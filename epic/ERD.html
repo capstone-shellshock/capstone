@@ -1,0 +1,23 @@
+<h1>AbqOnTheReel</h1>
+<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;xml&quot;:&quot;&lt;mxfile modified=\&quot;2019-07-29T16:02:37.316Z\&quot; host=\&quot;www.draw.io\&quot; agent=\&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36\&quot; etag=\&quot;R1H2d20qEMKjKPug_RSJ\&quot; version=\&quot;11.0.7\&quot; type=\&quot;device\&quot;&gt;&lt;diagram id=\&quot;ldHbd7cQA-Pp6MyOxBkZ\&quot; name=\&quot;Page-1\&quot;&gt;7Zpbc9o4FMc/DTPdh+74CuQxXJKyC7MMSafto2oLWxvbYmQRIJ9+j2zJlwioSy4kGycMwzm66/eXfCy7Yw/j7TVDq3BGfRx1LMPfduxRx7L63T58C8cudzh9J3cEjPi5yywdN+QBS6chvWvi47SWkVMacbKqOz2aJNjjNR9ijG7q2ZY0qre6QgHWHDceinTvN+LzUA7LNUr/F0yCULVsGjIlRiqzdKQh8umm4rLHHXvIKOX5r3g7xJGYOzUvebmrA6lFxxhOeJMCy82FufT8BRt+tn+gwNpcXOHPspZ7FK3lgOeMLgmMPu8z36mJSDckjlAC1mBJE34jUwywvZBE/hTt6Fp0JOXIu1PWIKSMPEB+FEGSCQ5IZlxytrqiNhJFQxpRlrVjY9N3ca9W8kbUKNtiOIWyczVq85Frhra1jFOUctVLGkVolZKfWb9FwRixgCQDyjmNZSY1yqt6p5bZH6SjiAQJ+DxoCzM1F/loTCcbHqN3uFL0otuzkRinzktNPmYcbysuye8a0xhztoMsajVJKe3q5qYUptmVvrAqSls6kVwMQVFzqRf4ISXzG/KxNPmscvlMfHB/mv/9h6YjGCrX5imhubAqsy5d6Qp5JAmmeCkG45SehRyfcFGYwmWULa6Q+D5OBH/KEUc/C5GuKEl4Nn53AB+YkaHxp9txoU9DsM3Sho/IzviQJtBNRDJeGJS0wUJNNebWXrJH19qvcUu+sDwa8VX5nh2vfQjvpcfJPeKEJrdAMWkhnw7Ztc4M2XQOUR7HiEQt29PZ9vpnZnsQ7ReUhi3Z08mahnNmtK6G9msKEYllTMldG729xejNMerhm2M2k5DaRZ5dQl1NQmuQkNDPlHrZ1X3if7pqY7g9q+79xHC9vZCxoCxv9SYjEau3nJ/E+exh3IXGWS3i810MDPH/bi8Gz7Dl245b2/Kt/kVDmdjOS4X7hiaUqNjt25v2Q8vq/Wz4pn6mpwDPq4cz7Yb/JM5n3/BNPXxTnC99H/bMtMV7Ot7XvHX/lxB2+31yv5oshim7Hs+cv3p7jlaLbToWzyw+DFuNWVPcb/jm3ewfpDuFb772PxDg51+8xQOP8wHWb7sKwDQJWsJPJey+Ypi1d38+HGXdEr7n+en/Fu4L7M/9s8dW+umqovt1MYUqJ7PR4OMgfoG7JOPcj0ZM/cBEA4r9AKvTEZgAwncLHGUqGJcp2pyFPFYnJDjxL8VLKGCOFw+Y0Vs6Q8lOnZ2UaTFK/H8yVUA7bPddks2MH8IAftIcbauJo520dFLqdRnEAnwMnrxUicEeRVdFZexBVThZNkn3uNaNfQBlG3Oh3/LQxHLq5+SmadWrSOmaeViWKmWgVWS79YrU+xKqnnxmtHoyORXjfsLLEfpJywdVmDqSeLsSs4wTJfaoIst9XYnpUchRicHOH9KAJih6BXmZvycvvCW8KAa/K6XAKgsJ45eSzPkdk6TRULvuG5Oua9UVZ1uPHg82lW7XrFfUa7Y7AnK0q2STwcfB/j5uRvW3abf6tbca4UfegYbLCMzyDcs8e/maqj3+Dw==&lt;/diagram&gt;&lt;/mxfile&gt;&quot;}"></div>
+<script type="text/javascript" src="https://www.draw.io/js/viewer.min.js"></script>
+
+<strong>Profile:</strong>
+<li>profileId (primary key)</li>
+<li>profileActivationToken</li>
+<li>profileEmail</li>
+<li>profileHash</li>
+
+
+<strong>Location:</strong>
+<li>locationId (primary key)</li>
+<li>locationProfileId (foreign key)
+<li>locationTitle</li>
+<li>locationURL/IMDB</li>
+<li>locationAddress</li>
+<li>locationLongitude</li>
+<li>locationLatitude</li>
+
+<strong>User Like:</strong>
+<li>userLikeLocationId (foreign key)</li>
+<li>userLikeProfileId (foregin key)</li>
