@@ -25,6 +25,8 @@ CREATE TABLE location (
 	locationDate DATETIME(6) NOT NULL,
 	locationLatitude VARCHAR(12) NULL,
 	locationLongitude VARCHAR(12) NULL,
+	locationImageCloudinaryId VARCHAR(128) NULL,
+	locationImageCloudinaryUrl VARCHAR(128) NULL,
 	locationText VARCHAR(300) NOT NULL,
 	locationTitle VARCHAR(64) NOT NULL,
 	locationImdbUrl VARCHAR(255) NOT NULL,
