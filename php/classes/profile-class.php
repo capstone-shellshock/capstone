@@ -213,4 +213,6 @@ class Profile implements \JsonSerializable {
 		$this->profileUsername = $newProfileUsername;
 	}
 
+	/
+
 }
