@@ -113,6 +113,8 @@ class Profile implements \JsonSerializable {
 		return ($this->profileActivationToken);
 	}
 
-	
+	/**
+	 * mutator for the profile activation token
+	 **/
 
 }
