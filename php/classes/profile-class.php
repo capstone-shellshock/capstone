@@ -4,6 +4,8 @@ namespace shellShock\Capstone;
 
 require_once("autoload.php");
 require_once(dirname(__DIR__)."/vendor/autoload.php");
+
+use http\Exception\BadQueryStringException;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -115,6 +117,100 @@ class Profile implements \JsonSerializable {
 
 	/**
 	 * mutator for the profile activation token
+	 *
+	 * @param string $newProfileActivationToken new value of activation token
+	 * @throws \RangeException if string entered does not meet field requirements
+	 * @throws \Exception if any other error is found
 	 **/
+
+	public function setProfileActivationToken(?string $newProfileActivationToken) : void {
+
+		if($newProfileActivationToken === null) {
+			$this->profileActivationToken = null;
+			return;
+		}
+
+		$newProfileActivationToken = strtolower(trim($newProfileActivationToken));
+		if(ctype_xdigit($newProfileActivationToken) === false) {
+			throw(new \RangeException("Activation token not valid"));
+		}
+
+		if(strlen($newProfileActivationToken) !== 32) {
+			throw(new \RangeException("Activation token must be 32 characters"));
+		}
+
+		$this->profileActivationToken = $newProfileActivationToken;
+	}
+
+	/**
+	 * accessor for profile email
+	 *
+	 * @return string for email
+	 **/
+
+	public function getProfileEmail() : string {
+		return ($this -> profileEmail);
+	}
+
+	/**
+	 * mutator for profile email
+	 *
+	 * @param string new value of email
+	 * @throws \InvalidArgumentException if $newProfileEmail is not a valid BadQueryStringException
+	 * @throws \RangeException if email is too long
+	 * @throws \Exception if any other error is found
+	 **/
+
+	public function setProfileEmail(string $newProfileEmail) : void {
+
+		//verifies email security
+		$newProfileEmail = trim($newProfileEmail);
+		$newProfileEmail = filter_var($newProfileEmail, FILTER_VALIDATE_EMAIL);
+		if(empty($newProfileEmail) === true) {
+			throw(new \InvalidArgumentException("Email is insecure or invalid"));
+		}
+
+		//checks if email is too large for database
+		if(strlen($newProfileEmail) > 128) {
+			throw(new \RangeException("Email is too large"));
+		}
+
+		$this -> profileEmail = $newProfileEmail;
+	}
+
+	/**
+	 * accessor profile username
+	 *
+	 * @returns string for profile username
+	 **/
+
+	public function getProfileUsername() : string {
+		return ($this->profileUsername);
+	}
+
+	/**
+	 * mutator for profile username
+	 *
+	 * @param string $newProfileUsername
+	 * @throws \InvalidArgumentException if username is not a string
+	 * @throws \RangeException if new username is longer than 32 characters
+	 * @throws \TypeError if username is not a string
+	 **/
+
+	public function setProfileUsername(string $newProfileUsername) : void {
+
+		$newProfileUsername = trim($newProfileUsername);
+		$newProfileUsername = filter_var($newProfileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileUsername) === true) {
+			throw(new \InvalidArgumentException("Username is empty or taken"));
+		}
+
+		//checks length of username
+		if(strlen($newProfileUsername) > 32) {
+			throw(new \RangeException("Username is too long"));
+		}
+
+		$this->profileUsername = $newProfileUsername;
+	}
 
 }
