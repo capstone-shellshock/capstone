@@ -5,6 +5,7 @@ namespace shellShock\Capstone;
 require_once("autoload.php");
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 
+use http\Exception\BadQueryStringException;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -140,9 +141,31 @@ class Location {
 	/**
 	 * accessor method for location id
 	 *
-	 * @return 
+	 * @return Uuid value of location Id
 	 */
+	public function getLocationId() : uuid {
+		return($this->locationId);
+	}
 
+	/**
+	 * mutator method for location id
+	 *
+	 * @param Uuid| string $newLocationId new value of tweet id
+	 * @throws \RangeException if %newLocationId is not positive
+	 * @throws |\TypeError if $newLocationId is not a Uuid or string
+	 *
+	 */
+	public function setLocationId($newLocationId) : void {
+		try {
+			$uuid = self::validateUuid($newLocationId);
+		} catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception ) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
 
+		//convert and store the location id
+		$this->locationId = $uuid;
+	}
 
+	
 }
