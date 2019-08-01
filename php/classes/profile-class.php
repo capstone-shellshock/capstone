@@ -3,9 +3,8 @@
 namespace shellShock\Capstone;
 
 require_once("autoload.php");
-require_once(dirname(__DIR__)."/vendor/autoload.php");
+require_once(dirname(__DIR__)."/classes/autoload.php");
 
-use http\Exception\BadQueryStringException;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -15,7 +14,7 @@ use Ramsey\Uuid\Uuid;
  * @author Justin Murphy <jmurphy33@cnm.edu>
  **/
 
-class Profile implements \JsonSerializable {
+class Profile {
 	use ValidateDate;
 	use ValidateUuid;
 
@@ -213,6 +212,46 @@ class Profile implements \JsonSerializable {
 		$this->profileUsername = $newProfileUsername;
 	}
 
-	/
+	/**
+	 * accessor method for profileHash
+	 *
+	 * @return string of hash
+	 **/
+
+	public function getProfileHash() : string {
+
+		return ($this->profileHash);
+	}
+
+	/**
+	 * mutator method for profileHash
+	 *
+	 * @param string $newProfileHash
+	 * @throws \InvalidArgumentException if hash is not secure
+	 * @throws \RangeException if hash is not proper length
+	 * @throws \TypeError if hash is not a string
+	 **/
+
+	public function setProfileHash(string $newProfileHash) : void {
+
+		$newProfileHash = trim($newProfileHash);
+		if(empty($newProfileHash) === true) {
+			throw(new \InvalidArgumentException("Hash field is empty or insecure"));
+
+		}
+
+		$hashInfo = password_get_info($newProfileHash);
+		if($hashInfo["algoName"] !== "argon2i") {
+			throw(new \InvalidArgumentException("Profile has is not valid"));
+
+		}
+
+		if (strlen($newProfileHash) !== 97) {
+			throw(new \RangeException("Profile hash must be 97 characters"));
+
+		}
+
+		$this -> profileHash = $newProfileHash;
+	}
 
 }
