@@ -195,7 +195,58 @@ class Location {
 		$this->locationProfileId = $uuid;
 	}
 
-	
+	/**
+	 * accessor method for $locationAddress
+	 *
+	 * @return string
+	 */
+	public function getLocationAddress(): string {
+		return $this->locationAddress;
+	}
+
+	/**
+	 * mutator method for location address
+	 *
+	 *
+	 */
+	public function setLocationAddress($newLocationAddress) : void {
+
+	}
+
+
+	/**
+	 * accessor method for location date
+	 *
+	 * @return \DateTime value of location date
+	 */
+	public function getLocationDate(): \DateTime {
+		return $this->locationDate;
+	}
+
+	/**
+	 * mutator method for location date
+	 *
+	 * @param \DateTime|string|null $newLocationDate string location date as a DateTime object pr string (or null to load the current time)
+	 * @throws \InvalidArgumentException if $newLocationDate is not a valid object or string
+	 * @throws \RangeException if $newLocationDate is a date that does not exist
+	 */
+	public function setLocationDate($newLocationDate): void {
+		// base case: if the date is null, use the current date and time
+		if($newLocationDate === null) {
+			$this->locationDate = $newLocationDate;
+			return;
+		}
+			//store the location date using the ValidateDate trait
+			try {
+				$newLocationDate = self::validateDateTime($newLocationDate);
+			} catch(\InvalidArgumentException | \RangeException $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			}
+		$this->locationId = $newLocationDate;
+	}
+
+
 
 
 
