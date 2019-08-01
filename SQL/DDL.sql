@@ -37,9 +37,9 @@ CREATE TABLE location (
 
 );
 
-CREATE TABLE userLike (
-	userLikeLocationId BINARY(16) NOT NULL,
-	userLikeProfileId BINARY(16) NOT NULL,
+CREATE TABLE Like (
+	likeLocationId BINARY(16) NOT NULL,
+	likeProfileId BINARY(16) NOT NULL,
 
 	INDEX(userLikeLocationId),
 	INDEX(userLikeProfileId),
