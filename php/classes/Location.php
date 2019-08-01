@@ -246,8 +246,40 @@ class Location {
 		$this->locationId = $newLocationDate;
 	}
 
+	/**
+	 * accessor method for location latitude
+	 *
+	 * @return int for location latitude
+	 */
+	public function getLocationLatitude(): int {
+		return $this->locationLatitude;
+	}
 
+	/**
+	 * mutator method for location latitude
+	 *
+	 * @param int $locationLatitude
+	 */
+	public function setLocationLatitude(int $locationLatitude): void {
+		$this->locationLatitude = $locationLatitude;
+	}
 
+	/**
+	 * accessor method for location longitude
+	 *
+	 * @return int for location latitude
+	 */
+	public function getLocationLongitude(): int {
+		return $this->locationLatitude;
+	}
 
+	/**
+	 * mutator method for location longitude
+	 *
+	 * @param int $locationLongitude
+	 */
+	public function setLocationLongitude(int $locationLongitude): void {
+		$this->locationLongitude = $locationLongitude;
+	}
 
 }
