@@ -150,7 +150,7 @@ class Location {
 	/**
 	 * mutator method for location id
 	 *
-	 * @param Uuid| string $newLocationId new value of tweet id
+	 * @param Uuid| string $newLocationId new value of location id
 	 * @throws \RangeException if %newLocationId is not positive
 	 * @throws |\TypeError if $newLocationId is not a Uuid or string
 	 *
@@ -167,5 +167,36 @@ class Location {
 		$this->locationId = $uuid;
 	}
 
+	/**
+	 * accessor method for location profile id
+	 *
+	 * @return uuid value of location profile id
+	 */
+
+	public function getLocationProfileId(): Uuid {
+		return $this->locationProfileId;
+	}
+
+	/**
+	 * mutator method for location profile id
+	 *
+	 * @param uuid | string $newLocationProfileId new value of location profile id
+	 * @throws \RangeException if %newLocationProfileId is not positive
+	 * @throws |\TypeError if $newLocationProfileId is not a integer
+	 */
+	public function setLocationProfileId($newLocationProfileId) : void {
+		try {
+			$uuid = self::validateUuid($newLocationProfileId);
+		} catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the location profile id
+		$this->locationProfileId = $uuid;
+	}
+
 	
+
+
+
 }
