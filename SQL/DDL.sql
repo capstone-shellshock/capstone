@@ -1,4 +1,4 @@
-ALTER DATABASE [place-holder] CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER DATABASE abqonthereel CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `like`;
 DROP TABLE IF EXISTS location;
@@ -8,7 +8,7 @@ CREATE TABLE `profile` (
    profileId BINARY(16) NOT NULL,
    profileActivationToken CHAR(32),
    profileEmail VARCHAR(128) NOT NULL,
-   profileUsername VARCHAR(32) NOT NULL,
+   profileUsername VARCHAR(64) NOT NULL,
    profileHash CHAR(97) NOT NULL,
 
    UNIQUE(profileEmail),
@@ -21,14 +21,14 @@ CREATE TABLE `profile` (
 CREATE TABLE location (
 	locationId BINARY(16) NOT NULL,
 	locationProfileId BINARY(16) NOT NULL,
-	locationAddress VARCHAR(64) NULL,
+	locationAddress BLOB(256),
 	locationDate DATETIME(6) NOT NULL,
-	locationLatitude DECIMAL(10,8) NULL,
-	locationLongitude DECIMAL(11,8) NULL,
-	locationImageCloudinaryId VARCHAR(128) NULL,
-	locationImageCloudinaryUrl VARCHAR(128) NULL,
+	locationLatitude DECIMAL(10,8),
+	locationLongitude DECIMAL(11,8),
+	locationImageCloudinaryId VARCHAR(128),
+	locationImageCloudinaryUrl VARCHAR(128),
 	locationText VARCHAR(300) NOT NULL,
-	locationTitle VARCHAR(64) NOT NULL,
+	locationTitle VARCHAR(128) NOT NULL,
 	locationImdbUrl VARCHAR(255) NOT NULL,
 
 	FOREIGN KEY(locationProfileId) REFERENCES profile(profileId),
@@ -39,7 +39,6 @@ CREATE TABLE location (
 
 CREATE TABLE `like` (
 
-   likeId BINARY(16) NOT NULL,
 	likeLocationId BINARY(16) NOT NULL,
 	likeProfileId BINARY(16) NOT NULL,
 
@@ -49,5 +48,5 @@ CREATE TABLE `like` (
 	FOREIGN KEY(likeLocationId) REFERENCES location(locationId),
 	FOREIGN KEY(likeProfileId) REFERENCES  profile(profileId),
 
-	PRIMARY KEY(likeId)
+	PRIMARY KEY(likeLocationId, likeProfileId)
 );
