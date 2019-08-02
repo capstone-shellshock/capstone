@@ -37,13 +37,16 @@ CREATE TABLE location (
 
 );
 
-CREATE TABLE Like (
+CREATE TABLE `Like` (
+   likeId BINARY(16) NOT NULL,
 	likeLocationId BINARY(16) NOT NULL,
 	likeProfileId BINARY(16) NOT NULL,
 
-	INDEX(userLikeLocationId),
-	INDEX(userLikeProfileId),
+	INDEX(likeLocationId),
+	INDEX(likeProfileId),
 
-	FOREIGN KEY(userLikeLocationId) REFERENCES location(locationId),
-	FOREIGN KEY(userLikeProfileId) REFERENCES  profile(profileId)
+	FOREIGN KEY(likeLocationId) REFERENCES location(locationId),
+	FOREIGN KEY(likeProfileId) REFERENCES  profile(profileId),
+
+	PRIMARY KEY(likeId)
 );
