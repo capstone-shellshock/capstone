@@ -155,7 +155,7 @@ class Profile implements \JsonSerializable {
 	 * mutator for profile email
 	 *
 	 * @param string new value of email
-	 * @throws \InvalidArgumentException if $newProfileEmail is not a valid BadQueryStringException
+	 * @throws \InvalidArgumentException if $newProfileEmail is not a valid email
 	 * @throws \RangeException if email is too long
 	 * @throws \Exception if any other error is found
 	 **/
