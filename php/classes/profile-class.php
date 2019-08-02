@@ -254,6 +254,94 @@ class Profile implements \JsonSerializable {
 		$this -> profileHash = $newProfileHash;
 	}
 
+
+	/**
+	 * inserts profile into the table
+	 *
+	 * @param \PDO $pdo PDO Connection object
+	 * @throws \PDOException when MySQL related error occurs
+	 * @throws \TypeError if $pdo is not a PDO connection
+	 **/
+
+	public function insert(\PDO $pdo) : void {
+
+		//create a query template
+		$query = "INSERT INTO profile(profileId, profileActivationToken, profileEmail, profileUsername, profileHash)
+							VALUES(:profileId, :profileActivationToken, :profileEmail, :profileUsername, :profileHash)";
+		$statement = $pdo -> prepare($query);
+
+		$parameters = ["profileId" => $this -> profileId -> getBytes(), "profileActivationToken" => $this -> profileActivationToken,
+							"profileEmail" => $this -> profileEmail, "profileUsername" => $this -> profileUsername, "profileHash" => $this -> profileHash];
+		$statement -> execute($parameters);
+	}
+
+	/**
+	 * Removes this profile from MySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when a MySQL related error occurs
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+
+	public function delete(\PDO $pdo) : void {
+
+		//create query template
+		$query = "DELETE FROM profile WHERE profileId = :profileId";
+		$statement = $pdo -> prepare($query);
+
+		//Bind the member variables to the place holder in the template
+		$parameters = ["profileId" => $this -> profileId -> getBytes()];
+		$statement -> execute($parameters);
+	}
+
+	/**
+	 * updates the profile in MySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when MySQL related error occurs
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+
+	public function update(\PDO $pdo) : void {
+
+		//create query template
+		$query = "UPDATE profile SET profileActivationToken = :profileActivationToken, profileEmail = :profileEmail,
+						profileUsername = :profileUsername, profileHash = :profileHash WHERE profileId = :profileId";
+		$statement = $pdo -> prepare($query);
+
+		//binds the member variables to the place holders in the template
+		$parameters = ["profileId" => $this -> profileId -> getBytes(), "profileActivationToken" => $this -> profileActivationToken,
+								"profileEmail" => $this -> profileEmail, "profileUsername" => $this -> profileUsername, "profileHash" => $this -> profileHash];
+		$statement -> execute($parameters);
+	}
+
+	/**
+	 * Gets the profile by profileId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param $profileId profile Id to search for
+	 * @return profile|null author or null if not related
+	 * @throws \PDOException when MySQL related error occurs
+	 * @throws \TypeError when a variable is not the correct data type
+	 **/
+
+	public static function getProfileByProfileId(\PDO $pdo, $profileId) : ?Profile {
+
+		//cleans profile Id before searching
+		try{
+			$profileId = self::validateUuid($profileId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception -> getMessage(), 0, $exception));
+		}
+
+		//create query template
+		$query = "SELECT profieId, profileActivationToken, profileEmail, profileUsername, profileHash FROM profile
+						WHERE profileId = :profileId";
+		$statement = $pdo -> prepare($query);
+
+		//binds the profile Id to the place holder
+	}
+
 	/**
 	 * formats the state variables for JSON serialization
 	 *
