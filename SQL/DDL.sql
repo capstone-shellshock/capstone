@@ -1,6 +1,6 @@
 ALTER DATABASE [place-holder] CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-DROP TABLE IF EXISTS userLike;
+DROP TABLE IF EXISTS `like`;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS `profile`;
 
@@ -37,7 +37,8 @@ CREATE TABLE location (
 
 );
 
-CREATE TABLE `Like` (
+CREATE TABLE `like` (
+
    likeId BINARY(16) NOT NULL,
 	likeLocationId BINARY(16) NOT NULL,
 	likeProfileId BINARY(16) NOT NULL,
