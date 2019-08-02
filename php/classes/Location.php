@@ -196,7 +196,7 @@ class Location {
 	}
 
 	/**
-	 * accessor method for $locationAddress
+	 * accessor method for location Address
 	 *
 	 * @return string
 	 */
@@ -281,5 +281,15 @@ class Location {
 	public function setLocationLongitude(int $locationLongitude): void {
 		$this->locationLongitude = $locationLongitude;
 	}
+
+	/**
+	 * accessor method for location image cloudinary id
+	 *
+	 * @return string
+	 */
+	public function getLocationImageCloudinaryId(): string {
+		return $this->locationImageCloudinaryId;
+	}
+
 
 }
