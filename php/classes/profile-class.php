@@ -454,7 +454,7 @@ class Profile implements \JsonSerializable {
 	public static function getProfileByProfileUsername(\PDO $pdo, string $profileUsername) :  \SplFixedArray {
 		//sanitize the username before searching
 		$profileUsername = trim($profileUsername);
-		$profileUsername = filter_var(($profileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		$profileUsername = filter_var($profileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($profileUsername) === true) {
 			throw(new \PDOException("Not a valid username"));
 		}
@@ -483,7 +483,7 @@ class Profile implements \JsonSerializable {
 		return($profiles);
 	}
 
-	
+
 
 	/**
 	 * formats the state variables for JSON serialization
