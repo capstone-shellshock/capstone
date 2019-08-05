@@ -116,7 +116,7 @@ class Location {
 	 * @throws \Exception if some other exception occurs
 	 *
 	 */
-	public function __construct($newLocationId, $newLocationProfileId, $newLocationAddress, $newLocationDate, $newLocationLatitude, $newLocationLongitude, $newLocationImageCloudinaryId, $newLocationImageCloudinaryUrl, $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
+	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, $newLocationLatitude, $newLocationLongitude, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
 		try {
 			$this->setLocationId($newLocationId);
 			$this->setLocationProfileId($newLocationProfileId);
@@ -267,7 +267,7 @@ class Location {
 	/**
 	 * accessor method for location longitude
 	 *
-	 * @return int for location latitude
+	 * @return float for location latitude
 	 */
 	public function getLocationLongitude(): int {
 		return $this->locationLatitude;
@@ -276,7 +276,7 @@ class Location {
 	/**
 	 * mutator method for location longitude
 	 *
-	 * @param int $locationLongitude
+	 * @param float $locationLongitude
 	 */
 	public function setLocationLongitude(int $locationLongitude): void {
 		$this->locationLongitude = $locationLongitude;
@@ -285,11 +285,77 @@ class Location {
 	/**
 	 * accessor method for location image cloudinary id
 	 *
-	 * @return string
+	 * @return string|null value for location image cloudinary id
 	 */
 	public function getLocationImageCloudinaryId(): string {
 		return $this->locationImageCloudinaryId;
 	}
 
+	/**
+	 * mutator method for location image cloudinary id
+	 *
+	 *
+	 */
+	/**
+	 * @param string $locationImageCloudinaryId
+	 */
+	public function setLocationImageCloudinaryId(string $locationImageCloudinaryId): void {
+		$this->locationImageCloudinaryId = $locationImageCloudinaryId;
+	}
 
+
+	/**
+	 * accessor method for location image cloudinary url
+	 *
+	 * @return string|null value for location image cloudinary url
+	 */
+	public function getLocationImageCloudinaryUrl(): string {
+		return $this->locationImageCloudinaryUrl;
+	}
+
+	/**
+	 * mutator method for location Image Cloudinary Url
+	 *
+	 * @param string $ new value of location image cloudinary url
+	 * @throws \InvalidArgumentException if $locationImageCloudinaryUrl is not a string or insecure
+	 * @throws \RangeException if $locationImageCloudinaryUrl is < 64 characters
+	 * @throws \TypeError if $locationImageCloudinaryUrl is not a string
+	 */
+	public function setLocationImageCloudinaryUrl(?string $newLocationImageCloudinaryUrl): void {
+		if($newLocationImageCloudinaryUrl === NULL) {
+			$this->locationImageCloudinaryUrl = null;
+			return;
+		}
+		//verify image is secure
+		$newLocationImageCloudinaryUrl = trim($newLocationImageCloudinaryUrl);
+		$newLocationImageCloudinaryUrl = filter_var($newLocationImageCloudinaryUrl, FILTER_SANITIZE_STRING);
+
+		//make sure image cloudinary url is not empty
+		if(empty($newLocationImageCloudinaryUrl) === true) {
+			throw(new \InvalidArgumentException("location image is either empty or insecure"));
+		}
+		//make sure the image cloudinary url will fit in the database
+		if(strlen($newLocationImageCloudinaryUrl) > 128) {
+			throw( \RangeException("location image must be 128 characters or less"));
+		}
+		// store the location image cloudinary url
+		$this->locationImageCloudinaryUrl = $newLocationImageCloudinaryUrl;
+	}
+
+	/**
+	 * accessor method for location text
+	 *
+	 * @param string $locationText string actual text about the location
+	 */
+	public function setLocationText(string $locationText): void {
+		$this->locationText = $locationText;
+	}
+
+	/**
+	 * mutator method for location text
+	 *
+	 * @param string $newLocationText
+	 * @throws \InvalidArgumentException if $newLocationText is not a string or insecure
+	 * @throws
+	 */
 }
