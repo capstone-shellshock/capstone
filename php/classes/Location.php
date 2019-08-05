@@ -207,7 +207,10 @@ class Location {
 	/**
 	 * mutator method for location address
 	 *
-	 *
+	 * @param blob new value of $newLocationAddress
+	 * @throws \InvalidArgumentException if $newLocationaddress is not a blob or insecure
+	 * @throws \RangeException if $newLocationAddrress
+	 * @throws \TypeError
 	 */
 	public function setLocationAddress($newLocationAddress) : void {
 
@@ -251,17 +254,17 @@ class Location {
 	 *
 	 * @return int for location latitude
 	 */
-	public function getLocationLatitude(): int {
+	public function getLocationLatitude(): float {
 		return $this->locationLatitude;
 	}
 
 	/**
 	 * mutator method for location latitude
 	 *
-	 * @param int $locationLatitude
+	 * @param int $newLocationLatitude
 	 */
-	public function setLocationLatitude(int $locationLatitude): void {
-		$this->locationLatitude = $locationLatitude;
+	public function setLocationLatitude(float $newLocationLatitude): void {
+		$this->locationLatitude = $newLocationLatitude;
 	}
 
 	/**
@@ -269,17 +272,17 @@ class Location {
 	 *
 	 * @return float for location latitude
 	 */
-	public function getLocationLongitude(): int {
+	public function getLocationLongitude(): float {
 		return $this->locationLatitude;
 	}
 
 	/**
 	 * mutator method for location longitude
 	 *
-	 * @param float $locationLongitude
+	 * @param float $newLocationLongitude
 	 */
-	public function setLocationLongitude(int $locationLongitude): void {
-		$this->locationLongitude = $locationLongitude;
+	public function setLocationLongitude(float $newLocationLongitude): void {
+		$this->locationLongitude = $newLocationLongitude;
 	}
 
 	/**
@@ -294,15 +297,29 @@ class Location {
 	/**
 	 * mutator method for location image cloudinary id
 	 *
-	 *
+	 * @param string $newLocationImageCloudinaryId
+	 *@throws \InvalidArgumentException if $newLocationImageCloudinaryId is not a string or insecure
+	 * @throws \RangeException if $newLocationImageCloudinaryId is < 128 characters
+	 * @throws \TypeError if $newLocationImageCloudinaryId is not a string
 	 */
-	/**
-	 * @param string $locationImageCloudinaryId
-	 */
-	public function setLocationImageCloudinaryId(string $locationImageCloudinaryId): void {
-		$this->locationImageCloudinaryId = $locationImageCloudinaryId;
-	}
+	public function setLocationImageCloudinaryId(?string $newLocationImageCloudinaryId): void {
+		if ($newLocationImageCloudinaryId === NULL) {
+			$this->locationImageCloudinaryUrl = null;
+			return;
+		}
+		//verify the cloudinary image id is secure
+		$newLocationImageCloudinaryId = trim($newLocationImageCloudinaryId);
+		$newLocationImageCloudinaryId = filter_var($newLocationImageCloudinaryId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
+		//make sure image cloudinary id is not empty
+		if(empty($newLocationImageCloudinaryId)=== true) {
+			throw(new\InvalidArgumentException ("cloudinary id is either empty or insecure"));
+		}
+		//make sure the cloudinary id will fit in the database
+		if(strlen($newLocationImageCloudinaryId) > 128)
+			throw(new \RangeException("cloudinary id must be 128 characters or less"));
+		$this->locationImageCloudinaryId = $newLocationImageCloudinaryId;
+	}
 
 	/**
 	 * accessor method for location image cloudinary url
@@ -316,10 +333,10 @@ class Location {
 	/**
 	 * mutator method for location Image Cloudinary Url
 	 *
-	 * @param string $ new value of location image cloudinary url
-	 * @throws \InvalidArgumentException if $locationImageCloudinaryUrl is not a string or insecure
-	 * @throws \RangeException if $locationImageCloudinaryUrl is < 64 characters
-	 * @throws \TypeError if $locationImageCloudinaryUrl is not a string
+	 * @param string $newLocationImageCloudinaryUrl new value of location image cloudinary url
+	 * @throws \InvalidArgumentException if $newLocationImageCloudinaryUrl is not a string or insecure
+	 * @throws \RangeException if $newLocationImageCloudinaryUrl is < 255 characters
+	 * @throws \TypeError if $newLocationImageCloudinaryUrl is not a string
 	 */
 	public function setLocationImageCloudinaryUrl(?string $newLocationImageCloudinaryUrl): void {
 		if($newLocationImageCloudinaryUrl === NULL) {
@@ -335,8 +352,8 @@ class Location {
 			throw(new \InvalidArgumentException("location image is either empty or insecure"));
 		}
 		//make sure the image cloudinary url will fit in the database
-		if(strlen($newLocationImageCloudinaryUrl) > 128) {
-			throw( \RangeException("location image must be 128 characters or less"));
+		if(strlen($newLocationImageCloudinaryUrl) > 255) {
+			throw(new\RangeException("location image must be 128 characters or less"));
 		}
 		// store the location image cloudinary url
 		$this->locationImageCloudinaryUrl = $newLocationImageCloudinaryUrl;
@@ -359,9 +376,6 @@ class Location {
 	 * @throws \RangeException if $newLocationText is < 300 characters
 	 * @throws \TypeError if $newLocationText is not a string
 	 */
-	/**
-	 * @param string $locationText
-	 */
 	public function setLocationText(string $newLocationText): void {
 		//verify the text is secure
 		$newLocationText = trim($newLocationText);
@@ -374,6 +388,7 @@ class Location {
 		if(strlen($newLocationText) === true) {
 			throw(new\RangeException("text must be under 300 characters"));
 		}
+		//convert and store location text
 		$this->locationText = $newLocationText;
 	}
 
@@ -387,7 +402,12 @@ class Location {
 	}
 
 	/**
-	 * @param string $locationTitle
+	 * mutator method for location title
+	 *
+	 * @param string $newLocationTitle
+	 * @throws \InvalidArgumentException if $newLocationTitle is not a string or insecure
+	 * @throws \RangeException if $newLocationTitle is < 128 characters
+	 * @throws \TypeError if $newLocationTitle is not a string
 	 */
 	public function setLocationTitle(string $newLocationTitle): void {
 		// verify the title is secure
@@ -403,7 +423,43 @@ class Location {
 		if(strlen($newLocationTitle) > 128) {
 			throw(new\RangeException("Title is to large"));
 		}
+		//convert and store location title
 		$this->locationTitle = $newLocationTitle;
 	}
 
+	/**
+	 * accessor method for imdb Url
+	 *
+	 * @return string value of Imdb Url
+	 */
+	public function getLocationImdbUrl(): string {
+		return $this->locationImdbUrl;
+	}
+
+	/**
+	 * mutator method Imdb Url
+	 *
+	 * @param string $newLocationImdbUrl new value of location Imdb Url
+	 * @throws \InvalidArgumentException if $newLocationImdbUrl is not a string or insecure
+	 * @throws \RangeException if $newLocationImdbUrl is > 128 characters
+	 * @throws \TypeError if  $newLocationImdbUrl is not a string
+	 */
+	public function setLocationImdbUrl(string $newLocationImdbUrl): void {
+		// verify the title is secure
+		$newLocationImdbUrl = trim($newLocationImdbUrl);
+		$newLocationImdbUrl = filter_var($newLocationImdbUrl,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		//verify the imdb url is not null
+		if(empty($newLocationImdbUrl) === true) {
+			throw(new\InvalidArgumentException("Imdb Url is empty or insecure"));
+		}
+
+		//verify the title will fit in the database
+		if(strlen($newLocationImdbUrl) > 255) {
+			throw(new\RangeException("Url is to large"));
+		}
+
+		//convert and store Imdb Url
+		$this->locationImdbUrl = $newLocationImdbUrl;
+	}
 }
