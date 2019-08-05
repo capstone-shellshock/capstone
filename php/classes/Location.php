@@ -376,4 +376,34 @@ class Location {
 		}
 		$this->locationText = $newLocationText;
 	}
+
+	/**
+	 * accessor method for location Title
+	 *
+	 * @return string value of title
+	 */
+	public function getLocationTitle(): string {
+		return $this->locationTitle;
+	}
+
+	/**
+	 * @param string $locationTitle
+	 */
+	public function setLocationTitle(string $newLocationTitle): void {
+		// verify the title is secure
+		$newLocationTitle = trim($newLocationTitle);
+		$newLocationTitle = filter_var($newLocationTitle, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		//verify the title is not null
+		if(empty($newLocationTitle) === true) {
+			throw(new \InvalidArgumentException("Title is empty or insecure"));
+		}
+
+		//verify the title will fit in the database
+		if(strlen($newLocationTitle) > 128) {
+			throw(new\RangeException("Title is to large"));
+		}
+		$this->locationTitle = $newLocationTitle;
+	}
+
 }
