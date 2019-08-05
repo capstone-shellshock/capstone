@@ -345,17 +345,35 @@ class Location {
 	/**
 	 * accessor method for location text
 	 *
-	 * @param string $locationText string actual text about the location
+	 * @return string value of text
 	 */
-	public function setLocationText(string $locationText): void {
-		$this->locationText = $locationText;
+	public function getLocationText(): string {
+		return $this->locationText;
 	}
 
 	/**
 	 * mutator method for location text
 	 *
-	 * @param string $newLocationText
+	 * @param string $newLocationText string actual text about the location
 	 * @throws \InvalidArgumentException if $newLocationText is not a string or insecure
-	 * @throws
+	 * @throws \RangeException if $newLocationText is < 300 characters
+	 * @throws \TypeError if $newLocationText is not a string
 	 */
+	/**
+	 * @param string $locationText
+	 */
+	public function setLocationText(string $newLocationText): void {
+		//verify the text is secure
+		$newLocationText = trim($newLocationText);
+		$newLocationText = filter_var($newLocationText, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		if(empty($newLocationText) === true) {
+			throw(new \InvalidArgumentException("text is empty please tell us what you saw at this location"));
+		}
+		//verify the text will fit in the database
+		if(strlen($newLocationText) === true) {
+			throw(new\RangeException("text must be under 300 characters"));
+		}
+		$this->locationText = $newLocationText;
+	}
 }
