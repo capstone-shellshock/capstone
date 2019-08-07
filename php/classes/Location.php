@@ -247,6 +247,7 @@ class Location implements \JsonSerializable {
 	 * @param \DateTime|string|null $newLocationDate string location date as a DateTime object pr string (or null to load the current time)
 	 * @throws \InvalidArgumentException if $newLocationDate is not a valid object or string
 	 * @throws \RangeException if $newLocationDate is a date that does not exist
+	 * @throws \Exception
 	 */
 	public function setLocationDate($newLocationDate): void {
 		// base case: if the date is null, use the current date and time
@@ -278,7 +279,7 @@ class Location implements \JsonSerializable {
 	 *
 	 * @param float $newLocationLatitude value of latitude
 	 * @throws \InvalidArgumentException if $newLocationLatitude is not a float or insecure
-	 * @throws \TypeError if $newLocationLatitude string is not a float
+	 * @throws \RangeException if $newLocationLatitude is not between -90 and 90
 	 */
 	public function setLocationLatitude(float $newLocationLatitude): void {
 		if($newLocationLatitude === NULL) {
@@ -286,19 +287,14 @@ class Location implements \JsonSerializable {
 			return;
 		}
 
-		//make sure latitude is secure
-		$newLocationLatitude = trim($newLocationLatitude);
-		$newLocationLatitude = filter_var($newLocationLatitude, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-
-		//make sure latitude is not empty
-		if(empty($newLocationLatitude) === true) {
-			throw(new \InvalidArgumentException("Latitude is empty or insecure"));
+		//make sure latitude is in range
+		if(floatval($newLocationLatitude) < -90) {
+			throw(new\RangeException("latitude is not between -90 and 90"));
+		}
+		if(floatval($newLocationLatitude) > 90) {
+			throw(new\RangeException("latitude is not between -90 and 90"));
 		}
 
-		//make sure latitude fits in the database
-		if(is_float($newLocationLatitude) === false) {
-			throw(new\TypeError("latitude is not a float"));
-		}
 		//store latitude in the database
 		$this->locationLatitude = $newLocationLatitude;
 	}
@@ -317,7 +313,7 @@ class Location implements \JsonSerializable {
 	 *
 	 * @param float $newLocationLongitude value of longitude
 	 * @throws \InvalidArgumentException if $newLocationLongitude is not a float or insecure
-	 * @throws \TypeError if $newLocationLongitude is not a float
+	 * @throws \RangeException if $newLocationLongitude is not between -90 and 90
 	 */
 	public function setLocationLongitude(float $newLocationLongitude): void {
 		if($newLocationLongitude === NULL) {
@@ -325,18 +321,12 @@ class Location implements \JsonSerializable {
 			return;
 		}
 
-		//make sure longitude is secure
-		$newLocationLongitude = trim($newLocationLongitude);
-		$newLocationLongitude = filter_var($newLocationLongitude, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-
-		//make sure longitude is not empty
-		if(empty($newLocationLongitude) === true) {
-			throw(new \InvalidArgumentException("Longitude is empty or insecure"));
+		//make sure latitude is in range
+		if(floatval($newLocationLongitude) < -180) {
+			throw(new\RangeException("latitude is not between -90 and 90"));
 		}
-
-		//make sure longitude fits in the database
-		if(is_float($newLocationLongitude) === false) {
-			throw(new\TypeError("latitude is not a float"));
+		if(floatval($newLocationLongitude) > 180) {
+			throw(new\RangeException("latitude is not between -90 and 90"));
 		}
 		//store longitude in the database
 		$this->locationLongitude = $newLocationLongitude;
@@ -535,4 +525,41 @@ class Location implements \JsonSerializable {
 		return($fields);
 	}
 
+	/**
+	 * inserts this location into mySQL
+	 *
+	 * @param \PDO $pdo connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 */
+	public function insert(\PDO $pdo) : void {
+
+		//create query template
+		$query = "INSERT INTO location(locationId, locationProfileId, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl) VALUES (:locationId, :locationProfileID, :locationAddress, :locationDate, :locationLatitude, :locationLongitude, :locationImageCloudinaryId, :locationImageCloudinaryUrl, :locationText, :locationTitle, :locationImdbUrl)";
+		$statement = $pdo->prepare($query);
+
+		//bind the member variables to the place holders in the template
+		$formattedDate = $this->locationDate->format("Y-m-d H:i:s.u");
+		$parameters = ["locationId" => $this->locationId->getBytes(), "locationProfileId" => $this->locationProfileId->getBytes(), "locationAddress" => $this->locationAddress, "locationDate" => $formattedDate, "locationLatitude" => $this->locationLatitude, "locationLongitude" => $this->locationLongitude, "locationImageCloudinaryId" => $this->locationImageCloudinaryId, "locationImageCloudinaryUrl" => $this->locationImageCloudinaryUrl, "locationText" => $this->locationText, "locationTitle" => $this->locationTitle, "locationImdbUrl" => $this->locationImdbUrl];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * deletes this location from mySQL
+	 *
+	 * @params \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if PDO is not a PDO exception object
+	 *
+	 **/
+	public function delete(\PDO $pdo) : void {
+
+		//create query template
+		$query = "DELETE FROM location WHERE locationId = :locationId";
+		$statement = $pdo->prepare($query);
+
+		//bind the member variables to the place holder in the template
+		$parameters = ["locationId" => $this->locationId->getBytes()];
+		$statement->execute($parameters);
+	}
 }
