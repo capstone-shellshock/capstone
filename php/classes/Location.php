@@ -103,8 +103,8 @@ class Location {
 	 * @param string|Uuid $newLocationProfileId id of the profile that made this location
 	 * @param string $newLocationAddress string containing the address of the location or null if no address was added
 	 * @param \DateTime|string|null $newLocationDate date and time location was added or null if set to current date and time
-	 * @param integer $newLocationLatitude
-	 * @param integer $newLocationLongitude
+	 * @param float $newLocationLatitude
+	 * @param float $newLocationLongitude
 	 * @param string $newLocationImageCloudinaryId string cloudinary id for the image of the location or null if no image is uploaded
 	 * @param string $newLocationImageCloudinaryUrl string cloudinary Url for the image of the location or null if no image was uploaded
 	 * @param string $newLocationText string the text details of the location
@@ -116,7 +116,7 @@ class Location {
 	 * @throws \Exception if some other exception occurs
 	 *
 	 */
-	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, $newLocationLatitude, $newLocationLongitude, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
+	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, ?float $newLocationLatitude, ?float $newLocationLongitude, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
 		try {
 			$this->setLocationId($newLocationId);
 			$this->setLocationProfileId($newLocationProfileId);
@@ -207,15 +207,31 @@ class Location {
 	/**
 	 * mutator method for location address
 	 *
-	 * @param blob new value of $newLocationAddress
-	 * @throws \InvalidArgumentException if $newLocationaddress is not a blob or insecure
-	 * @throws \RangeException if $newLocationAddrress
-	 * @throws \TypeError
+	 * @param string new value of $newLocationAddress
+	 * @throws \InvalidArgumentException if $newLocationAddress is not a blob or insecure
+	 * @throws \RangeException if $newLocationAddress is < 3000 characters
+	 * @throws \TypeError if $newLocationAddress string is not a string
 	 */
 	public function setLocationAddress($newLocationAddress) : void {
+		if($newLocationAddress === NULL) {
+			$this->locationAddress = null;
+			return;
+		}
+		//make sure new location address is secure
+		$newLocationAddress = trim($newLocationAddress);
+		$newLocationAddress = filter_var($newLocationAddress, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
+		//make sure new location address is not empty
+		if(empty($newLocationAddress) === true) {
+			throw(new \InvalidArgumentException ("address is either empty or insecure"));
+		}
+			//make sure address will fit in the database
+			if(strlen($newLocationAddress) > 3000) {
+				throw(new \RangeException("address must be 3000 characters or less"));
+			}
+			//Store address in the database
+		$this->locationAddress = $newLocationAddress;
 	}
-
 
 	/**
 	 * accessor method for location date
@@ -252,7 +268,7 @@ class Location {
 	/**
 	 * accessor method for location latitude
 	 *
-	 * @return int for location latitude
+	 * @return float for location latitude
 	 */
 	public function getLocationLatitude(): float {
 		return $this->locationLatitude;
@@ -261,9 +277,30 @@ class Location {
 	/**
 	 * mutator method for location latitude
 	 *
-	 * @param int $newLocationLatitude
+	 * @param float $newLocationLatitude value of latitude
+	 * @throws \InvalidArgumentException if $newLocationLatitude is not a float or insecure
+	 * @throws \TypeError if $newLocationLatitude string is not a float
 	 */
 	public function setLocationLatitude(float $newLocationLatitude): void {
+		if($newLocationLatitude === NULL) {
+			$this->locationLatitude =$newLocationLatitude;
+			return;
+		}
+
+		//make sure latitude is secure
+		$newLocationLatitude = trim($newLocationLatitude);
+		$newLocationLatitude = filter_var($newLocationLatitude, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		//make sure latitude is not empty
+		if(empty($newLocationLatitude) === true) {
+			throw(new \InvalidArgumentException("Latitude is empty or insecure"));
+		}
+
+		//make sure latitude fits in the database
+		if(is_float($newLocationLatitude) === false) {
+			throw(new\TypeError("latitude is not a float"));
+		}
+		//store latitude in the database
 		$this->locationLatitude = $newLocationLatitude;
 	}
 
@@ -279,9 +316,30 @@ class Location {
 	/**
 	 * mutator method for location longitude
 	 *
-	 * @param float $newLocationLongitude
+	 * @param float $newLocationLongitude value of longitude
+	 * @throws \InvalidArgumentException if $newLocationLongitude is not a float or insecure
+	 * @throws \TypeError if $newLocationLongitude is not a float
 	 */
 	public function setLocationLongitude(float $newLocationLongitude): void {
+		if($newLocationLongitude === NULL) {
+			$this->locationLatitude =$newLocationLongitude;
+			return;
+		}
+
+		//make sure longitude is secure
+		$newLocationLongitude = trim($newLocationLongitude);
+		$newLocationLongitude = filter_var($newLocationLongitude, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		//make sure longitude is not empty
+		if(empty($newLocationLongitude) === true) {
+			throw(new \InvalidArgumentException("Longitude is empty or insecure"));
+		}
+
+		//make sure longitude fits in the database
+		if(is_float($newLocationLongitude) === false) {
+			throw(new\TypeError("latitude is not a float"));
+		}
+		//store longitude in the database
 		$this->locationLongitude = $newLocationLongitude;
 	}
 
@@ -297,10 +355,10 @@ class Location {
 	/**
 	 * mutator method for location image cloudinary id
 	 *
-	 * @param string $newLocationImageCloudinaryId
+	 *@param string $newLocationImageCloudinaryId
 	 *@throws \InvalidArgumentException if $newLocationImageCloudinaryId is not a string or insecure
-	 * @throws \RangeException if $newLocationImageCloudinaryId is < 128 characters
-	 * @throws \TypeError if $newLocationImageCloudinaryId is not a string
+	 *@throws \RangeException if $newLocationImageCloudinaryId is < 128 characters
+	 *@throws \TypeError if $newLocationImageCloudinaryId is not a string
 	 */
 	public function setLocationImageCloudinaryId(?string $newLocationImageCloudinaryId): void {
 		if ($newLocationImageCloudinaryId === NULL) {
@@ -318,6 +376,8 @@ class Location {
 		//make sure the cloudinary id will fit in the database
 		if(strlen($newLocationImageCloudinaryId) > 128)
 			throw(new \RangeException("cloudinary id must be 128 characters or less"));
+
+		//store image cloudinary id
 		$this->locationImageCloudinaryId = $newLocationImageCloudinaryId;
 	}
 
