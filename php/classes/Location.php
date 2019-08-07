@@ -14,9 +14,9 @@ use Ramsey\Uuid\Uuid;
  * that is held by the entity profile
  */
 
-class Location {
+class Location implements \JsonSerializable {
 	use validateUuid;
-	use ValidaterDate;
+	use ValidateDate;
 
 	/**
 	 * id for this location; this is the primary key
@@ -521,4 +521,18 @@ class Location {
 		//convert and store Imdb Url
 		$this->locationImdbUrl = $newLocationImdbUrl;
 	}
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() : array {
+		$fields = get_object_vars($this);
+
+		$fields["locationId"] = $this->locationId->toString();
+		$fields["locationProfileId"] =$this->locationProfileId->toString();
+		return($fields);
+	}
+
 }
