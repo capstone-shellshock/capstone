@@ -5,7 +5,6 @@ namespace shellShock\Capstone;
 require_once("autoload.php");
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 
-use http\Exception\BadQueryStringException;
 use Ramsey\Uuid\Uuid;
 
 /**
