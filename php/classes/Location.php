@@ -512,18 +512,6 @@ class Location implements \JsonSerializable {
 		$this->locationImdbUrl = $newLocationImdbUrl;
 	}
 
-	/**
-	 * formats the state variables for JSON serialization
-	 *
-	 * @return array resulting state variables to serialize
-	 **/
-	public function jsonSerialize() : array {
-		$fields = get_object_vars($this);
-
-		$fields["locationId"] = $this->locationId->toString();
-		$fields["locationProfileId"] =$this->locationProfileId->toString();
-		return($fields);
-	}
 
 	/**
 	 * inserts this location into mySQL
@@ -582,11 +570,38 @@ class Location implements \JsonSerializable {
 		$statement->execute($parameters);
 	}
 
+
+
+	/**
+	 * gets the location by location Id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $locationId location address to search for
+	 * @return Location
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 * */
+
+	public static function getLocationByLocationId (\PDO $pdo, string $locationId) : \SplFixedArray {
+		//sanitize the description before searching
+		$locationId = trim($locationId);
+		$locationId = filter_var($locationId, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($locationId) === true) {
+			throw(new \PDOException("location Id is invalid"));
+		}
+
+		//escape any mySQL wild cards
+		$locationId = str_replace("_","\\_", str_replace("%", "\\%", $locationId));
+
+		//create query template
+		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationId LIKE :locationId ";
+		$statement = $pdo->prepare($query);
+
 	/**
 	 * gets the location by location address
 	 *
 	 * @param \PDO $pdo PDO connection object
-	 * @param string $locationAddress location adress to search for
+	 * @param string $locationAddress location address to search for
 	 * @return Location
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
@@ -626,6 +641,16 @@ class Location implements \JsonSerializable {
 		}
 		return($locations);
 	}
+
+		/**
+		 * gets the location by location Title
+		 *
+		 * @param \PDO $pdo PDO connection object
+		 * @param string $locationTitle location ttile to search for
+		 * @return Location
+		 * @throws \PDOException when mySQL related errors occur
+		 * @throws \TypeError when variables are not the correct data type
+		 **/
 	public static function getLocationByLocationTitle (\PDO $pdo, string $locationTitle) : \SplFixedArray {
 		//sanitize the description before searching
 		$locationTitle = trim($locationTitle);
@@ -635,7 +660,7 @@ class Location implements \JsonSerializable {
 		}
 
 		//escape any mySQL wild cards
-		$locationAddress = str_replace("_","\\_", str_replace("%", "\\%", $locationTitle));
+		$locationTitle = str_replace("_","\\_", str_replace("%", "\\%", $locationTitle));
 
 		//create query template
 		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationTitle LIKE :locationTitle ";
@@ -660,6 +685,34 @@ class Location implements \JsonSerializable {
 			}
 		}
 		return($locations);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() : array {
+		$fields = get_object_vars($this);
+
+		$fields["locationId"] = $this->locationId->toString();
+		$fields["locationProfileId"] =$this->locationProfileId->toString();
+		return($fields);
 	}
 
 }
