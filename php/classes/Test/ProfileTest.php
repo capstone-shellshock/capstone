@@ -55,6 +55,38 @@ class ProfileTest extends ProfileTestSetup {
 
 	protected $VALID_HASH;
 
+	/**
+	 * run the default setup operation to create salt and hash
+	 **/
+
+	public final function setUp() : void {
+		parent::setUp();
+
+		$password = "abc123";
+		$this -> VALID_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+		$this -> VALID_ACTIVATION = bin2hex(random_bytes(16));
+	}
+
+	/**
+	 * test inserting a valid profile and verify that the actual MySQL data matches
+	 **/
+
+	public function testInsertValidProfile() : void {
+		//count the number of rows and save it for later
+		$numRows = $this -> getConnection() -> getRowCount("profile");
+
+		$profileId = generateUuidV4();
+
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile -> insert($this -> getPDO());
+
+		//grab the data from MySQL and enforce the fields match our expectations
+		$pdoProfile = Profile::getProfileByProfileId($this -> getPDO(), $profile -> getProfileId());
+		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
+		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATION);
+	}
+
 
 
 
