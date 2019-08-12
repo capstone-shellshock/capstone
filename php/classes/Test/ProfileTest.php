@@ -85,6 +85,31 @@ class ProfileTest extends ProfileTestSetup {
 		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
 		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
 		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
+		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+	}
+
+	/**
+	 * test inserting a profile, editing it, and then updating it
+	 **/
+
+	public function testUpdateValidProfile() {
+		//count the number of rows and save it for later
+
+		$numRows = $this -> getConnection() -> getRowCount("profile");
+
+		//create a new profile and insert into MySQL
+		$profileId = generateUuidV4();
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this);
+		$profile -> insert($this -> getPDO());
+
+		//edit the profile and update it in MySQL
+		$profile -> setProfileUsername($this -> VALID_USERNAME);
+		$profile -> update($this -> getPDO());
+
+		//grab the data from MySQL and enforce that the fields match the expectations
+		$pdoProfile = Profile::getProfileByProfileId()
 	}
 
 
