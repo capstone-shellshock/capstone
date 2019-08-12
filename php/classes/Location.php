@@ -637,7 +637,7 @@ class Location implements \JsonSerializable {
 		$locationProfileId = str_replace("_", "\\_", str_replace("%", "\\%", $locationProfileId));
 
 		//create query template
-		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationId LIKE :locationId ";
+		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationProfileId LIKE :locationProfileId ";
 		$statement = $pdo->prepare($query);
 
 		//bind the location to the place holder in the template
@@ -771,7 +771,7 @@ class Location implements \JsonSerializable {
 		$locationImdbUrl = str_replace("_", "\\_", str_replace("%", "\\%", $locationImdbUrl));
 
 		//create query template
-		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationId LIKE :locationId ";
+		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationImdbUrl LIKE :locationImdbUrl ";
 		$statement = $pdo->prepare($query);
 
 		//bind the location to the place holder in the template
@@ -794,6 +794,37 @@ class Location implements \JsonSerializable {
 		}
 		return($locations);
 	}
+
+	/**
+	 *  gets the all locations
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return Location
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 * **/
+	public static function getAllLocations (\PDO $pdo) : \SplFixedArray {
+		//create query template
+		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		//build an array of locations
+		$locations = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row =$statement->fetch()) !== false) {
+			try {
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$locations[$locations->key()] = $location;
+				$locations->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($locations);
+	}
+
 	/**
 	 * formats the state variables for JSON serialization
 	 *
