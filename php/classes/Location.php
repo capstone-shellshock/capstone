@@ -625,8 +625,21 @@ class Location implements \JsonSerializable {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 */
+	public static function getLocationByLocationProfileId (\PDO $pdo, string $locationProfileId) : \SplFixedArray {
+		//sanitize the description before searching
+		$locationProfileId = trim($locationProfileId);
+		$locationProfileId = filter_var($locationProfileId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($locationProfileId) === true) {
+			throw(new \PDOException("location Profile Id is invalid"));
+		}
 
+		//escape any mySQL wild cards
+		$locationProfileId = str_replace("_", "\\_", str_replace("%", "\\%", $locationProfileId));
 
+		//create query template
+		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationId LIKE :locationId ";
+		$statement = $pdo->prepare($query);
+	}
 	/**
 	 * gets the location by location address
 	 *
