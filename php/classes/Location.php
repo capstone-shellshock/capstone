@@ -597,6 +597,27 @@ class Location implements \JsonSerializable {
 		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationId LIKE :locationId ";
 		$statement = $pdo->prepare($query);
 
+		//bind the location to the place holder in the template
+		$locationId = "%$locationId%";
+		$parameters = ["locationId" => $locationId];
+		$statement->execute($parameters);
+
+		//build an array of locations
+		$locations = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row =$statement->fetch()) !== false) {
+			try {
+				$location = new Location ($row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$locations[$locations->key()] = $location;
+				$locations->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($locations);
+	}
+
 	/**
 	 * gets the location by location address
 	 *
@@ -686,21 +707,6 @@ class Location implements \JsonSerializable {
 		}
 		return($locations);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	/**
 	 * formats the state variables for JSON serialization
