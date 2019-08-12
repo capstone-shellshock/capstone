@@ -235,7 +235,36 @@ class ProfileTest extends ProfileTestSetup {
 		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
 	}
 
-	
+	/**
+	 * test grabbing a profile that does not exist by invalid profileId
+	 **/
+
+	public function testGetProfileByInvalidId() : void {
+		//grab a profile id that exceeds the limit
+		$invalidProfileId = generateUuidV4();
+		$profile = Profile::getProfileByProfileId($this -> getPDO(), $invalidProfileId);
+		$this -> assertNull($profile);
+	}
+
+	/**
+	 * test grabbing a profile that does not exist by invalid activation token
+	 **/
+
+	public function testGetProfileByInvalidActivationToken() : void {
+		//grab an activation token that does not exist
+		$profile = Profile::getProfileByActivationToken($this -> getPDO(), "3105839c017d4k492t948250132b3227");
+		$this -> assertNull($profile);
+	}
+
+	/**
+	 * test grabbing a profile that does not exist by invalid email
+	 **/
+
+	public function testGetProfileByInvalidEmail() : void {
+		//grab an email that does not exist
+		$profile = Profile::getProfileByProfileEmail($this -> getPDO(), "totallyFake@youGottaBeKiddingMe.com");
+		$this -> assertNull($profile);
+	}
 
 
 
