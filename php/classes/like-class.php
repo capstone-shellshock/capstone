@@ -140,7 +140,7 @@ use Ramsey\Uuid\Uuid;
 		 *
 		 * @param \PDO $pdo PDO connection object
 		 * @param string $likeLocationId location id to search for
-		 * @param string $likeProfileID profile id to search for
+		 * @param string $likeProfileId profile id to search for
 		 * @return Like|null Like found or null if not found
 		 **/
 		public static function getLikeByLikeLocationIdAndLikeProfileId(\PDO $pdo, string $likeLocationId, string $likeProfileId) : ?Like {
