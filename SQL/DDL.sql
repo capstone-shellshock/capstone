@@ -5,16 +5,16 @@ DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS `profile`;
 
 CREATE TABLE `profile` (
-   profileId BINARY(16) NOT NULL,
-   profileActivationToken CHAR(32),
-   profileEmail VARCHAR(128) NOT NULL,
-   profileUsername VARCHAR(64) NOT NULL,
-   profileHash CHAR(97) NOT NULL,
+	profileId BINARY(16) NOT NULL,
+	profileActivationToken CHAR(32),
+	profileEmail VARCHAR(128) NOT NULL,
+	profileUsername VARCHAR(64) NOT NULL,
+	profileHash CHAR(97) NOT NULL,
 
-   UNIQUE(profileEmail),
-   UNIQUE(profileUsername),
+	UNIQUE(profileEmail),
+	UNIQUE(profileUsername),
 
-   PRIMARY KEY(profileId)
+	PRIMARY KEY(profileId)
 
 );
 
