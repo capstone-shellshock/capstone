@@ -2,7 +2,7 @@
 
 namespace shellShock\Capstone;
 
-use
+use shellShock\Capstone\profile-class;
 
 //grab the class under scrutiny
 require_once(dirname(__DIR__)."/autoload.php");
@@ -144,12 +144,100 @@ class ProfileTest extends ProfileTestSetup {
 	 * test inserting a profile and getting it from MySQL
 	 **/
 
-	public function testGetValidProfileByProfileId() : void {
+	public function testGetProfileByProfileId() : void {
 		//count the number of rows and save it for later
 		$numRows = $this -> getConnection() -> getRowCount("profile");
 
+		$profileId = generateUuidV4();
+		$profile = new Profile($profileId,  $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile -> insert($this -> getPDO());
 
+		//grab the data from MySQL and enforce that the fields match the expectations
+		$pdoProfile = Profile::getProfileByProfileId($this -> getPDO(), $profile -> getProfileId());
+		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
+		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
+		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
 	}
+
+	/**
+	 * test grabbing a profile by activation token
+	 **/
+
+	public function testGetProfileByActivationToken() : void {
+		//count the number of rows and save it for later
+		$numRows = $this -> getConnection() -> getRowCount("profile");
+
+		$profileId = generateUuidV4();
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile -> insert($this -> getPDO());
+
+		//grab the data from MySQL and enforce that the fields match expectations
+		$pdoProfile = Profile::getProfileByActivationToken($this -> getPDO(), $profile -> getProfileActivationToken());
+		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
+		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
+		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+	}
+
+	/**
+	 * test grabbing a profile by email
+	 **/
+
+	public function testGetProfileByEmail() : void {
+		//count the number of rows and save it for later
+		$numRows = $this -> getConnection() -> getRowCount("profile");
+
+		$profileId = generateUuidV4();
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile -> insert($this -> getPDO());
+
+		//grab the data from MySQL and enforce that the data matches expectations
+		$pdoProfile = Profile::getProfileByProfileEmail($this -> getPDO(), $profile -> getProfileEmail());
+		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
+		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
+		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+	}
+
+	/**
+	 * test retrieving a profile by username
+	 **/
+
+	public function testGetProfileByUsername() {
+		//count the number of rows and save it for later
+		$numRows = $this -> getConnection() -> getRowCount("profile");
+
+		$profileId = generateUuidV4();
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile -> insert($this -> getPDO());
+
+		//grab the data from MySQL
+		$results = Profile::getProfileByProfileUsername($this -> getPDO(), $this -> VALID_USERNAME);
+		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
+
+		//enforce there are no other objects bleeding into profile
+		$this -> assertContainsOnlyInstancesOf("shellShock\Capstone\profile-test", $results);
+
+		//enforce that the results match the expectations
+		$pdoProfile = $results[0];
+		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
+		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
+		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+	}
+
+	
+
+
 
 
 
