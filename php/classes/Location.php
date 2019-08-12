@@ -570,8 +570,6 @@ class Location implements \JsonSerializable {
 		$statement->execute($parameters);
 	}
 
-
-
 	/**
 	 * gets the location by location Id
 	 *
@@ -607,7 +605,7 @@ class Location implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row =$statement->fetch()) !== false) {
 			try {
-				$location = new Location ($row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
 				$locations[$locations->key()] = $location;
 				$locations->next();
 			} catch(\Exception $exception) {
@@ -617,6 +615,17 @@ class Location implements \JsonSerializable {
 		}
 		return($locations);
 	}
+
+	/**
+	 *  gets the location by location profile id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $locationProfileId location address to search for
+	 * @return Location
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 */
+
 
 	/**
 	 * gets the location by location address
@@ -652,7 +661,7 @@ class Location implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row =$statement->fetch()) !== false) {
 			try {
-				$location = new Location ($row["locationAddress"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
 				$locations[$locations->key()] = $location;
 				$locations->next();
 			} catch(\Exception $exception) {
@@ -667,7 +676,7 @@ class Location implements \JsonSerializable {
 		 * gets the location by location Title
 		 *
 		 * @param \PDO $pdo PDO connection object
-		 * @param string $locationTitle location ttile to search for
+		 * @param string $locationTitle location title to search for
 		 * @return Location
 		 * @throws \PDOException when mySQL related errors occur
 		 * @throws \TypeError when variables are not the correct data type
@@ -697,7 +706,7 @@ class Location implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row =$statement->fetch()) !== false) {
 			try {
-				$location = new Location ($row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$location = new Location ($row["locationId"],$row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
 				$locations[$locations->key()] = $location;
 				$locations->next();
 			} catch(\Exception $exception) {
