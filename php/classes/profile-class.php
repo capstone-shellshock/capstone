@@ -52,7 +52,7 @@ class Profile implements \JsonSerializable {
 	/**
 	 * constructor
 	 *
-	 * @param string | Uuid $profileId id for profile
+	 * @param string | Uuid $newProfileId id for profile
 	 * @param string $newProfileActivationToken for security
 	 * @param string $newProfileEmail for email storage
 	 * @param string $newProfileUsername for username storage
