@@ -101,7 +101,7 @@ class ProfileTest extends ProfileTestSetup {
 
 		//create a new profile and insert into MySQL
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this);
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
 		$profile -> insert($this -> getPDO());
 
 		//edit the profile and update it in MySQL
@@ -109,7 +109,46 @@ class ProfileTest extends ProfileTestSetup {
 		$profile -> update($this -> getPDO());
 
 		//grab the data from MySQL and enforce that the fields match the expectations
-		$pdoProfile = Profile::getProfileByProfileId()
+		$pdoProfile = Profile::getProfileByProfileId($this -> getPDO(), $profile -> getProfileId());
+		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
+		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
+		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+	}
+
+	/**
+	 * test creating a profile and then deleting it
+	 **/
+
+	public function testDeleteValidProfile() : void {
+		//count the number of rows and save it for later
+		$numRows = $this -> getConnection() -> getRowCount("profile");
+
+		$profileId = generateUuidV4();
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile -> insert($this -> getPDO());
+
+		//delete the profile from MySQL
+		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
+		$profile -> delete($this -> getPDO());
+
+		//grab the data from MySQL and enforce the profile does not exist
+		$pdoProfile = Profile::getProfileByProfileId($this -> getPDO(), $profile -> getProfileId());
+		$this -> assertNull($pdoProfile);
+		$this -> assertEquals($numRows, $this -> getConnection() -> getRowCount("profile"));
+	}
+
+	/**
+	 * test inserting a profile and getting it from MySQL
+	 **/
+
+	public function testGetValidProfileByProfileId() : void {
+		//count the number of rows and save it for later
+		$numRows = $this -> getConnection() -> getRowCount("profile");
+
+
 	}
 
 
