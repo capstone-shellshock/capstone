@@ -323,10 +323,10 @@ class Location implements \JsonSerializable {
 
 		//make sure latitude is in range
 		if(floatval($newLocationLongitude) < -180) {
-			throw(new\RangeException("latitude is not between -90 and 90"));
+			throw(new\RangeException("latitude is not between -180 and 180"));
 		}
 		if(floatval($newLocationLongitude) > 180) {
-			throw(new\RangeException("latitude is not between -90 and 90"));
+			throw(new\RangeException("latitude is not between -180 and 180"));
 		}
 		//store longitude in the database
 		$this->locationLongitude = $newLocationLongitude;
