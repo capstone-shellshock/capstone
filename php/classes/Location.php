@@ -717,13 +717,13 @@ class Location implements \JsonSerializable {
 	public static function getLocationByLocationTitle (\PDO $pdo, string $locationTitle) : \SplFixedArray {
 		//sanitize the description before searching
 		$locationTitle = trim($locationTitle);
-		$locationTitle = filter_var($locationTitle, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES);
+		$locationTitle = filter_var($locationTitle, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($locationTitle) === true) {
 			throw(new \PDOException("location title is invalid"));
 		}
 
 		//escape any mySQL wild cards
-		$locationTitle = str_replace("_","\\_", str_replace("%", "\\%", $locationTitle));
+		$locationTitle = str_replace("_", "\\_", str_replace("%", "\\%", $locationTitle));
 
 		//create query template
 		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationTitle LIKE :locationTitle ";
@@ -737,52 +737,7 @@ class Location implements \JsonSerializable {
 		//build an array of locations
 		$locations = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row =$statement->fetch()) !== false) {
-			try {
-				$location = new Location ($row["locationId"],$row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
-				$locations[$locations->key()] = $location;
-				$locations->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return($locations);
-	}
-
-	/**
-	 * gets the location by location Imdb Url
-	 *
-	 * @param \PDO $pdo PDO connection object
-	 * @param string $locationImdbUrl location title to search for
-	 * @return Location
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when variables are not the correct data type
-	 **/
-	public static function getLocationByLocationImdbUrl (\PDO $pdo, string $locationImdbUrl) : \SplFixedArray {
-		//sanitize the description before searching
-		$locationImdbUrl = trim($locationImdbUrl);
-		$locationImdbUrl = filter_var($locationImdbUrl, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($locationImdbUrl) === true) {
-			throw(new \PDOException("location Profile Imdb Url is invalid"));
-		}
-
-		//escape any mySQL wild cards
-		$locationImdbUrl = str_replace("_", "\\_", str_replace("%", "\\%", $locationImdbUrl));
-
-		//create query template
-		$query = "SELECT locationId, locationProfileID, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationImdbUrl LIKE :locationImdbUrl ";
-		$statement = $pdo->prepare($query);
-
-		//bind the location to the place holder in the template
-		$locationImdbUrl = "%$locationImdbUrl%";
-		$parameters = ["locationImdbUrl" => $locationImdbUrl];
-		$statement->execute($parameters);
-
-		//build an array of locations
-		$locations = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row =$statement->fetch()) !== false) {
+		while(($row = $statement->fetch()) !== false) {
 			try {
 				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
 				$locations[$locations->key()] = $location;
@@ -792,7 +747,7 @@ class Location implements \JsonSerializable {
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($locations);
+		return ($locations);
 	}
 
 	/**
