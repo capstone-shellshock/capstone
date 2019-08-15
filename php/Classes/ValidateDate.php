@@ -1,5 +1,5 @@
 <?php
-namespace shellShock\Capstone;
+namespace ShellShock\Capstone;
 /**
  * Trait to Validate a mySQL Date
  *
