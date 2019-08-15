@@ -272,5 +272,40 @@ class LocationTest extends ProfileClassTest {
 		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
 	}
 
+	/**
+	 * test grabbing a location by location profile Id
+	 */
+	public function testGetValidLocationByLocationProfileId() {
+		//count the number of rows and sva it for later
+		$numRows = $this->getConnection()->getRowCount("location");
+
+		//create a new location and insert it into mySQL
+		$locationId = generateUuidV4();
+		$location = new Location($locationId, $this->profile->getProfileId(), $this->VALID_LOCATIONADDRESS, $this->VAILID_LOCATIONDATE, $this->VALID_LOCATIONLATITUDE, $this->VALID_LOCATIONLONGITUDE, $this->VALID_LOCATIONIMAGECLOUDINARYID, $this->VALID_LOCATIONIMAGECLOUDINARYURL, $this->VALID_LOCATIONTEXT, $this->VALID_LOCATIONTITLE, $this->VALID_LOCATIONIMDBURL);
+		$location->insert($this->getPDO());
+
+		//grab the data from mySQL and enforce the fields match our expectations
+		$results = Location::getLocationByLocationProfileId($this->getPDO(), $location->getLocationProfileId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("", $results);
+
+		//grab the result from the array and validate it
+		$pdoLocation = $results[0];
+
+		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
+		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
+		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
+		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
+		$this->assertEquels($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
+		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT);
+		$this->assertEquels($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
+		$this->assertEquels($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
+		//format the date too secnds since the beginning of time to avoid round off errors
+		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
+	}
+
 
 }
