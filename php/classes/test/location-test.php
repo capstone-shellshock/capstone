@@ -136,7 +136,7 @@ class LocationTest extends ProfileClassTest {
 
 
 		//create and insert a Profile to own the Test Location
-		$this->profile = new Profile(generateUuidV4(),  );
+		$this->profile = new Profile(generateUuidV4(), null, "ajaramillo208@cnm.edu", "ajaramillo208", $this->VALID_PROFILE_HASH);
 		$this->profile->insert($this->getPDO());
 
 		//calculate the date (use the time the unit test was setup)
@@ -253,7 +253,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("", $results);
+		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
@@ -288,7 +288,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getLocationByLocationProfileId($this->getPDO(), $location->getLocationProfileId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("", $results);
+		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
@@ -323,7 +323,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getLocationByLocationAddress($this->getPDO(), $location->getLocationAddress());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("", $results);
+		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
@@ -357,7 +357,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getLocationByLocationTitle($this->getPDO(), $location->getLocationTitle());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("", $results);
+		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
@@ -392,7 +392,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getALLLocations($this->getPDO());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("", $results);
+		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
