@@ -124,6 +124,7 @@ class LocationTest extends ProfileClassTest {
 	 */
 	protected $VALID_LOCATIONIMDBURL = "bootcamp-coders.cnm.edu";
 
+
 	/**
 	 * create dependent objects before running each test
 	 */
@@ -160,7 +161,7 @@ class LocationTest extends ProfileClassTest {
 
 		// create a new location and insert into mySQL
 		$locationId = generateUuidV4();
-		$location = new Location($locationId, $this->profile->getProfileId(), $this->VALID_LOCATIONADDRESS, $this->VAILID_LOCATIONDATE, $this->VALID_LOCATIONLATITUDE, $this->VALID_LOCATIONLONGITUDE, $this->VALID_LOCATIONIMAGECLOUDINARYID, $this->VALID_LOCATIONIMAGECLOUDINARYURL, $this->VALID_LOCATIONTEXT, $this->VALID_LOCATIONTITLE, $this->VALID_LOCATIONIMDBURL);
+		$location = new Location($locationId, $this->profile->getProfileId(), $this->VALID_LOCATIONADDRESS, $this->VALID_LOCATIONDATE, $this->VALID_LOCATIONLATITUDE, $this->VALID_LOCATIONLONGITUDE, $this->VALID_LOCATIONIMAGECLOUDINARYID, $this->VALID_LOCATIONIMAGECLOUDINARYURL, $this->VALID_LOCATIONTEXT, $this->VALID_LOCATIONTITLE, $this->VALID_LOCATIONIMDBURL);
 		$location->insert($this->getPDO());
 
 		//grab the data from mySQL and enforce the fields match our expectations
@@ -189,7 +190,7 @@ class LocationTest extends ProfileClassTest {
 
 		// create a new location and insert into mySQL
 		$locationId = generateUuidV4();
-		$location = new Location($locationId, $this->profile->getProfileId(), $this->VALID_LOCATIONADDRESS, $this->VAILID_LOCATIONDATE, $this->VALID_LOCATIONLATITUDE, $this->VALID_LOCATIONLONGITUDE, $this->VALID_LOCATIONIMAGECLOUDINARYID, $this->VALID_LOCATIONIMAGECLOUDINARYURL, $this->VALID_LOCATIONTEXT, $this->VALID_LOCATIONTITLE, $this->VALID_LOCATIONIMDBURL);
+		$location = new Location($locationId, $this->profile->getProfileId(), $this->VALID_LOCATIONADDRESS, $this->VALID_LOCATIONDATE, $this->VALID_LOCATIONLATITUDE, $this->VALID_LOCATIONLONGITUDE, $this->VALID_LOCATIONIMAGECLOUDINARYID, $this->VALID_LOCATIONIMAGECLOUDINARYURL, $this->VALID_LOCATIONTEXT, $this->VALID_LOCATIONTITLE, $this->VALID_LOCATIONIMDBURL);
 		$location->insert($this->getPDO());
 
 		//edit the Location and update it in mySQL
@@ -224,5 +225,19 @@ class LocationTest extends ProfileClassTest {
 		$locationId = generateUuidV4();
 		$location = new Location($locationId, $this->profile->getProfileId(), $this->VALID_LOCATIONADDRESS, $this->VAILID_LOCATIONDATE, $this->VALID_LOCATIONLATITUDE, $this->VALID_LOCATIONLONGITUDE, $this->VALID_LOCATIONIMAGECLOUDINARYID, $this->VALID_LOCATIONIMAGECLOUDINARYURL, $this->VALID_LOCATIONTEXT, $this->VALID_LOCATIONTITLE, $this->VALID_LOCATIONIMDBURL);
 		$location->insert($this->getPDO());
+
+		//delete the Location from mySQL
+		$this->assertEquels($numRows + 1, $this->getConnection()->getRowCount("Location"));
+		$location->delete($this->getPDO());
+
+		//grab the daata from mySQL and enforce the Location does not exist
+		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
+		$this->assertNull($pdoLocation);
+		$this->assertEquals($numRows, $this->getConnection()->getRowCount($location));
+
 	}
+
+	/**
+	 *
+	 */
 }
