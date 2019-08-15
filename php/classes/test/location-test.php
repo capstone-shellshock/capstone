@@ -42,7 +42,7 @@ class LocationTest extends ProfileClassTest {
 	 * @var string $VALID_LOCATIONADDRESS2
 	 */
 
-	protected $VAILID_LOCATIONDATE = null;
+	protected $VALID_LOCATIONDATE = null;
 
 	/**
 	 * Valid timestamp to use as a sunriseLocationDate
@@ -73,7 +73,7 @@ class LocationTest extends ProfileClassTest {
 	 *
 	 * @var $VALIDE_LOCATIONIMAGECLOUDINARYID
 	 */
-	protected $VALID_LOCATIONIMAGECLOUDINARYID = null;
+	protected $VALID_LOCATIONIMAGECLOUDINARYID = "some kind of string";
 
 	/**
 	 * cloudinary URL for the location Image
@@ -87,11 +87,69 @@ class LocationTest extends ProfileClassTest {
 	 *
 	 * @var $VALID_LOCATIONTEXT
 	 */
-	protected $VALID_LOCATIONTEXT = "wow what a cool filmimg location i saw spongebob hes such a dream boat";
+	protected $VALID_LOCATIONTEXT = "wow what a cool filmimg location. I saw Spongebob he's such a dream boat";
 
 	/**
+	 *title of the production thats being filmed at the location
 	 *
+	 * @var $VALID_LOCATIONTITLE
 	 */
+	protected $VALID_LOCATIONTITLE = "Some Movie Title";
+
+	/**
+	 * imdb url for the production thats being filmed at the location
+	 *
+	 * @var $VALID_LOCATIONIMDB
+	 */
+	protected $VALID_LOCATIONIMDBURL = "bootcamp-coders.cnm.edu";
+
+	/**
+	 * create dependent objects before running each test
+	 */
+	public final function setUp($VALID_LOCATIONDATE) : void {
+		// run the default setUp() method first
+		parent::setUp();
+		$password = "abc123";
+		$this->VALID_PROFILE_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 
 
+		//create and insert a Profile to own the Test Location
+		$this->profile = new Profile(generateUuidV4(),  );
+		$this->profile->insert($this->getPDO());
+
+		//calculate the date (use the time the unit test was setup)
+		$this->$VALID_LOCATIONDATE = new \DateTime();
+
+		//format the sunrise date to use for testing
+		$this->VALID_SUNRISEDATE = new \DateTime();
+		$this->VALID_SUNRISEDATE->sub(new \DateInterval("P10D"));
+
+		//format the sunset date to use for testing
+		$this->VALID_SUNSETDATE = new\DateTime();
+		$this->VALID_SUNSETDATE->add(new \DateInterval("P10D"));
+
+	}
+
+	/**
+	 * test inserting a valid Location and verify that the actual mySQL data matches
+	 */
+	public function testInsertValidLocation() : void {
+		//count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("location");
+
+		// create a new location and insert into mySQL
+		$locationId = generateUuidV4();
+		$location = new Location($locationId, $this->profile->getProfileId(), $this->VALID_LOCATIONADDRESS, $this->VAILID_LOCATIONDATE, $this->VALID_LOCATIONLATITUDE, $this->VALID_LOCATIONLONGITUDE, $this->VALID_LOCATIONIMAGECLOUDINARYID, $this->VALID_LOCATIONIMAGECLOUDINARYURL, $this->VALID_LOCATIONTEXT, $this->VALID_LOCATIONTITLE, $this->VALID_LOCATIONIMDBURL);
+		$location->insert($this->getPDO());
+
+		//grab the data from mySQL and enforce the fields match our expectations
+		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
+		$this->assertEquels($numRows + 1, $this->getConnection()->getRowCount("Location"));
+		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
+		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
+		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
+		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
+		$this->assertEquels($pdoLocation->)
+	}
 }
