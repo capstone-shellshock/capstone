@@ -1,9 +1,9 @@
 <?php
 
-namespace shellShock\Capstone;
+namespace ShellShock\Capstone;
 
 require_once("autoload.php");
-require_once(dirname(__DIR__)."/classes/autoload.php");
+require_once(dirname(__DIR__) . "/Classes/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 
@@ -335,12 +335,7 @@ class Profile implements \JsonSerializable {
 		}
 
 		//create query template
-<<<<<<< HEAD
-		$query = "SELECT profileId, profileActivationToken, profileEmail, profileUsername, profileHash FROM profile
-						WHERE profileId = :profileId";
-=======
 		$query = "SELECT profileId, profileActivationToken, profileEmail, profileUsername, profileHash FROM profile WHERE profileId = :profileId";
->>>>>>> master
 		$statement = $pdo -> prepare($query);
 
 		//gets the profile from MySQL

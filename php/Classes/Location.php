@@ -1,6 +1,6 @@
 <?php
 
-namespace shellShock\Capstone;
+namespace ShellShock\Capstone;
 
 require_once("autoload.php");
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
@@ -15,7 +15,7 @@ use Ramsey\Uuid\Uuid;
  */
 
 class Location implements \JsonSerializable {
-	use validateUuid;
+	use ValidateUuid;
 	use ValidateDate;
 
 	/**
