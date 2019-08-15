@@ -2,14 +2,12 @@
 
 namespace shellShock\Capstone;
 
-use shellShock\Capstone\profile-class;
+use shellShock\Capstone\{Profile};
 
-//grab the class under scrutiny
 require_once(dirname(__DIR__)."/autoload.php");
 
 //grab the UUID generator
-require_once(dirname(__DIR__,2)."uuid.php");
-
+require_once(dirname(__DIR__,1)."/vendor/uuid/src/Uuid.php");
 
 
 /**
@@ -21,7 +19,7 @@ require_once(dirname(__DIR__,2)."uuid.php");
  * @author Justin Murphy <jmurphy33@cnm.edu>
  **/
 
-class ProfileTest extends ProfileTestSetup {
+class ProfileTest {
 
 	/**
 	 *place holder until account activation is created
@@ -264,6 +262,11 @@ class ProfileTest extends ProfileTestSetup {
 		//grab an email that does not exist
 		$profile = Profile::getProfileByProfileEmail($this -> getPDO(), "totallyFake@youGottaBeKiddingMe.com");
 		$this -> assertNull($profile);
+	}
+
+	public function testGetProfileByInvalidUsername() : void {
+		//grabs a username that does not exist
+		$profile = Profile:: getProfileByProfileUsername($this -> getPDO(), "notARealUsername");
 	}
 
 
