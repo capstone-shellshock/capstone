@@ -1,6 +1,6 @@
 <?php
 
-namespace shellShock\Capstone;
+namespace ShellShock\Capstone;
 
 require_once("../Classes/Like.php");
 

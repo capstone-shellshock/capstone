@@ -2,11 +2,8 @@
 namespace ShellShock\Capstone;
 
 require_once ("autoload.php");
-require_once (dirname(__DIR__) . "/Classes/autoload.php");
+require_once (dirname(__DIR__)."/vendor/autoload.php");
 
-
-use http\Exception\InvalidArgumentException;
-use mysql_xdevapi\Exception;
 use Ramsey\Uuid\Uuid;
 
 	/**

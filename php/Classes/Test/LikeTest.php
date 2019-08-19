@@ -1,13 +1,12 @@
 <?php
-namespace shellShock\Capstone;
+namespace ShellShock\Capstone\Test;
 
-require_once ("autoload.php");
-require_once (dirname(__DIR__)."/classes/autoload.php");
+use ShellShock\Capstone\{Like};
 
+require_once (dirname(__DIR__)."/autoload.php");
 
-use http\Exception\InvalidArgumentException;
-use mysql_xdevapi\Exception;
-use Ramsey\Uuid\Uuid;
+//grab the UUID generator
+require_once (dirname(__DIR__,2)."/lib/uuid.php");
 
 /**
  * Full PHPUnit test for the Like class
@@ -15,11 +14,11 @@ use Ramsey\Uuid\Uuid;
  * This is a complete PHPUnit test of the Like class. It is complete because "ALL" mySQL/PDO enabled methods
  * are tested for both invalid and valid inputs.
  *
- * @see \shellShock\Capstone\Like
+ * @see \ShellShock\Capstone\Like
  * @author Lariah Christensen <lchristensen7@cnm.edu>
  **/
 
-class LikeTest extends DataDesignTest {
+class LikeTest extends AbqOnTheReelTest {
 	/**
 	 * Profile that created the like of location; this is for foreign key
 	 * @var Profile $profile
@@ -62,13 +61,13 @@ class LikeTest extends DataDesignTest {
 		$this->VALID_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 		$this->VALID_ACTIVATION = bin2hex(random_bytes(16));
 
-		//create and insert the mocked profile
-		$this->profile = new Profile(generateUuidV4(), null,"phpunit", "https://media.giphy.com/media/3og0INyCmH1Nylks90/giphy.gif", "test@phpunit.de",$this->VALID_HASH,"+12125551212");
-		$this->profile->insert($this->getPDO());
-
-		//create the and insert the mocked location
-		$this->location = new Location(generateUuidV4(), $this->profile->getProfileId(), "PHPUnit like test passing");
-		$this->locdation->insert($this->getPDO());
+////		//create and insert the mocked profile
+////		$this->profile = new Profile(generateUuidV4(), null,"phpunit", "https://media.giphy.com/media/3og0INyCmH1Nylks90/giphy.gif", "test@phpunit.de",$this->VALID_HASH,"+12125551212");
+////		$this->profile->insert($this->getPDO());
+//
+//		//create the and insert the mocked location
+//		$this->location = new Location(generateUuidV4(), $this->profile->getProfileId(), "PHPUnit like test passing");
+//		$this->location->insert($this->getPDO());
 
 		//calculate the date (just use the time the unit test was setup...)
 		$this->VALID_LIKEDATE = new \DateTime();
@@ -164,7 +163,7 @@ class LikeTest extends DataDesignTest {
 				$this->assertCount(1, $results);
 
 				//enforce no other objects are bleeding into the test
-				$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\DataDesign\\Like", $results);
+				$this->assertContainsOnlyInstancesOf("ShellShock\\Capstone\\Like", $results);
 
 				//grab the result from the array and validate it
 				$pdoLike = $results[0];
@@ -199,7 +198,7 @@ class LikeTest extends DataDesignTest {
 		$results = Like::getLikebyProfileId($this->getPDO(), $this->profile->getProfileId());
 		$this->assertEquals($numRows + 1, $this>getConnection()->getRowCount("like"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\DataDesign\\Like", $results);
+		$this->assertContainsOnlyInstancesOf("ShellShock\\Capstone\\Like", $results);
 
 		//grab the result from the array and validate it
 		$pdoLike = $results[0];
