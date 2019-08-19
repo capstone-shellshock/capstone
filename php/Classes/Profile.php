@@ -37,16 +37,16 @@ class Profile implements \JsonSerializable {
 	private $profileEmail;
 
 	/**
-	 * profile password hash
-	 **/
-
-	private $profileHash;
-
-	/**
 	 * profile username
 	 **/
 
 	private $profileUsername;
+
+	/**
+	 * profile password hash
+	 **/
+
+	private $profileHash;
 
 	/**
 	 * constructor
@@ -54,8 +54,8 @@ class Profile implements \JsonSerializable {
 	 * @param string | Uuid $newProfileId id for profile
 	 * @param string $newProfileActivationToken for security
 	 * @param string $newProfileEmail for email storage
-	 * @param string $newProfileHash for hashed password storage
 	 * @param string $newProfileUsername for username storage
+	 * @param string $newProfileHash for hashed password storage
 	 * @throws \RangeException if entries are too long
 	 * @throws \InvalidArgumentException if email address format is incorrect
 	 * @throws \TypeError if data entered does not meet type requirements
@@ -67,8 +67,8 @@ class Profile implements \JsonSerializable {
 			$this->setProfileId($newProfileId);
 			$this->setProfileActivationToken($newProfileActivationToken);
 			$this->setProfileEmail($newProfileEmail);
-			$this->setProfileHash($newProfileHash);
 			$this->setProfileUsername($newProfileUsername);
+			$this->setProfileHash($newProfileHash);
 		} catch(\RangeException | \InvalidArgumentException | \TypeError | \Exception $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
@@ -177,42 +177,6 @@ class Profile implements \JsonSerializable {
 		$this -> profileEmail = $newProfileEmail;
 	}
 
-	public function getProfileHash() : string {
-
-		return ($this->profileHash);
-	}
-
-	/**
-	 * mutator method for profileHash
-	 *
-	 * @param string $newProfileHash
-	 * @throws \InvalidArgumentException if hash is not secure
-	 * @throws \RangeException if hash is not proper length
-	 * @throws \TypeError if hash is not a string
-	 **/
-
-	public function setProfileHash(string $newProfileHash) : void {
-
-		$newProfileHash = trim($newProfileHash);
-		if(empty($newProfileHash) === true) {
-			throw(new \InvalidArgumentException("Hash field is empty or insecure"));
-
-		}
-
-		$hashInfo = password_get_info($newProfileHash);
-		if($hashInfo["algoName"] !== "argon2i") {
-			throw(new \InvalidArgumentException("Profile hash is not valid"));
-
-		}
-
-		if (strlen($newProfileHash) !== 97) {
-			throw(new \RangeException("Profile hash must be 97 characters"));
-
-		}
-
-		$this -> profileHash = $newProfileHash;
-	}
-
 	/**
 	 * accessor profile username
 	 *
@@ -253,6 +217,42 @@ class Profile implements \JsonSerializable {
 	 *
 	 * @return string of hash
 	 **/
+
+	public function getProfileHash() : string {
+
+		return ($this->profileHash);
+	}
+
+	/**
+	 * mutator method for profileHash
+	 *
+	 * @param string $newProfileHash
+	 * @throws \InvalidArgumentException if hash is not secure
+	 * @throws \RangeException if hash is not proper length
+	 * @throws \TypeError if hash is not a string
+	 **/
+
+	public function setProfileHash(string $newProfileHash) : void {
+
+		$newProfileHash = trim($newProfileHash);
+		if(empty($newProfileHash) === true) {
+			throw(new \InvalidArgumentException("Hash field is empty or insecure"));
+
+		}
+
+		$hashInfo = password_get_info($newProfileHash);
+		if($hashInfo["algoName"] !== "argon2i") {
+			throw(new \InvalidArgumentException("Profile hash is not valid"));
+
+		}
+
+		if (strlen($newProfileHash) !== 97) {
+			throw(new \RangeException("Profile hash must be 97 characters"));
+
+		}
+
+		$this -> profileHash = $newProfileHash;
+	}
 
 
 	/**

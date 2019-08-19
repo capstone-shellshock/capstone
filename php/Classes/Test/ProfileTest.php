@@ -24,10 +24,10 @@ class ProfileTest extends AbqOnTheReelTest {
 	/**
 	 *place holder until account activation is created
 	 *
-	 * @var string $VALID_ACTIVATION
+	 * @var string $VALID_ACTIVATIONTOKEN
 	 **/
 
-	protected $VALID_ACTIVATION;
+	protected $VALID_ACTIVATIONTOKEN;
 
 	/**
 	 * valid email for testing
@@ -48,10 +48,10 @@ class ProfileTest extends AbqOnTheReelTest {
 	/**
 	 * valid hash to use
 	 *
-	 * @var $VALID_HASH
+	 * @var $VALID_PASSWORD_HASH
 	 **/
 
-	protected $VALID_HASH;
+	protected $VALID_PASSWORD_HASH;
 
 	/**
 	 * run the default setup operation to create salt and hash
@@ -61,8 +61,8 @@ class ProfileTest extends AbqOnTheReelTest {
 		parent::setUp();
 
 		$password = "abc123";
-		$this -> VALID_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
-		$this -> VALID_ACTIVATION = bin2hex(random_bytes(16));
+		$this -> VALID_PASSWORD_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+		$this -> VALID_ACTIVATIONTOKEN = bin2hex(random_bytes(16));
 	}
 
 	/**
@@ -75,17 +75,17 @@ class ProfileTest extends AbqOnTheReelTest {
 
 		$profileId = generateUuidV4();
 
-		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_PASSWORD_HASH);
 		$profile -> insert($this -> getPDO());
 
 		//grab the data from MySQL and enforce the fields match our expectations
 		$pdoProfile = Profile::getProfileByProfileId($this -> getPDO(), $profile -> getProfileId());
 		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
 		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
-		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATIONTOKEN);
 		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
 		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
-		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_PASSWORD_HASH);
 	}
 
 	/**
@@ -99,7 +99,7 @@ class ProfileTest extends AbqOnTheReelTest {
 
 		//create a new profile and insert into MySQL
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_PASSWORD_HASH);
 		$profile -> insert($this -> getPDO());
 
 		//edit the profile and update it in MySQL
@@ -110,10 +110,10 @@ class ProfileTest extends AbqOnTheReelTest {
 		$pdoProfile = Profile::getProfileByProfileId($this -> getPDO(), $profile -> getProfileId());
 		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
 		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
-		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATIONTOKEN);
 		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
 		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
-		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_PASSWORD_HASH);
 	}
 
 	/**
@@ -125,7 +125,7 @@ class ProfileTest extends AbqOnTheReelTest {
 		$numRows = $this -> getConnection() -> getRowCount("profile");
 
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_PASSWORD_HASH);
 		$profile -> insert($this -> getPDO());
 
 		//delete the profile from MySQL
@@ -147,17 +147,17 @@ class ProfileTest extends AbqOnTheReelTest {
 		$numRows = $this -> getConnection() -> getRowCount("profile");
 
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId,  $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile = new Profile($profileId,  $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_PASSWORD_HASH);
 		$profile -> insert($this -> getPDO());
 
 		//grab the data from MySQL and enforce that the fields match the expectations
 		$pdoProfile = Profile::getProfileByProfileId($this -> getPDO(), $profile -> getProfileId());
 		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
 		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
-		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this -> VALID_ACTIVATIONTOKEN);
 		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
 		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
-		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_PASSWORD_HASH);
 	}
 
 	/**
@@ -169,17 +169,17 @@ class ProfileTest extends AbqOnTheReelTest {
 		$numRows = $this -> getConnection() -> getRowCount("profile");
 
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_PASSWORD_HASH);
 		$profile -> insert($this -> getPDO());
 
 		//grab the data from MySQL and enforce that the fields match expectations
 		$pdoProfile = Profile::getProfileByProfileActivationToken($this -> getPDO(), $profile -> getProfileActivationToken());
 		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
 		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
-		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATIONTOKEN);
 		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
 		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
-		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_PASSWORD_HASH);
 	}
 
 	/**
@@ -191,17 +191,17 @@ class ProfileTest extends AbqOnTheReelTest {
 		$numRows = $this -> getConnection() -> getRowCount("profile");
 
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_PASSWORD_HASH);
 		$profile -> insert($this -> getPDO());
 
 		//grab the data from MySQL and enforce that the data matches expectations
 		$pdoProfile = Profile::getProfileByProfileEmail($this -> getPDO(), $profile -> getProfileEmail());
 		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
 		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
-		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATIONTOKEN);
 		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
 		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
-		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_PASSWORD_HASH);
 	}
 
 	/**
@@ -213,7 +213,7 @@ class ProfileTest extends AbqOnTheReelTest {
 		$numRows = $this -> getConnection() -> getRowCount("profile");
 
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this -> VALID_ACTIVATION, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_HASH);
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_PASSWORD_HASH);
 		$profile -> insert($this -> getPDO());
 
 		//grab the data from MySQL
@@ -228,9 +228,9 @@ class ProfileTest extends AbqOnTheReelTest {
 
 		$this -> assertEquals($numRows + 1, $this -> getConnection() -> getRowCount("profile"));
 		$this -> assertEquals($pdoProfile -> getProfileId(), $profileId);
-		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATION);
+		$this -> assertEquals($pdoProfile -> getProfileActivationToken(), $this-> VALID_ACTIVATIONTOKEN);
 		$this -> assertEquals($pdoProfile -> getProfileEmail(), $this -> VALID_EMAIL);
 		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
-		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
+		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_PASSWORD_HASH);
 	}
 }
