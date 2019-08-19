@@ -54,8 +54,8 @@ class Profile implements \JsonSerializable {
 	 * @param string | Uuid $newProfileId id for profile
 	 * @param string $newProfileActivationToken for security
 	 * @param string $newProfileEmail for email storage
-	 * @param string $newProfileUsername for username storage
 	 * @param string $newProfileHash for hashed password storage
+	 * @param string $newProfileUsername for username storage
 	 * @throws \RangeException if entries are too long
 	 * @throws \InvalidArgumentException if email address format is incorrect
 	 * @throws \TypeError if data entered does not meet type requirements
