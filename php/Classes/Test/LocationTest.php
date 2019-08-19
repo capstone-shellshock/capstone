@@ -1,21 +1,22 @@
 <?php
-namespace shellShock\Capstone;
-use shellShock\Capstone\Location;
+namespace ShellShock\Capstone\Test;
+use ShellShock\Capstone\{Location, Profile};
 //grab the class under scrutiny
 require_once(dirname(__DIR__)."/autoload.php");
 //grab the UUID generator
-require_once(dirname(__DIR__,2)."uuid.php");
+require_once(dirname(__DIR__,2)."/lib/uuid.php");
 
 
 /**
- * Full PHPUnit test for the Location class
+ * Full PHPUnit Test for the Location class
  *
- * This is a complete PHPUnit test of the Location class. It is complete because *ALL* mySQL/PDO enabled methods
+ * This is a complete PHPUnit Test of the Location class. It is complete because *ALL* mySQL/PDO enabled methods
  * are tested for both invalid and valid inputs.
  *
  * @see Location
  **/
-class LocationTest extends ProfileClassTest {
+class LocationTest extends AbqOnTheReelTest {
+
 	/**
 	 * Profile that created the Location
 	 *
@@ -24,7 +25,7 @@ class LocationTest extends ProfileClassTest {
 	protected $profile = null;
 
 	/**
-	 * valid profile hash to create the profile object to own the test
+	 * valid profile hash to create the profile object to own the Test
 	 * @var $VALID_HASH
 	 */
 	protected $VALID_PROFILE_HASH;
@@ -32,27 +33,27 @@ class LocationTest extends ProfileClassTest {
 	/**
 	 * address for the Location
 	 *
-	 * @var string #VAILD_ADDRESS
+	 * @var string $VALID_ADDRESS
 	 */
 	protected $VALID_LOCATIONADDRESS = "20 1st Plaza Center NW, #200, Albuquerque, NM 87102";
 
 	/**
 	 * address for updated Location
 	 *
-	 * @var string $VALID_LOCATIONADDRESS2
+	 * @var string $VALID_LOCATIONDATE
 	 */
 
-	protected $VALID_LOCATIONDATE = null;
-
-	/**
-	 * Valid timestamp to use as a sunriseLocationDate
-	 */
-	protected $VALID_SUNRISEDATE = null;
+	protected $VALID_LOCATIONDATE;
 
 	/**
-	 * Valid timestamp to use as a sunsetLocationDate
+	 * Valid Timestamp to use as a sunriseLocationDate
 	 */
-	protected $VALID_SUNSETDATE = null;
+	protected $VALID_SUNRISEDATE;
+
+	/**
+	 * Valid Timestamp to use as a sunsetLocationDate
+	 */
+	protected $VALID_SUNSETDATE;
 
 	/**
 	 * latitude of the Location
@@ -71,21 +72,21 @@ class LocationTest extends ProfileClassTest {
 	/**
 	 *cloudinary id for the Location Image
 	 *
-	 * @var $VALIDE_LOCATIONIMAGECLOUDINARYID
+	 * @var $VALID_LOCATIONIMAGECLOUDINARYID
 	 */
-	protected $VALID_LOCATIONIMAGECLOUDINARYID = "some kind of string";
+	protected $VALID_LOCATIONIMAGECLOUDINARYID = "WHHAHSHHS kind of string";
 
 	/**
 	 *cloudinary id for the Location Image
 	 *
-	 * @var $VALIDE_LOCATIONIMAGECLOUDINARYID
+	 * @var $VALID_LOCATIONIMAGECLOUDINARYID
 	 */
 	protected $VALID_LOCATIONIMAGECLOUDINARYID2 = "also some kind of string";
 
 	/**
 	 * updated cloudinary URL for the location Image
 	 *
-	 * @var $VALIDE_LOCATIONIMAGECLOUDINARYURL
+	 * @var $VALID_LOCATIONIMAGECLOUDINARYURL
 	 */
 	protected $VALID_LOCATIONIMAGECLOUDINARYURL = "bootcamp-coders.cnm.edu";
 
@@ -126,9 +127,9 @@ class LocationTest extends ProfileClassTest {
 
 
 	/**
-	 * create dependent objects before running each test
+	 * create dependent objects before running each Test
 	 */
-	public final function setUp($VALID_LOCATIONDATE) : void {
+	public final function setUp() : void {
 		// run the default setUp() method first
 		parent::setUp();
 		$password = "abc123";
@@ -139,8 +140,8 @@ class LocationTest extends ProfileClassTest {
 		$this->profile = new Profile(generateUuidV4(), null, "ajaramillo208@cnm.edu", "ajaramillo208", $this->VALID_PROFILE_HASH);
 		$this->profile->insert($this->getPDO());
 
-		//calculate the date (use the time the unit test was setup)
-		$this->$VALID_LOCATIONDATE = new \DateTime();
+		// calculate the date (just use the time the unit test was setup...)
+		$this->VALID_LOCATIONDATE = new \DateTime();
 
 		//format the sunrise date to use for testing
 		$this->VALID_SUNRISEDATE = new \DateTime();
@@ -153,7 +154,7 @@ class LocationTest extends ProfileClassTest {
 	}
 
 	/**
-	 * test inserting a valid Location and verify that the actual mySQL data matches
+	 * Test inserting a valid location and verify that the actual mySQL data matches
 	 */
 	public function testInsertValidLocation() : void {
 		//count the number of rows and save it for later
@@ -166,23 +167,23 @@ class LocationTest extends ProfileClassTest {
 
 		//grab the data from mySQL and enforce the fields match our expectations
 		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
-		$this->assertEquels($numRows + 1, $this->getConnection()->getRowCount("Location"));
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
 		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
-		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		//format the date too seconds since the beginning of time to avoid round off errors
+		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimestamp());
+		$this->assertEquals($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
 		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
-		$this->assertEquels($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
 		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
 		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT);
-		$this->assertEquels($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
-		$this->assertEquels($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
-		//format the date too secnds since the beginning of time to avoid round off errors
-		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
+		$this->assertEquals($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
+		$this->assertEquals($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
 	}
 
 	/**
-	 * test inserting a Location editing it and then updating it
+	 * Test inserting a Location editing it and then updating it
 	 */
 	public function testUpdateValidLocation() : void {
 		// count the number of rows and save it for later
@@ -194,28 +195,29 @@ class LocationTest extends ProfileClassTest {
 		$location->insert($this->getPDO());
 
 		//edit the Location and update it in mySQL
-		$location->setLocationImageCloudinaryId($this->VALID_LOCATIONTEXT2);
+		$location->setLocationText($this->VALID_LOCATIONTEXT2);
 		$location->update($this->getPDO());
 
 		//grab the data from mySQL and enforce the fields match our expectations
 		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
-		$this->assertEquels($numRows + 1, $this->getConnection()->getRowCount("Location"));
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
 		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
-		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
-		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
-		$this->assertEquels($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
-		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
-		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT);
-		$this->assertEquels($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
-		$this->assertEquels($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
 		//format the result from the array and validate it
-		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
+		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimestamp());
+		$this->assertEquals($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
+		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT2);
+		$this->assertEquals($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
+		$this->assertEquals($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
+
 	}
 
 	/**
-	 * test creating a location and then deleting it
+	 * Test creating a location and then deleting it
 	 */
 	public function testDeleteValidLocation() : void {
 		// count the number of rows and save it for later
@@ -227,18 +229,18 @@ class LocationTest extends ProfileClassTest {
 		$location->insert($this->getPDO());
 
 		//delete the Location from mySQL
-		$this->assertEquels($numRows + 1, $this->getConnection()->getRowCount("Location"));
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$location->delete($this->getPDO());
 
 		//grab the daata from mySQL and enforce the Location does not exist
 		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
 		$this->assertNull($pdoLocation);
-		$this->assertEquals($numRows, $this->getConnection()->getRowCount($location));
+		$this->assertEquals($numRows, $this->getConnection()->getRowCount("location"));
 
 	}
 
 	/**
-	 *test inserting a location and grabbing it from mySql
+	 *Test inserting a location and grabbing it from mySql
 	 */
 	public function testGetValidLocationByLocationId() {
 		//count the number of rows and sva it for later
@@ -250,30 +252,25 @@ class LocationTest extends ProfileClassTest {
 		$location->insert($this->getPDO());
 
 		//grab the data from mySQL and enforce the fields match our expectations
-		$results = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
+		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
-		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
-
-		//grab the result from the array and validate it
-		$pdoLocation = $results[0];
-
 		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
 		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
-		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		//format the result from the array and validate it
+		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimestamp());
+		$this->assertEquals($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
 		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
-		$this->assertEquels($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
 		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
 		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT);
-		$this->assertEquels($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
-		$this->assertEquels($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
-		//format the date too secnds since the beginning of time to avoid round off errors
-		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
+		$this->assertEquals($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
+		$this->assertEquals($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
+
 	}
 
 	/**
-	 * test grabbing a location by location profile Id
+	 * Test grabbing a location by location profile Id
 	 */
 	public function testGetValidLocationByLocationProfileId() {
 		//count the number of rows and sva it for later
@@ -288,7 +285,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getLocationByLocationProfileId($this->getPDO(), $location->getLocationProfileId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
+		$this->assertContainsOnlyInstancesOf("ShellShock\\Capstone\\Location", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
@@ -296,19 +293,20 @@ class LocationTest extends ProfileClassTest {
 		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
 		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
-		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		//format the date too secnds since the beginning of time to avoid round off errors
+		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimestamp());
+		$this->assertEquals($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
 		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
-		$this->assertEquels($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
 		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
 		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT);
-		$this->assertEquels($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
-		$this->assertEquels($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
-		//format the date too secnds since the beginning of time to avoid round off errors
-		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
+		$this->assertEquals($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
+		$this->assertEquals($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
+
 	}
 
 	/**
-	 * test grabbing a location by location address
+	 * Test grabbing a location by location address
 	 */
 	public function testGetValidLocationByLocationAddress() {
 		//count the number of rows and sva it for later
@@ -323,7 +321,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getLocationByLocationAddress($this->getPDO(), $location->getLocationAddress());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
+		$this->assertContainsOnlyInstancesOf("ShellShock\\Capstone\\Location", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
@@ -331,18 +329,19 @@ class LocationTest extends ProfileClassTest {
 		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
 		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
-		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		//format the date too secnds since the beginning of time to avoid round off errors
+		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimestamp());
+		$this->assertEquals($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
 		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
-		$this->assertEquels($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
 		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
 		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT);
-		$this->assertEquels($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
-		$this->assertEquels($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
-		//format the date too secnds since the beginning of time to avoid round off errors
-		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
+		$this->assertEquals($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
+		$this->assertEquals($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
+
 	}
 	/**
-	 * test grabbing the location by locationTitle
+	 * Test grabbing the location by locationTitle
 	 */
 	public function testGetValidLocationByLocationTitle() {
 		//count the number of rows and sva it for later
@@ -357,7 +356,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getLocationByLocationTitle($this->getPDO(), $location->getLocationTitle());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
+		$this->assertContainsOnlyInstancesOf("ShellShock\\Capstone\\Location", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
@@ -365,19 +364,20 @@ class LocationTest extends ProfileClassTest {
 		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
 		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
-		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		//format the date too secnds since the beginning of time to avoid round off errors
+		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimestamp());
+		$this->assertEquals($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
 		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
-		$this->assertEquels($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
 		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
 		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT);
-		$this->assertEquels($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
-		$this->assertEquels($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
-		//format the date too secnds since the beginning of time to avoid round off errors
-		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
+		$this->assertEquals($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
+		$this->assertEquals($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
+
 	}
 
 	/**
-	 * test grabbing all locations
+	 * Test grabbing all locations
 	 */
 	public function testGetAllValidLocations() {
 		//count the number of rows and sva it for later
@@ -392,7 +392,7 @@ class LocationTest extends ProfileClassTest {
 		$results = Location::getALLLocations($this->getPDO());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("shellShock\Capstone", $results);
+		$this->assertContainsOnlyInstancesOf("ShellShock\\Capstone\\Location", $results);
 
 		//grab the result from the array and validate it
 		$pdoLocation = $results[0];
@@ -400,14 +400,15 @@ class LocationTest extends ProfileClassTest {
 		$this->assertEquals($pdoLocation->getLocationId(), $locationId);
 		$this->assertEquals($pdoLocation->getLocationProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoLocation->getLocationAddress(), $this->VALID_LOCATIONADDRESS);
-		$this->assertEquels($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
+		//format the date too secnds since the beginning of time to avoid round off errors
+		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimestamp());
+		$this->assertEquals($pdoLocation->getLocationLatitude(), $this->VALID_LOCATIONLATITUDE);
 		$this->assertEquals($pdoLocation->getLocationLongitude(), $this->VALID_LOCATIONLONGITUDE);
-		$this->assertEquels($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
+		$this->assertEquals($pdoLocation->getLocationImageCloudinaryId(), $this->VALID_LOCATIONIMAGECLOUDINARYID);
 		$this->assertEquals($pdoLocation->getLocationImageCloudinaryUrl(), $this->VALID_LOCATIONIMAGECLOUDINARYURL);
 		$this->assertEquals($pdoLocation->getLocationText(), $this->VALID_LOCATIONTEXT);
-		$this->assertEquels($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
-		$this->assertEquels($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
-		//format the date too secnds since the beginning of time to avoid round off errors
-		$this->assertEquals($pdoLocation->getLocationDate()->getTimestamp(), $this->VALID_LOCATIONDATE->getTimesstamp());
+		$this->assertEquals($pdoLocation->getLocationTitle(), $this->VALID_LOCATIONTITLE);
+		$this->assertEquals($pdoLocation->getLocationImdbUrl(), $this->VALID_LOCATIONIMDBURL);
+
 	}
 }

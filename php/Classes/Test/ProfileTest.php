@@ -11,9 +11,9 @@ require_once(dirname(__DIR__,2)."/lib/uuid.php");
 
 
 /**
- * Unit test for the profile class
+ * Unit Test for the profile class
  *
- * Complete unit test, tests for all MySQL/PDO enabled methods. Tests for both valid and invalid inputs
+ * Complete unit Test, tests for all MySQL/PDO enabled methods. Tests for both valid and invalid inputs
  *
  * @see Profile
  * @author Justin Murphy <jmurphy33@cnm.edu>
@@ -66,7 +66,7 @@ class ProfileTest extends AbqOnTheReelTest {
 	}
 
 	/**
-	 * test inserting a valid profile and verify that the actual MySQL data matches
+	 * Test inserting a valid profile and verify that the actual MySQL data matches
 	 **/
 
 	public function testInsertValidProfile() : void {
@@ -89,7 +89,7 @@ class ProfileTest extends AbqOnTheReelTest {
 	}
 
 	/**
-	 * test inserting a profile, editing it, and then updating it
+	 * Test inserting a profile, editing it, and then updating it
 	 **/
 
 	public function testUpdateValidProfile() {
@@ -117,7 +117,7 @@ class ProfileTest extends AbqOnTheReelTest {
 	}
 
 	/**
-	 * test creating a profile and then deleting it
+	 * Test creating a profile and then deleting it
 	 **/
 
 	public function testDeleteValidProfile() : void {
@@ -139,7 +139,7 @@ class ProfileTest extends AbqOnTheReelTest {
 	}
 
 	/**
-	 * test inserting a profile and getting it from MySQL
+	 * Test inserting a profile and getting it from MySQL
 	 **/
 
 	public function testGetProfileByProfileId() : void {
@@ -161,7 +161,7 @@ class ProfileTest extends AbqOnTheReelTest {
 	}
 
 	/**
-	 * test grabbing a profile by activation token
+	 * Test grabbing a profile by activation token
 	 **/
 
 	public function testGetProfileByActivationToken() : void {
@@ -183,7 +183,7 @@ class ProfileTest extends AbqOnTheReelTest {
 	}
 
 	/**
-	 * test grabbing a profile by email
+	 * Test grabbing a profile by email
 	 **/
 
 	public function testGetProfileByEmail() : void {
@@ -205,7 +205,7 @@ class ProfileTest extends AbqOnTheReelTest {
 	}
 
 	/**
-	 * test retrieving a profile by username
+	 * Test retrieving a profile by username
 	 **/
 
 	public function testGetProfileByUsername() {
