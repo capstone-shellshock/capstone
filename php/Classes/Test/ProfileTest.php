@@ -233,11 +233,4 @@ class ProfileTest extends AbqOnTheReelTest {
 		$this -> assertEquals($pdoProfile -> getProfileUsername(), $this -> VALID_USERNAME);
 		$this -> assertEquals($pdoProfile -> getProfileHash(), $this -> VALID_HASH);
 	}
-
-
-
-
-
-
-
 }
