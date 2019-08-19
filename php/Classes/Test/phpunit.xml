@@ -1,7 +1,7 @@
 <phpunit>
 	<testsuites>
 		<testsuite name="abqonthereel">
-			<file>ProfileTest.php</file>
+			<file>LikeTest.php</file>
 		</testsuite>
 	</testsuites>
 	<filter>
