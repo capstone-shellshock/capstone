@@ -57,7 +57,7 @@ abstract class AbqOnTheReelTest extends TestCase {
 	}
 
 	/**
-	 * templates the setUp method that runs before each test; this method expunges the database before each run
+	 * templates the setUp method that runs before each Test; this method expunges the database before each run
 	 *
 	 * @see https://phpunit.de/manual/current/en/fixtures.html#fixtures.more-setup-than-teardown PHPUnit Fixtures: setUp and tearDown
 	 * @see https://github.com/sebastianbergmann/dbunit/issues/37 TRUNCATE fails on tables which have foreign key constraints
@@ -71,7 +71,7 @@ abstract class AbqOnTheReelTest extends TestCase {
 	}
 
 	/**
-	 * templates the tearDown method that runs after each test; this method expunges the database after each run
+	 * templates the tearDown method that runs after each Test; this method expunges the database after each run
 	 *
 	 * @return Operation delete command for the database
 	 **/
