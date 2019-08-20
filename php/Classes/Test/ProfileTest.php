@@ -75,7 +75,7 @@ class ProfileTest extends AbqOnTheReelTest {
 
 		$profileId = generateUuidV4();
 
-		$profile = new Profile($profileId, $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_USERNAME, $this -> VALID_PASSWORD_HASH);
+		$profile = new Profile($profileId, $this -> VALID_ACTIVATIONTOKEN, $this -> VALID_EMAIL, $this -> VALID_PASSWORD_HASH, $this -> VALID_USERNAME);
 		$profile -> insert($this -> getPDO());
 
 		//grab the data from MySQL and enforce the fields match our expectations
