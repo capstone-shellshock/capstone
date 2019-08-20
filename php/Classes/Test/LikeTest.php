@@ -49,12 +49,11 @@ class LikeTest extends AbqOnTheReelTest {
 		$this->VALID_PROFILE_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 
 //		//create and insert the mocked profile
-		$this->profile = new Profile(generateUuidV4(), null, "test@phpunit.de","phpunit", $this->VALID_PROFILE_HASH,"+12125551212");
+		$this->profile = new Profile(generateUuidV4(), null, "test@phpunit.de",$this->VALID_PROFILE_HASH, "phpunit");
 		$this->profile->insert($this->getPDO());
 
 		//create the and insert the mocked location
 		$this->location = new Location(generateUuidV4(), $this->profile->getProfileId(), "PHPUnit like test passing", null,"-53.4958","89.4938","getcloudiinaryid","anothercloudinaryid", "weneedtacos","ABQONTHEREEL", "https://imbd.movie.url");
-	var_dump($this->location);
 		$this->location->insert($this->getPDO());
 	}
 
@@ -70,7 +69,7 @@ class LikeTest extends AbqOnTheReelTest {
 		$like->insert($this->getPDO());
 
 		//grab the data from mySQL and enforce the fields match our expectations
-		$pdoLIke = Like::getLikeByLikeLocationIdAndLikeProfileId($this->PDO(), $this->profile->getProfileId(), $this->location->getLocationId());
+		$pdoLike = Like::getLikeByLikeLocationIdAndLikeProfileId($this->PDO(), $this->profile->getProfileId(), $this->location->getLocationId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("like"));
 		$this->assertEquals($pdoLike->getLikeProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoLike->getLikeLocationId(), $this->location->getLocationId());
@@ -96,25 +95,6 @@ class LikeTest extends AbqOnTheReelTest {
 				$pdoLike = Like::getLikeByLikeLocationIdAndLikeProfileId($this->getPDO(), $this->profile->getProfileId(), $this->location->getLocationId());
 				$this->assertNull($pdoLike);
 				$this->assertions($numRows, $this->getConnection()->getRowCount("like"));
-			}
-
-			/**
-			 * test inserting a Like and regrabbing it from mySQL
-			 **/
-			public function testGetValidLikeByProfileIdandLocationId() : void {
-				// count the number of rows and save it for later
-				$numRows = $this->getConnection()->getRowCount("like");
-
-				//create a new Like and insert to into mySQL
-				$like = new Like($this->profile->getProfileId(), $this->location->getLocationId());
-				$like->insert($this->getPDO());
-
-				//grab the data from mySQL and enforce the fields match our expectation
-				$pdoLike = Like::getLikeByLikeLocationIdAndLikeProfileId ($this->getPDO(), $this->profile->getProfileId(), $this->location->getLocationId());
-				$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("like"));
-				$this->assertEquals($pdoLike->getLikeProfileId(), $this->profile->getProfileId());
-				$this->assertEquals($pdoLike->getLikeLocationId(), $this->location->getLocationId());
-
 			}
 
 //			/**
