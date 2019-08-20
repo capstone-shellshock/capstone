@@ -47,18 +47,11 @@ class Location implements \JsonSerializable {
 	private $locationDate;
 
 	/**
-	 * latitude of the filming location
+	 * Url to the productions IMDB page (a way for us to verify that this production is not fake)
 	 *
-	 * @var int $lacationLatitude
+	 * @var string $locationImdbUrl
 	 */
-	private $locationLatitude;
-
-	/**
-	 *longitude of the filming location
-	 *
-	 * @var int $locationLatitude
-	 */
-	private $locationLongitude;
+	private $locationImdbUrl;
 
 	/**
 	 *cloudinarys id for the location image
@@ -75,6 +68,20 @@ class Location implements \JsonSerializable {
 	private $locationImageCloudinaryUrl;
 
 	/**
+	 * latitude of the filming location
+	 *
+	 * @var int $lacationLatitude
+	 */
+	private $locationLatitude;
+
+	/**
+	 *longitude of the filming location
+	 *
+	 * @var int $locationLatitude
+	 */
+	private $locationLongitude;
+
+	/**
 	 * text to describe what the user saw at the filming location
 	 *
 	 * @var string $locationText
@@ -88,12 +95,6 @@ class Location implements \JsonSerializable {
 	 */
 	private $locationTitle;
 
-	/**
-	 * Url to the productions IMDB page (a way for us to verify that this production is not fake)
-	 *
-	 * @var string $locationImdbUrl
-	 */
-	private $locationImdbUrl;
 
 	/**
 	 * cunstructor for this Location
@@ -102,13 +103,13 @@ class Location implements \JsonSerializable {
 	 * @param string|Uuid $newLocationProfileId id of the profile that made this location
 	 * @param string $newLocationAddress string containing the address of the location or null if no address was added
 	 * @param \DateTime|string|null $newLocationDate date and time location was added or null if set to current date and time
-	 * @param float $newLocationLatitude
-	 * @param float $newLocationLongitude
 	 * @param string $newLocationImageCloudinaryId string cloudinary id for the image of the location or null if no image is uploaded
 	 * @param string $newLocationImageCloudinaryUrl string cloudinary Url for the image of the location or null if no image was uploaded
+	 * @param string $newLocationImdbUrl string Url to the Imdb page for the production being filmed at the location
+	 * @param float $newLocationLatitude
+	 * @param float $newLocationLongitude
 	 * @param string $newLocationText string the text details of the location
 	 * @param string $newLocationTitle string the title of the production being filmed at the location
-	 * @param string $newLocationImdbUrl string Url to the Imdb page for the production being filmed at the location
 	 * @throws \InvalidArgumentException if data types are not valid
 	 * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws \TypeError if data types violate type hints
@@ -121,13 +122,13 @@ class Location implements \JsonSerializable {
 			$this->setLocationProfileId($newLocationProfileId);
 			$this->setLocationAddress($newLocationAddress);
 			$this->setLocationDate($newLocationDate);
-			$this->setLocationLatitude($newLocationLatitude);
-			$this->setLocationLongitude($newLocationLongitude);
 			$this->setLocationImageCloudinaryId($newLocationImageCloudinaryId);
 			$this->setLocationImageCloudinaryUrl($newLocationImageCloudinaryUrl);
+			$this->setLocationImdbUrl($newLocationImdbUrl);
+			$this->setLocationLatitude($newLocationLatitude);
+			$this->setLocationLongitude($newLocationLongitude);
 			$this->setLocationText($newLocationText);
 			$this->setLocationTitle($newLocationTitle);
-			$this->setLocationImdbUrl($newLocationImdbUrl);
 		}
 
 		//determine what exception type was thrown
@@ -269,72 +270,6 @@ class Location implements \JsonSerializable {
 		//var_dump($newLocationDate);
 	}
 
-	/**
-	 * accessor method for location latitude
-	 *
-	 * @return float for location latitude
-	 */
-	public function getLocationLatitude(): float {
-		return $this->locationLatitude;
-	}
-
-	/**
-	 * mutator method for location latitude
-	 *
-	 * @param float $newLocationLatitude value of latitude
-	 * @throws \InvalidArgumentException if $newLocationLatitude is not a float or insecure
-	 * @throws \RangeException if $newLocationLatitude is not between -90 and 90
-	 */
-	public function setLocationLatitude(float $newLocationLatitude): void {
-		if($newLocationLatitude === NULL) {
-			$this->locationLatitude =$newLocationLatitude;
-			return;
-		}
-
-		//make sure latitude is in range
-		if(floatval($newLocationLatitude) < -90) {
-			throw(new\RangeException("latitude is not between -90 and 90"));
-		}
-		if(floatval($newLocationLatitude) > 90) {
-			throw(new\RangeException("latitude is not between -90 and 90"));
-		}
-
-		//store latitude in the database
-		$this->locationLatitude = $newLocationLatitude;
-	}
-
-	/**
-	 * accessor method for location longitude
-	 *
-	 * @return float for location latitude
-	 */
-	public function getLocationLongitude(): float {
-		return $this->locationLongitude;
-	}
-
-	/**
-	 * mutator method for location longitude
-	 *
-	 * @param float $newLocationLongitude value of longitude
-	 * @throws \InvalidArgumentException if $newLocationLongitude is not a float or insecure
-	 * @throws \RangeException if $newLocationLongitude is not between -90 and 90
-	 */
-	public function setLocationLongitude(float $newLocationLongitude): void {
-		if($newLocationLongitude === NULL) {
-			$this->locationLongitude =$newLocationLongitude;
-			return;
-		}
-
-		//make sure latitude is in range
-		if(floatval($newLocationLongitude) < -180) {
-			throw(new\RangeException("latitude is not between -180 and 180"));
-		}
-		if(floatval($newLocationLongitude) > 180) {
-			throw(new\RangeException("latitude is not between -180 and 180"));
-		}
-		//store longitude in the database
-		$this->locationLongitude = $newLocationLongitude;
-	}
 
 	/**
 	 * accessor method for location image cloudinary id
@@ -413,6 +348,109 @@ class Location implements \JsonSerializable {
 	}
 
 	/**
+	 * accessor method for imdb Url
+	 *
+	 * @return string value of Imdb Url
+	 */
+	public function getLocationImdbUrl(): string {
+		return $this->locationImdbUrl;
+	}
+
+	/**
+	 * mutator method Imdb Url
+	 *
+	 * @param string $newLocationImdbUrl new value of location Imdb Url
+	 * @throws \InvalidArgumentException if $newLocationImdbUrl is not a string or insecure
+	 * @throws \RangeException if $newLocationImdbUrl is > 128 characters
+	 * @throws \TypeError if  $newLocationImdbUrl is not a string
+	 */
+	public function setLocationImdbUrl(string $newLocationImdbUrl): void {
+		// verify the title is secure
+		$newLocationImdbUrl = trim($newLocationImdbUrl);
+		$newLocationImdbUrl = filter_var($newLocationImdbUrl,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		//verify the imdb url is not null
+		if(empty($newLocationImdbUrl) === true) {
+			throw(new\InvalidArgumentException("Imdb Url is empty or insecure"));
+		}
+
+		//verify the title will fit in the database
+		if(strlen($newLocationImdbUrl) > 255) {
+			throw(new\RangeException("Url is to large"));
+		}
+
+		//convert and store Imdb Url
+		$this->locationImdbUrl = $newLocationImdbUrl;
+	}
+
+	/**
+	 * accessor method for location latitude
+	 *
+	 * @return float for location latitude
+	 */
+	public function getLocationLatitude(): float {
+		return $this->locationLatitude;
+	}
+
+	/**
+	 * mutator method for location latitude
+	 *
+	 * @param float $newLocationLatitude value of latitude
+	 * @throws \InvalidArgumentException if $newLocationLatitude is not a float or insecure
+	 * @throws \RangeException if $newLocationLatitude is not between -90 and 90
+	 */
+	public function setLocationLatitude(float $newLocationLatitude): void {
+		if($newLocationLatitude === NULL) {
+			$this->locationLatitude =$newLocationLatitude;
+			return;
+		}
+
+		//make sure latitude is in range
+		if(floatval($newLocationLatitude) < -90) {
+			throw(new\RangeException("latitude is not between -90 and 90"));
+		}
+		if(floatval($newLocationLatitude) > 90) {
+			throw(new\RangeException("latitude is not between -90 and 90"));
+		}
+
+		//store latitude in the database
+		$this->locationLatitude = $newLocationLatitude;
+	}
+
+	/**
+	 * accessor method for location longitude
+	 *
+	 * @return float for location latitude
+	 */
+	public function getLocationLongitude(): float {
+		return $this->locationLongitude;
+	}
+
+	/**
+	 * mutator method for location longitude
+	 *
+	 * @param float $newLocationLongitude value of longitude
+	 * @throws \InvalidArgumentException if $newLocationLongitude is not a float or insecure
+	 * @throws \RangeException if $newLocationLongitude is not between -90 and 90
+	 */
+	public function setLocationLongitude(float $newLocationLongitude): void {
+		if($newLocationLongitude === NULL) {
+			$this->locationLongitude =$newLocationLongitude;
+			return;
+		}
+
+		//make sure latitude is in range
+		if(floatval($newLocationLongitude) < -180) {
+			throw(new\RangeException("latitude is not between -180 and 180"));
+		}
+		if(floatval($newLocationLongitude) > 180) {
+			throw(new\RangeException("latitude is not between -180 and 180"));
+		}
+		//store longitude in the database
+		$this->locationLongitude = $newLocationLongitude;
+	}
+
+	/**
 	 * accessor method for location text
 	 *
 	 * @return string value of text
@@ -480,42 +518,6 @@ class Location implements \JsonSerializable {
 		$this->locationTitle = $newLocationTitle;
 	}
 
-	/**
-	 * accessor method for imdb Url
-	 *
-	 * @return string value of Imdb Url
-	 */
-	public function getLocationImdbUrl(): string {
-		return $this->locationImdbUrl;
-	}
-
-	/**
-	 * mutator method Imdb Url
-	 *
-	 * @param string $newLocationImdbUrl new value of location Imdb Url
-	 * @throws \InvalidArgumentException if $newLocationImdbUrl is not a string or insecure
-	 * @throws \RangeException if $newLocationImdbUrl is > 128 characters
-	 * @throws \TypeError if  $newLocationImdbUrl is not a string
-	 */
-	public function setLocationImdbUrl(string $newLocationImdbUrl): void {
-		// verify the title is secure
-		$newLocationImdbUrl = trim($newLocationImdbUrl);
-		$newLocationImdbUrl = filter_var($newLocationImdbUrl,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-
-		//verify the imdb url is not null
-		if(empty($newLocationImdbUrl) === true) {
-			throw(new\InvalidArgumentException("Imdb Url is empty or insecure"));
-		}
-
-		//verify the title will fit in the database
-		if(strlen($newLocationImdbUrl) > 255) {
-			throw(new\RangeException("Url is to large"));
-		}
-
-		//convert and store Imdb Url
-		$this->locationImdbUrl = $newLocationImdbUrl;
-	}
-
 
 	/**
 	 * inserts this location into mySQL
@@ -527,7 +529,7 @@ class Location implements \JsonSerializable {
 	public function insert(\PDO $pdo) : void {
 
 		//create query template
-		$query = "INSERT INTO location(locationId, locationProfileId, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl) VALUES (:locationId, :locationProfileId, :locationAddress, :locationDate, :locationLatitude, :locationLongitude, :locationImageCloudinaryId, :locationImageCloudinaryUrl, :locationText, :locationTitle, :locationImdbUrl)";
+		$query = "INSERT INTO location (locationId, locationProfileId, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl) VALUES (:locationId, :locationProfileId, :locationAddress, :locationDate, :locationLatitude, :locationLongitude, :locationImageCloudinaryId, :locationImageCloudinaryUrl, :locationText, :locationTitle, :locationImdbUrl)";
 		$statement = $pdo->prepare($query);
 
 		//bind the member variables to the place holders in the template

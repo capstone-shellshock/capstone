@@ -56,20 +56,6 @@ class LocationTest extends AbqOnTheReelTest {
 	protected $VALID_SUNSETDATE;
 
 	/**
-	 * latitude of the Location
-	 *
-	 * @var float $VALID_LOCATIONLATITUDE
-	 */
-	protected $VALID_LOCATIONLATITUDE = 50.53445;
-
-	/**
-	 *longitude of the location
-	 *
-	 * @var float $VALID_LOCATIONLONGITUDE
-	 */
-	protected $VALID_LOCATIONLONGITUDE = 135.343568;
-
-	/**
 	 *cloudinary id for the Location Image
 	 *
 	 * @var $VALID_LOCATIONIMAGECLOUDINARYID
@@ -89,6 +75,27 @@ class LocationTest extends AbqOnTheReelTest {
 	 * @var $VALID_LOCATIONIMAGECLOUDINARYURL
 	 */
 	protected $VALID_LOCATIONIMAGECLOUDINARYURL = "bootcamp-coders.cnm.edu";
+
+	/**
+	 * imdb url for the production thats being filmed at the location
+	 *
+	 * @var $VALID_LOCATIONIMDB
+	 */
+	protected $VALID_LOCATIONIMDBURL = "bootcamp-coders.cnm.edu";
+
+	/**
+	 * latitude of the Location
+	 *
+	 * @var float $VALID_LOCATIONLATITUDE
+	 */
+	protected $VALID_LOCATIONLATITUDE = 50.53445;
+
+	/**
+	 *longitude of the location
+	 *
+	 * @var float $VALID_LOCATIONLONGITUDE
+	 */
+	protected $VALID_LOCATIONLONGITUDE = 135.343568;
 
 	/**
 	 * text about the Location
@@ -117,13 +124,6 @@ class LocationTest extends AbqOnTheReelTest {
 	 * @var $VALID_LOCATIONTITLE
 	 */
 	protected $VALID_LOCATIONTITLE2 = "Some Movie Title";
-
-	/**
-	 * imdb url for the production thats being filmed at the location
-	 *
-	 * @var $VALID_LOCATIONIMDB
-	 */
-	protected $VALID_LOCATIONIMDBURL = "bootcamp-coders.cnm.edu";
 
 
 	/**
