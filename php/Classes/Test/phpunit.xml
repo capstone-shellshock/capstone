@@ -1,8 +1,12 @@
 <phpunit>
 	<testsuites>
 		<testsuite name="abqonthereel">
+<<<<<<< HEAD
 			<file>LikeTest.php</file>
 			<file>LocationTest.php</file>
+=======
+			<file>ProfileTest.php</file>
+>>>>>>> Sprint-2
 		</testsuite>
 	</testsuites>
 	<filter>

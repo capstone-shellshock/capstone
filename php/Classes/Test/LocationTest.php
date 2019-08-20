@@ -137,7 +137,7 @@ class LocationTest extends AbqOnTheReelTest {
 
 
 		//create and insert a Profile to own the Test Location
-		$this->profile = new Profile(generateUuidV4(), null, "ajaramillo208@cnm.edu", "ajaramillo208", $this->VALID_PROFILE_HASH);
+		$this->profile = new Profile(generateUuidV4(), null, "ajaramillo208@cnm.edu", $this->VALID_PROFILE_HASH, "ajaramillo208");
 		$this->profile->insert($this->getPDO());
 
 		// calculate the date (just use the time the unit test was setup...)
