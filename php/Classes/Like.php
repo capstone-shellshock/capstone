@@ -83,7 +83,7 @@ use Ramsey\Uuid\Uuid;
 		 * @return Uuid value of like profile id
 		 **/
 		public function  getLikeProfileId($newLikeProfileId) : Uuid {
-			return ($this->likeProfileIdId);
+			return ($this->likeProfileId);
 		}
 
 		/**
@@ -164,7 +164,7 @@ use Ramsey\Uuid\Uuid;
 					$like = new Like ($row["likeLocationId"], $row["likeProfileId"]);
 				}
 			} catch (\Exception $exception) {
-				//if the row couldn't be converted, rethrow it
+				//if the row couldn't be converted, rethrow it`
 				throw (new \PDOException($exception->getMessage(),0, $exception));
 			}
 			return ($like);
@@ -178,7 +178,7 @@ use Ramsey\Uuid\Uuid;
 		 * @return \SplFixedArray SplFixedArray of Likes found or null if not found
 		 * @throws \PDOException when mySQL related errors occur
 		 **/
-		public static function getLikebyLocationId(\PDO $pdo, string $likeLocationId) : \SplFixedArray {
+		public static function getLikeByLocationId(\PDO $pdo, string $likeLocationId) : \SplFixedArray {
 			try {
 				$likeLocationId = self::validateUuid($likeLocationId);
 			} catch (\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
