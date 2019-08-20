@@ -37,16 +37,16 @@ class Profile implements \JsonSerializable {
 	private $profileEmail;
 
 	/**
-	 * profile username
-	 **/
-
-	private $profileUsername;
-
-	/**
 	 * profile password hash
 	 **/
 
 	private $profileHash;
+
+	/**
+	 * profile username
+	 **/
+
+	private $profileUsername;
 
 	/**
 	 * constructor
@@ -54,21 +54,21 @@ class Profile implements \JsonSerializable {
 	 * @param string | Uuid $newProfileId id for profile
 	 * @param string $newProfileActivationToken for security
 	 * @param string $newProfileEmail for email storage
-	 * @param string $newProfileUsername for username storage
 	 * @param string $newProfileHash for hashed password storage
+	 * @param string $newProfileUsername for username storage
 	 * @throws \RangeException if entries are too long
 	 * @throws \InvalidArgumentException if email address format is incorrect
 	 * @throws \TypeError if data entered does not meet type requirements
 	 * @throws \Exception if any other exception is found
 	 **/
 
-	public function __construct($newProfileId, $newProfileActivationToken, $newProfileEmail, $newProfileUsername, string $newProfileHash) {
+	public function __construct($newProfileId, $newProfileActivationToken, $newProfileEmail, string $newProfileHash, $newProfileUsername) {
 		try {
 			$this->setProfileId($newProfileId);
 			$this->setProfileActivationToken($newProfileActivationToken);
 			$this->setProfileEmail($newProfileEmail);
-			$this->setProfileUsername($newProfileUsername);
 			$this->setProfileHash($newProfileHash);
+			$this->setProfileUsername($newProfileUsername);
 		} catch(\RangeException | \InvalidArgumentException | \TypeError | \Exception $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
@@ -178,41 +178,6 @@ class Profile implements \JsonSerializable {
 	}
 
 	/**
-	 * accessor profile username
-	 *
-	 * @returns string for profile username
-	 **/
-
-	public function getProfileUsername() : string {
-		return ($this->profileUsername);
-	}
-
-	/**
-	 * mutator for profile username
-	 *
-	 * @param string $newProfileUsername
-	 * @throws \InvalidArgumentException if username is not a string
-	 * @throws \RangeException if new username is longer than 32 characters
-	 * @throws \TypeError if username is not a string
-	 **/
-
-	public function setProfileUsername(string $newProfileUsername) : void {
-
-		$newProfileUsername = trim($newProfileUsername);
-		$newProfileUsername = filter_var($newProfileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileUsername) === true) {
-			throw(new \InvalidArgumentException("Username is empty or taken"));
-		}
-
-		//checks length of username
-		if(strlen($newProfileUsername) > 32) {
-			throw(new \RangeException("Username is too long"));
-		}
-
-		$this->profileUsername = $newProfileUsername;
-	}
-
-	/**
 	 * accessor method for profileHash
 	 *
 	 * @return string of hash
@@ -252,6 +217,41 @@ class Profile implements \JsonSerializable {
 		}
 
 		$this -> profileHash = $newProfileHash;
+	}
+
+	/**
+	 * accessor profile username
+	 *
+	 * @returns string for profile username
+	 **/
+
+	public function getProfileUsername() : string {
+		return ($this->profileUsername);
+	}
+
+	/**
+	 * mutator for profile username
+	 *
+	 * @param string $newProfileUsername
+	 * @throws \InvalidArgumentException if username is not a string
+	 * @throws \RangeException if new username is longer than 32 characters
+	 * @throws \TypeError if username is not a string
+	 **/
+
+	public function setProfileUsername(string $newProfileUsername) : void {
+
+		$newProfileUsername = trim($newProfileUsername);
+		$newProfileUsername = filter_var($newProfileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileUsername) === true) {
+			throw(new \InvalidArgumentException("Username is empty or taken"));
+		}
+
+		//checks length of username
+		if(strlen($newProfileUsername) > 32) {
+			throw(new \RangeException("Username is too long"));
+		}
+
+		$this->profileUsername = $newProfileUsername;
 	}
 
 
