@@ -2,6 +2,7 @@
 	<testsuites>
 		<testsuite name="abqonthereel">
 			<file>LikeTest.php</file>
+			<file>LocationTest.php</file>
 		</testsuite>
 	</testsuites>
 	<filter>
