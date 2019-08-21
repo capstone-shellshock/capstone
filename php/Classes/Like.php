@@ -56,7 +56,7 @@ use Ramsey\Uuid\Uuid;
 		 *
 		 * @return Uuid value of like location id
 		 **/
-		public function  getLikeLocationId($newLikeLocationid) : Uuid {
+		public function  getLikeLocationId() : Uuid {
 			return ($this->likeLocationId);
 		}
 
@@ -82,7 +82,7 @@ use Ramsey\Uuid\Uuid;
 		 *
 		 * @return Uuid value of like profile id
 		 **/
-		public function  getLikeProfileId($newLikeProfileId) : Uuid {
+		public function  getLikeProfileId() : Uuid {
 			return ($this->likeProfileId);
 		}
 
@@ -114,6 +114,10 @@ use Ramsey\Uuid\Uuid;
 			// create query template
 			$query = "INSERT INTO `like`(likeLocationId, likeProfileId) VALUES(:likeLocationId, :likeProfileId)";
 			$statement = $pdo->prepare($query);
+
+			//bind the member variables to the placeholders in the template
+			$parameters = ["likeLocationId"=>$this->likeLocationId->getBytes(), "likeProfileId"=>$this->likeProfileId->getBytes()];
+			$statement->execute($parameters);
 		}
 
 		/**
@@ -140,27 +144,28 @@ use Ramsey\Uuid\Uuid;
 		 * @param string $likeProfileId profile id to search for
 		 * @return Like|null Like found or null if not found
 		 **/
-		public static function getLikeByLikeLocationIdAndLikeProfileId(\PDO $pdo, string $likeLocationId, string $likeProfileId) : ?Like {
+		public static function getLikeByLikeLocationIdAndLikeProfileId(\PDO $pdo, $likeLocationId, $likeProfileId) : ?Like {
 			try {
 				$likeLocationId = self::validateUuid($likeLocationId);
+				$likeProfileId = self::validateUuid($likeProfileId);
 			} catch (\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 
-			//create queary template
+			//create query template
 			$query = "SELECT likeLocationId, likeProfileId FROM `like` WHERE likeLocationId = :likeLocationId AND likeProfileId = :likeProfileId";
 			$statement = $pdo->prepare($query);
 
 			// bind the location id and profile id to the place holder in the template
-			$parameteres = ["likeLocationId"=> $likeLocationId->getbytes(), "likeProfileId" => $likeProfileId->getBytes()];
-			$statement->execute($parameteres);
+			$parameters = ["likeLocationId"=> $likeLocationId->getBytes(), "likeProfileId" => $likeProfileId->getBytes()];
+			$statement->execute($parameters);
 
 			//grab the like from mySQL
 			try {
 				$like = null;
 				$statement->setFetchMode(\PDO::FETCH_ASSOC);
 				$row = $statement->fetch();
-				if(row !==false) {
+				if($row !==false) {
 					$like = new Like ($row["likeLocationId"], $row["likeProfileId"]);
 				}
 			} catch (\Exception $exception) {
@@ -218,7 +223,7 @@ use Ramsey\Uuid\Uuid;
 		 * @return \SplFixedArray SplFixedArray of Likes found or null if not found
 		 * @throws \PDOException when mySQL related errors occur
 		 **/
-		public static function getLikebyProfileId(\PDO $pdo, string $likeProfileId) : \SplFixedArray {
+		public static function getLikeByProfileId(\PDO $pdo, string $likeProfileId) : \SplFixedArray {
 			try {
 				$likeProfileId = self::validateUuid($likeProfileId);
 			} catch (\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -226,11 +231,11 @@ use Ramsey\Uuid\Uuid;
 			}
 
 			// create query template
-			$query = "SELECT likeLocationId, likeProfileId FROM `like` WHERE likeLocationId = :likeLocationId";
+			$query = "SELECT likeLocationId, likeProfileId FROM `like` WHERE likeProfileId = :likeProfileId";
 			$statement = $pdo->prepare($query);
 
 			//bind the member variables to the place holders in the template
-			$parameters = ["likeLocationId"=> $likeProfileId->getBytes()];
+			$parameters = ["likeProfileId"=> $likeProfileId->getBytes()];
 			$statement->execute($parameters);
 
 			//build an array of likes
