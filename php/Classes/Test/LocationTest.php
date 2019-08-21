@@ -62,12 +62,6 @@ class LocationTest extends AbqOnTheReelTest {
 	 */
 	protected $VALID_LOCATIONIMAGECLOUDINARYID = "WHHAHSHHS kind of string";
 
-	/**
-	 *cloudinary id for the Location Image
-	 *
-	 * @var $VALID_LOCATIONIMAGECLOUDINARYID
-	 */
-	protected $VALID_LOCATIONIMAGECLOUDINARYID2 = "also some kind of string";
 
 	/**
 	 * updated cloudinary URL for the location Image
@@ -118,12 +112,6 @@ class LocationTest extends AbqOnTheReelTest {
 	 */
 	protected $VALID_LOCATIONTITLE = "Some Movie Title";
 
-	/**
-	 *updated title of the production thats being filmed at the location
-	 *
-	 * @var $VALID_LOCATIONTITLE
-	 */
-	protected $VALID_LOCATIONTITLE2 = "Some Movie Title";
 
 
 	/**
@@ -389,7 +377,7 @@ class LocationTest extends AbqOnTheReelTest {
 		$location->insert($this->getPDO());
 
 		//grab the data from mySQL and enforce the fields match our expectations
-		$results = Location::getALLLocations($this->getPDO());
+		$results = Location::getAllLocations($this->getPDO());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertCount(1, $results);
 		$this->assertContainsOnlyInstancesOf("ShellShock\\Capstone\\Location", $results);
