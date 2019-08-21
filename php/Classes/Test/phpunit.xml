@@ -2,7 +2,6 @@
 	<testsuites>
 		<testsuite name="abqonthereel">
 			<file>LocationTest.php</file>
-			
 		</testsuite>
 	</testsuites>
 	<filter>

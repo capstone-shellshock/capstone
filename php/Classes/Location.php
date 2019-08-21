@@ -116,15 +116,15 @@ class Location implements \JsonSerializable {
 	 * @throws \Exception if some other exception occurs
 	 *
 	 */
-	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, ?float $newLocationLatitude, ?float $newLocationLongitude, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
+	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, $newLocationImdbUrl, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, ?float $newLocationLatitude, ?float $newLocationLongitude, $newLocationText, $newLocationTitle) {
 		try {
 			$this->setLocationId($newLocationId);
 			$this->setLocationProfileId($newLocationProfileId);
 			$this->setLocationAddress($newLocationAddress);
 			$this->setLocationDate($newLocationDate);
+			$this->setLocationImdbUrl($newLocationImdbUrl);
 			$this->setLocationImageCloudinaryId($newLocationImageCloudinaryId);
 			$this->setLocationImageCloudinaryUrl($newLocationImageCloudinaryUrl);
-			$this->setLocationImdbUrl($newLocationImdbUrl);
 			$this->setLocationLatitude($newLocationLatitude);
 			$this->setLocationLongitude($newLocationLongitude);
 			$this->setLocationText($newLocationText);
@@ -270,6 +270,37 @@ class Location implements \JsonSerializable {
 		//var_dump($newLocationDate);
 	}
 
+	/**
+	 * accessor method for imdb Url
+	 *
+	 * @return string value of Imdb Url
+	 */
+	public function getLocationImdbUrl(): string {
+		return $this->locationImdbUrl;
+	}
+	/**
+	 * mutator method Imdb Url
+	 *
+	 * @param string $newLocationImdbUrl new value of location Imdb Url
+	 * @throws \InvalidArgumentException if $newLocationImdbUrl is not a string or insecure
+	 * @throws \RangeException if $newLocationImdbUrl is > 128 characters
+	 * @throws \TypeError if  $newLocationImdbUrl is not a string
+	 */
+	public function setLocationImdbUrl(string $newLocationImdbUrl): void {
+		// verify the title is secure
+		$newLocationImdbUrl = trim($newLocationImdbUrl);
+		$newLocationImdbUrl = filter_var($newLocationImdbUrl,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		//verify the imdb url is not null
+		if(empty($newLocationImdbUrl) === true) {
+			throw(new\InvalidArgumentException("Imdb Url is empty or insecure"));
+		}
+		//verify the title will fit in the database
+		if(strlen($newLocationImdbUrl) > 255) {
+			throw(new\RangeException("Url is to large"));
+		}
+		//convert and store Imdb Url
+		$this->locationImdbUrl = $newLocationImdbUrl;
+	}
 
 	/**
 	 * accessor method for location image cloudinary id
@@ -289,10 +320,6 @@ class Location implements \JsonSerializable {
 	 *@throws \TypeError if $newLocationImageCloudinaryId is not a string
 	 */
 	public function setLocationImageCloudinaryId(?string $newLocationImageCloudinaryId): void {
-		if ($newLocationImageCloudinaryId === NULL) {
-			$this->locationImageCloudinaryUrl = null;
-			return;
-		}
 		//verify the cloudinary image id is secure
 		$newLocationImageCloudinaryId = trim($newLocationImageCloudinaryId);
 		$newLocationImageCloudinaryId = filter_var($newLocationImageCloudinaryId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -327,13 +354,9 @@ class Location implements \JsonSerializable {
 	 * @throws \TypeError if $newLocationImageCloudinaryUrl is not a string
 	 */
 	public function setLocationImageCloudinaryUrl(?string $newLocationImageCloudinaryUrl): void {
-		if($newLocationImageCloudinaryUrl === NULL) {
-			$this->locationImageCloudinaryUrl = null;
-			return;
-		}
 		//verify image is secure
 		$newLocationImageCloudinaryUrl = trim($newLocationImageCloudinaryUrl);
-		$newLocationImageCloudinaryUrl = filter_var($newLocationImageCloudinaryUrl, FILTER_SANITIZE_STRING);
+		$newLocationImageCloudinaryUrl = filter_var($newLocationImageCloudinaryUrl, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES, FILTER_VALIDATE_URL);
 
 		//make sure image cloudinary url is not empty
 		if(empty($newLocationImageCloudinaryUrl) === true) {
@@ -345,42 +368,6 @@ class Location implements \JsonSerializable {
 		}
 		// store the location image cloudinary url
 		$this->locationImageCloudinaryUrl = $newLocationImageCloudinaryUrl;
-	}
-
-	/**
-	 * accessor method for imdb Url
-	 *
-	 * @return string value of Imdb Url
-	 */
-	public function getLocationImdbUrl(): string {
-		return $this->locationImdbUrl;
-	}
-
-	/**
-	 * mutator method Imdb Url
-	 *
-	 * @param string $newLocationImdbUrl new value of location Imdb Url
-	 * @throws \InvalidArgumentException if $newLocationImdbUrl is not a string or insecure
-	 * @throws \RangeException if $newLocationImdbUrl is > 128 characters
-	 * @throws \TypeError if  $newLocationImdbUrl is not a string
-	 */
-	public function setLocationImdbUrl(string $newLocationImdbUrl): void {
-		// verify the title is secure
-		$newLocationImdbUrl = trim($newLocationImdbUrl);
-		$newLocationImdbUrl = filter_var($newLocationImdbUrl,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-
-		//verify the imdb url is not null
-		if(empty($newLocationImdbUrl) === true) {
-			throw(new\InvalidArgumentException("Imdb Url is empty or insecure"));
-		}
-
-		//verify the title will fit in the database
-		if(strlen($newLocationImdbUrl) > 255) {
-			throw(new\RangeException("Url is to large"));
-		}
-
-		//convert and store Imdb Url
-		$this->locationImdbUrl = $newLocationImdbUrl;
 	}
 
 	/**
@@ -399,11 +386,7 @@ class Location implements \JsonSerializable {
 	 * @throws \InvalidArgumentException if $newLocationLatitude is not a float or insecure
 	 * @throws \RangeException if $newLocationLatitude is not between -90 and 90
 	 */
-	public function setLocationLatitude(float $newLocationLatitude): void {
-		if($newLocationLatitude === NULL) {
-			$this->locationLatitude =$newLocationLatitude;
-			return;
-		}
+	public function setLocationLatitude(?float $newLocationLatitude): void {
 
 		//make sure latitude is in range
 		if(floatval($newLocationLatitude) < -90) {
@@ -433,11 +416,7 @@ class Location implements \JsonSerializable {
 	 * @throws \InvalidArgumentException if $newLocationLongitude is not a float or insecure
 	 * @throws \RangeException if $newLocationLongitude is not between -90 and 90
 	 */
-	public function setLocationLongitude(float $newLocationLongitude): void {
-		if($newLocationLongitude === NULL) {
-			$this->locationLongitude =$newLocationLongitude;
-			return;
-		}
+	public function setLocationLongitude(?float $newLocationLongitude): void {
 
 		//make sure latitude is in range
 		if(floatval($newLocationLongitude) < -180) {
@@ -610,7 +589,7 @@ class Location implements \JsonSerializable {
 				$statement->setFetchMode(\PDO::FETCH_ASSOC);
 				$row = $statement->fetch();
 				if($row !== false) {
-					$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+					$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationImdbUrl"],  $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationLatitude"], $row["locationLongitude"], $row["locationText"], $row["locationTitle"]);
 				}
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted rethrow it
@@ -647,7 +626,7 @@ class Location implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row =$statement->fetch()) !== false) {
 			try {
-				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationImdbUrl"],  $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationLatitude"], $row["locationLongitude"], $row["locationText"], $row["locationTitle"]);
 				$locations[$locations->key()] = $location;
 				$locations->next();
 			} catch(\Exception $exception) {
@@ -691,7 +670,7 @@ class Location implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row =$statement->fetch()) !== false) {
 			try {
-				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationImdbUrl"],  $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationLatitude"], $row["locationLongitude"], $row["locationText"], $row["locationTitle"]);
 				$locations[$locations->key()] = $location;
 				$locations->next();
 			} catch(\Exception $exception) {
@@ -736,7 +715,7 @@ class Location implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationImdbUrl"],  $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationLatitude"], $row["locationLongitude"], $row["locationText"], $row["locationTitle"]);
 				$locations[$locations->key()] = $location;
 				$locations->next();
 			} catch(\Exception $exception) {
@@ -766,7 +745,7 @@ class Location implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row =$statement->fetch()) !== false) {
 			try {
-				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationImdbUrl"],  $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationLatitude"], $row["locationLongitude"], $row["locationText"], $row["locationTitle"]);
 				$locations[$locations->key()] = $location;
 				$locations->next();
 			} catch(\Exception $exception) {
