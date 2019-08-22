@@ -256,10 +256,6 @@ class Location implements \JsonSerializable {
 	 *@throws \TypeError if $newLocationImageCloudinaryId is not a string
 	 */
 	public function setLocationImageCloudinaryId(?string $newLocationImageCloudinaryId): void {
-		if ($newLocationImageCloudinaryId === NULL) {
-			$this->locationImageCloudinaryUrl = null;
-			return;
-		}
 		//verify the cloudinary image id is secure
 		$newLocationImageCloudinaryId = trim($newLocationImageCloudinaryId);
 		$newLocationImageCloudinaryId = filter_var($newLocationImageCloudinaryId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -290,10 +286,6 @@ class Location implements \JsonSerializable {
 	 * @throws \TypeError if $newLocationImageCloudinaryUrl is not a string
 	 */
 	public function setLocationImageCloudinaryUrl(?string $newLocationImageCloudinaryUrl): void {
-		if($newLocationImageCloudinaryUrl === NULL) {
-			$this->locationImageCloudinaryUrl = null;
-			return;
-		}
 		//verify image is secure
 		$newLocationImageCloudinaryUrl = trim($newLocationImageCloudinaryUrl);
 		$newLocationImageCloudinaryUrl = filter_var($newLocationImageCloudinaryUrl, FILTER_SANITIZE_STRING, FILTER_VALIDATE_URL);
@@ -354,11 +346,7 @@ class Location implements \JsonSerializable {
 	 * @throws \InvalidArgumentException if $newLocationLatitude is not a float or insecure
 	 * @throws \RangeException if $newLocationLatitude is not between -90 and 90
 	 */
-	public function setLocationLatitude(float $newLocationLatitude): void {
-		if($newLocationLatitude === NULL) {
-			$this->locationLatitude =$newLocationLatitude;
-			return;
-		}
+	public function setLocationLatitude(?float $newLocationLatitude): void {
 		//make sure latitude is in range
 		if(floatval($newLocationLatitude) < -90) {
 			throw(new\RangeException("latitude is not between -90 and 90"));
@@ -384,11 +372,7 @@ class Location implements \JsonSerializable {
 	 * @throws \InvalidArgumentException if $newLocationLongitude is not a float or insecure
 	 * @throws \RangeException if $newLocationLongitude is not between -90 and 90
 	 */
-	public function setLocationLongitude(float $newLocationLongitude): void {
-		if($newLocationLongitude === NULL) {
-			$this->locationLongitude =$newLocationLongitude;
-			return;
-		}
+	public function setLocationLongitude(?float $newLocationLongitude): void {
 		//make sure latitude is in range
 		if(floatval($newLocationLongitude) < -180) {
 			throw(new\RangeException("latitude is not between -180 and 180"));
