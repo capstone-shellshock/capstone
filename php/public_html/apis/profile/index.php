@@ -54,8 +54,25 @@ try {
 		if(empty($id) === false) {
 
 			$reply -> data = Profile::getProfileByProfileId($pdo, $id);
+
 		} else if(empty($profileUsername) === false) {
+
 			$reply -> data = Profile::getProfileByProfileUsername($pdo, $profileUsername);
-		} else if
+
+		} else if(empty($profileEmail) === false) {
+
+			$reply -> data = Profile::getProfileByProfileEmail($pdo, $profileEmail);
+
+		}
+	} elseif($method === "PUT") {
+
+		//enforce that the XSRF token is present in the header
+		verifyXsrf();
+
+		//enforce the end user has a JWT token
+		validateJwtHeader();
+
+		//enforce the user is signed in and only trying to edit their own profile
+		if
 	}
 }
