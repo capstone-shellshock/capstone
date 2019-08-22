@@ -1,7 +1,12 @@
 <phpunit>
 	<testsuites>
 		<testsuite name="abqonthereel">
+			<file>LikeTest.php</file>
 			<file>LocationTest.php</file>
+<<<<<<< HEAD
+=======
+			<file>ProfileTest.php</file>
+>>>>>>> Like-Unit-Test
 		</testsuite>
 	</testsuites>
 	<filter>
