@@ -70,9 +70,82 @@ try {
 		verifyXsrf();
 
 		//enforce the end user has a JWT token
-		validateJwtHeader();
+		//validateJwtHeader();
 
 		//enforce the user is signed in and only trying to edit their own profile
-		if
+		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"] -> getProfileId() -> toString() !== $id) {
+			throw(new \InvalidArgumentException("You are not allowed to access this profile", 403));
+		}
+
+		validateJwtHeader();
+
+		//decode the response from the front end
+		$requestContent = file_get_contents("php://input");
+		$requestObject = json_decode($requestContent);
+
+		//retrieve the profile to be updated
+		$profile = Profile::getProfileByProfileId($pdo, $id);
+		if($profile === null) {
+			throw(new RuntimeException("Profile does not exist", 404));
+		}
+
+		//profile username
+		if(empty($requestObject -> profileUsername) === true) {
+			throw(new \InvalidArgumentException("No profile username", 405));
+		}
+
+		//profile email is a required field
+		if(empty($requestObject -> profileEmail) === true) {
+			throw(new \InvalidArgumentException("No profile email present", 405));
+		}
+
+		$profile -> setProfileUsername($requestObject -> profileUsername);
+		$profile -> setProfileEmail($requestObject -> profileEmail);
+		$profile -> update($pdo);
+
+		//update reply
+		$reply -> message = "Profile information updated";
 	}
+
+	elseif($method === "DELETE") {
+
+		//verify the XSRF token
+		verifyXsrf();
+
+		//enforce that the end user has a JWT token
+		//validateJwtHeader();
+
+		$profile = Profile::getProfileByProfileId($pdo, $id);
+		if($profile === null) {
+			throw(new RuntimeException("Profile does not exist"));
+		}
+
+		//enforce the user is signed in and only trying to edit their own profile
+		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"] -> getProfileId() -> toString() !== $profile -> getProfileId() -> toString()) {
+			throw(new \InvalidArgumentException("You are not allowed to access this profile", 403));
+		}
+
+		validateJwtHeader();
+
+		//delete the post from the database
+		$profile -> delete($pdo);
+		$reply -> message = "Profile Deleted";
+
+	} else {
+		throw (new InvalidArgumentException("Invalid HTTP request", 400));
+	}
+
+	//catch any exceptions that were thrown and update the status and message state variable fields
+} catch
+(\Exception | \TypeError $exception) {
+	$reply -> status = $exception -> getCode();
+	$reply -> message = $exception -> getMessage();
 }
+
+header("Content-type: application/json");
+if($reply -> data === null) {
+	unset($reply -> data);
+}
+
+//encode and return reply to front end caller
+echo json_encode($reply);
