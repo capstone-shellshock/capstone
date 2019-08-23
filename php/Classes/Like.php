@@ -12,9 +12,12 @@ use Ramsey\Uuid\Uuid;
 	 * This is  a class for a profile to like someones filming location
 	 **/
 
+
+
 	class Like implements \JsonSerializable {
 		use ValidateDate;
 		use ValidateUuid;
+
 
 		/**
 		 * id of the location being liked
