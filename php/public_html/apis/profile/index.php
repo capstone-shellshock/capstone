@@ -1,12 +1,12 @@
 <?php
 
-require_once dirname(__DIR__, 3) . "vendor/autoload.php";
-require_once dirname(__DIR__, 3) . "Classes/autoload.php";
+require_once dirname(__DIR__, 3) . "/vendor/autoload.php";
+require_once dirname(__DIR__, 3) . "/Classes/autoload.php";
 require_once("/etc/apache2/capstone-mysql/Secrets.php");
 require_once dirname(__DIR__, 3) . "/lib/xsrf.php";
 require_once dirname(__DIR__, 3) . "/lib/jwt.php";
 require_once dirname(__DIR__, 3) . "/lib/uuid.php";
-require_once ("etc/apache2/capstone-mysql/Secrets.php");
+require_once("etc/apache2/capstone-mysql/Secrets.php");
 
 use ShellShock\Capstone\{Profile};
 
@@ -24,14 +24,14 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 
 //prepare an empty reply
 $reply = new stdClass();
-$reply -> status = 200;
-$reply -> data = null;
+$reply->status = 200;
+$reply->data = null;
 
 try {
 
 	//grab the MySQL connection
 	$secrets = new \Secrets("etc/apache2/capstone-mysql/abqonthereel.ini");
-	$pdo = $secrets -> getPdoObject();
+	$pdo = $secrets->getPdoObject();
 
 	//determine which HTTP method was used
 	$method = $_SERVER["HTTP_X_HTTP_METHOD"] ?? $_SERVER["REQUEST_METHOD"];
@@ -53,15 +53,15 @@ try {
 		//gets a post by content
 		if(empty($id) === false) {
 
-			$reply -> data = Profile::getProfileByProfileId($pdo, $id);
+			$reply->data = Profile::getProfileByProfileId($pdo, $id);
 
 		} else if(empty($profileUsername) === false) {
 
-			$reply -> data = Profile::getProfileByProfileUsername($pdo, $profileUsername);
+			$reply->data = Profile::getProfileByProfileUsername($pdo, $profileUsername);
 
 		} else if(empty($profileEmail) === false) {
 
-			$reply -> data = Profile::getProfileByProfileEmail($pdo, $profileEmail);
+			$reply->data = Profile::getProfileByProfileEmail($pdo, $profileEmail);
 
 		}
 	} elseif($method === "PUT") {
@@ -73,7 +73,7 @@ try {
 		//validateJwtHeader();
 
 		//enforce the user is signed in and only trying to edit their own profile
-		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"] -> getProfileId() -> toString() !== $id) {
+		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $id) {
 			throw(new \InvalidArgumentException("You are not allowed to access this profile", 403));
 		}
 
@@ -90,24 +90,22 @@ try {
 		}
 
 		//profile username
-		if(empty($requestObject -> profileUsername) === true) {
+		if(empty($requestObject->profileUsername) === true) {
 			throw(new \InvalidArgumentException("No profile username", 405));
 		}
 
 		//profile email is a required field
-		if(empty($requestObject -> profileEmail) === true) {
+		if(empty($requestObject->profileEmail) === true) {
 			throw(new \InvalidArgumentException("No profile email present", 405));
 		}
 
-		$profile -> setProfileUsername($requestObject -> profileUsername);
-		$profile -> setProfileEmail($requestObject -> profileEmail);
-		$profile -> update($pdo);
+		$profile->setProfileUsername($requestObject->profileUsername);
+		$profile->setProfileEmail($requestObject->profileEmail);
+		$profile->update($pdo);
 
 		//update reply
-		$reply -> message = "Profile information updated";
-	}
-
-	elseif($method === "DELETE") {
+		$reply->message = "Profile information updated";
+	} elseif($method === "DELETE") {
 
 		//verify the XSRF token
 		verifyXsrf();
@@ -121,15 +119,15 @@ try {
 		}
 
 		//enforce the user is signed in and only trying to edit their own profile
-		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"] -> getProfileId() -> toString() !== $profile -> getProfileId() -> toString()) {
+		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $profile->getProfileId()->toString()) {
 			throw(new \InvalidArgumentException("You are not allowed to access this profile", 403));
 		}
 
 		validateJwtHeader();
 
 		//delete the post from the database
-		$profile -> delete($pdo);
-		$reply -> message = "Profile Deleted";
+		$profile->delete($pdo);
+		$reply->message = "Profile Deleted";
 
 	} else {
 		throw (new InvalidArgumentException("Invalid HTTP request", 400));
@@ -138,13 +136,13 @@ try {
 	//catch any exceptions that were thrown and update the status and message state variable fields
 } catch
 (\Exception | \TypeError $exception) {
-	$reply -> status = $exception -> getCode();
-	$reply -> message = $exception -> getMessage();
+	$reply->status = $exception->getCode();
+	$reply->message = $exception->getMessage();
 }
 
 header("Content-type: application/json");
-if($reply -> data === null) {
-	unset($reply -> data);
+if($reply->data === null) {
+	unset($reply->data);
 }
 
 //encode and return reply to front end caller
