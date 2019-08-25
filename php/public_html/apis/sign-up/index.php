@@ -34,7 +34,8 @@ try {
 
 	//determine which http method was used
 
-	$method = array_key_exists("HTTP_X_HTTP_METHOD" $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
+	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
+
 
 	if($method === "POST") {
 
