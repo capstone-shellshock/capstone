@@ -583,6 +583,7 @@ class Location implements \JsonSerializable {
 		}
 		//escape any mySQL wild cards
 		$locationAddress = str_replace("_","\\_", str_replace("%", "\\%", $locationAddress));
+
 		//create query template
 		$query = "SELECT locationId, locationProfileId, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationAddress LIKE :locationAddress ";
 		$statement = $pdo->prepare($query);
@@ -605,6 +606,92 @@ class Location implements \JsonSerializable {
 		}
 		return($locations);
 	}
+
+	/**
+	 * gets the location by location Imdb Url
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $locationImdbUrl location Imdb Url to search for
+	 * @return Location
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 * */
+
+	public static function getLocationByLocationImdbUrl (\PDO $pdo, string $locationImdbUrl) : \SplFixedArray {
+		//sanitize the description before searching
+		$locationImdbUrl = trim($locationImdbUrl);
+		$locationImdbUrl = filter_var($locationImdbUrl, FILTER_SANITIZE_STRING, FILTER_VALIDATE_URL);
+		if(empty($locationImdbUrl) === true) {
+			throw(new \PDOException("location Imdb Url is invalid"));
+		}
+
+		//create query template
+		$query = "SELECT locationId, locationProfileId, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationImdbUrl LIKE :locationImdbUrl ";
+		$statement = $pdo->prepare($query);
+
+		//bind the location to the place holder in the template
+		$locationImdbUrl = "%$locationImdbUrl%";
+		$parameters = ["locationImdbUrl" => $locationImdbUrl];
+		$statement->execute($parameters);
+
+		//build an array of locations
+		$locations = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$locations[$locations->key()] = $location;
+				$locations->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($locations);
+	}
+
+/**
+* gets the location by location Text
+*
+* @param \PDO $pdo PDO connection object
+* @param string $locationText location title to search for
+* @return Location
+* @throws \PDOException when mySQL related errors occur
+* @throws \TypeError when variables are not the correct data type
+**/
+	public static function getLocationByLocationText (\PDO $pdo, string $locationText) : \SplFixedArray {
+		//sanitize the description before searching
+		$locationText = trim($locationText);
+		$locationText = filter_var($locationText, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($locationText) === true) {
+			throw(new \PDOException("location text is invalid"));
+		}
+		//escape any mySQL wild cards
+		$locationText = str_replace("_", "\\_", str_replace("%", "\\%", $locationText));
+		//create query template
+		$query = "SELECT locationId, locationProfileId, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationText LIKE :locationText ";
+		$statement = $pdo->prepare($query);
+		//bind the location to the place holder in the template
+		$locationText = "%$locationText%";
+		$parameters = ["locationText" => $locationText];
+		$statement->execute($parameters);
+		//build an array of locations
+		$locations = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$location = new Location ($row["locationId"], $row["locationProfileId"], $row["locationAddress"], $row["locationDate"], $row["locationLatitude"], $row["locationLongitude"], $row["locationImageCloudinaryId"], $row["locationImageCloudinaryUrl"], $row["locationText"], $row["locationTitle"], $row["locationImdbUrl"]);
+				$locations[$locations->key()] = $location;
+				$locations->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($locations);
+	}
+
+
 	/**
 	 * gets the location by location Title
 	 *
@@ -623,6 +710,7 @@ class Location implements \JsonSerializable {
 		}
 		//escape any mySQL wild cards
 		$locationTitle = str_replace("_", "\\_", str_replace("%", "\\%", $locationTitle));
+
 		//create query template
 		$query = "SELECT locationId, locationProfileId, locationAddress, locationDate, locationLatitude, locationLongitude, locationImageCloudinaryId, locationImageCloudinaryUrl, locationText, locationTitle, locationImdbUrl FROM location WHERE locationTitle LIKE :locationTitle ";
 		$statement = $pdo->prepare($query);
@@ -645,6 +733,8 @@ class Location implements \JsonSerializable {
 		}
 		return ($locations);
 	}
+
+
 	/**
 	 *  gets the all locations
 	 *
