@@ -157,7 +157,7 @@ EOF;
 		//update reply
 		$reply -> message = "Thank you for creating a profile with ABQ On The Reel";
 	} else {
-		throw(new \http\Exception\InvalidArgumentException("Invalid HTTP request"));
+		throw(new \InvalidArgumentException("Invalid HTTP request"));
 	}
 
 } catch (\Exception | \TypeError $exception) {
