@@ -40,6 +40,25 @@ try {
 
 		//process the request content and decode the json object into the php object
 		$requestContent = file_get_contents("php://input");
-		
-	}
-}
+		$requestObject = json_decode($requestContent);
+
+		//check to make sure the password and email field is not empty
+		if(empty($requestObject->profileEmail) ===true ) {
+			throw(new \InvalidArgumentException("email address is not provided", 401));
+
+		}else {
+			$profileEmail = filter_var($requestObject->profileEmail, FILTER_SANITIZE_EMAIL);
+		}
+
+		if(empty($requestObject->profilePassword) ===true) {
+			throw(new\InvalidArgumentException("must enter a password", 401));
+		} else {
+			$profilePassword = $requestObject->profilePassword;
+		}
+
+		//grab the profile from the database by the email provided
+		$profile = Profile::getProfileByProfileEmail($pdo,$profileEmail);
+		if(empty($profile) === true) {
+			throw(new InvalidArgumentException("invalid Email", 401));
+		}
+
