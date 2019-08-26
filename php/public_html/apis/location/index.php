@@ -134,7 +134,7 @@ try {
 			$reply->message = "location created ok";
 		}
 
-	}else if($method === "DELET") {
+	}else if($method === "DELETE") {
 
 		//enforce that the end user has an XSRF token
 		verifyXsrf();
@@ -144,7 +144,30 @@ try {
 		if($location === null) {
 			throw(new RuntimeException("Location does not exist", 404));
 		}
-		
+		//enforce the user is signed in and only trying to edit there on Location
+		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $location->getLocationProfileId()->toString()) {
+			throw(new \InvalidArgumentException("you are not allowed to delte this Location", 403));
+		}
 
+		//enforce the end has a JWT token
+		validateJwtHeader();
+
+		//delete Location
+		$location->delete($pdo);
+
+		//update reple
+		$reply->message = "location deleted ok";
+	}else {
+		throw(new \InvalidArgumentException("invalid HTTP method request",418));
 	}
+
+	//update the reply
+	}catch (\Exception | \TypeError $exception) {
+		$reply->status = $exception->getCode();
+		$reply->message = $exception->getMessage();
 }
+
+//encode and return reply to the front end caller
+header("Content-type: application/Json");
+echo json_encode($reply);
+
