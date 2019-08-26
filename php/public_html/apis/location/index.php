@@ -76,20 +76,28 @@ try {
 		if(empty($_session["profile"]) === true) {
 			throw(new \InvalidArgumentException("you must be logged in to post locations", 401));
 		}
-
-		$requestText = file_get_contents("php://input");
 		//retrieves the JSON that the front end sent, and stores it in $requestContent, here we are using file_get_content ("php//input") o get the request from the front end. file_get_contents() is a PHP function that reads a file into a string. The argument for the function, here, is "php://input". This is a read only stream that allows raw data to be read from the front end request which is, in this case, a JSON package.
-		$requestObject = json_decode($requestText);
+		$requestContent = file_get_contents("php://input");
+
 		//this line then decodes the JSON packages and stores that result in $requestObject
+		$requestObject = json_decode($requestContent);
+
+		//make sure location Imdb is available (required field))
+		if(empty($requestContent->locationImdb) === true) {
+			throw(new \InvalidArgumentException("no Imdb for location", 405));
+		}
+
+		//make sure location Title is available (required field))
+		if(empty($requestContent->locationTitle) === true) {
+			throw(new \InvalidArgumentException("no title for location", 405));
+		}
+
 		//make sure location Text is available (required field))
-		if(empty($requestText->locationText) === true) {
+		if(empty($requestContent->locationText) === true) {
 			throw(new \InvalidArgumentException("no text for location", 405));
 		}
 
-		// make sure the location date is accurate(optional field)
-		if(empty($requestObject->locationDate)=== true ) {
-			$requestObject->LocationDate === null;
-		}
+
 		
 		//perform the actual put or post
 		if($method === "PUT") {
@@ -127,7 +135,7 @@ try {
 			validateJwtHeader();
 
 			//create new location and insert it into the database
-			$location = new Location(generateUuidV4(), $_SESSION["profile"]->getProfileId(), );
+			$location = new Location(generateUuidV4(), $_SESSION["profile"]->getProfileId(),null , null,null,null,null,null, $requestObject->locationText, $requestObject->locationTitle, $requestObject->locationImdbUrl() );
 		$location->insert($pdo);
 
 		//update reply

@@ -62,3 +62,37 @@ try {
 			throw(new InvalidArgumentException("invalid Email", 401));
 		}
 
+		$profile->setProfileActivationToken(null);
+		$profile->update($pdo);
+
+		//verify hash is correct
+		if(password_verify($requestObject->profilePassword, $profile->getProfileHash()) === false) {
+			throw(new \InvalidArgumentException("Password or email is incorrect", 402));
+		}
+
+		//grab profile from the database and put into the session
+		$profile = Profile::getProfileByProfileId($pdo, $profile->getProfileId());
+
+		$_SESSION["profile"] = $profile;
+
+		//create the aith payload
+		$authObject = (object) [
+			"profileId"=>$profile->getProfileId(),
+			"profileUsername"=> $profile->getProfileUsername()
+		];
+
+		//create and set the JWT token
+		setJwtAndAuthHeader("auth", $authObject);
+
+		$reply->message = "Sign in was successful.";
+	} else {
+		throe(new \InvalidArgumentException("Invalid HTTP method request", 418));
+	}
+
+	//if an exception throw an update
+} catch(Exception | TypeError $exception) {
+	$reply->status = $exception->getCode();
+	$reply->message = $exception->getMessage();
+}
+header("Content-type: application/json");
+echo json_encode($reply);
