@@ -33,6 +33,7 @@ try {
 	//determine which http type was used
 	$method = $_SERVER[HTTP_X_HTTP_METHOD] ?? $_SERVER["REQUEST_METHOD"];
 
+
 	//sanitize input
 	$id = filter_input(INPUT_GET, id, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$locationProfileId = filter_input(INPUT_GET, "locationProfileId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -83,17 +84,17 @@ try {
 		$requestObject = json_decode($requestContent);
 
 		//make sure location Imdb is available (required field))
-		if(empty($requestContent->locationImdb) === true) {
+		if(empty($requestObject->locationImdb) === true) {
 			throw(new \InvalidArgumentException("no Imdb for location", 405));
 		}
 
 		//make sure location Title is available (required field))
-		if(empty($requestContent->locationTitle) === true) {
+		if(empty($requestObject->locationTitle) === true) {
 			throw(new \InvalidArgumentException("no title for location", 405));
 		}
 
 		//make sure location Text is available (required field))
-		if(empty($requestContent->locationText) === true) {
+		if(empty($requestObject->locationText) === true) {
 			throw(new \InvalidArgumentException("no text for location", 405));
 		}
 
