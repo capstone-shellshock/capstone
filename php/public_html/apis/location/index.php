@@ -16,7 +16,7 @@ use ShellShock\Capstone\{Profile, Location, Like};
  */
 
 //verify the session start if not active
-if(session_start() !== PHP_SESSION_ACTIVE) {
+if(session_status() !== PHP_SESSION_ACTIVE) {
 	session_start();
 }
 
@@ -26,7 +26,7 @@ $reply->status = 200;
 $reply->data = null;
 try {
 
-	$secrets = new ("/etc/apache2/capstone-mysql/Secrets.php");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/abqonthereel.ini");
 	$pdo = $secrets->getPdoObject();
 
 
@@ -126,7 +126,7 @@ try {
 
 		} else if ($method === "POST") {
 
-			//enforce the user is signe in
+			//enforce the user is sign in
 			if(empty($_SESSION["profile"])=== true) {
 				throw(new \InvalidArgumentException("you must be logged in to post locations", 403));
 			}
@@ -154,7 +154,7 @@ try {
 		}
 		//enforce the user is signed in and only trying to edit there on Location
 		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $location->getLocationProfileId()->toString()) {
-			throw(new \InvalidArgumentException("you are not allowed to delte this Location", 403));
+			throw(new \InvalidArgumentException("you are not allowed to delete this Location", 403));
 		}
 
 		//enforce the end has a JWT token

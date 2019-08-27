@@ -26,7 +26,7 @@ try {
 	}
 
 	//grab mySQL statement
-	$secrets = new ("/etc/apache2/capstone-mysql/Secrets.php");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/abqonthereel.ini");
 	$pdo = $secrets->getPdoObject();
 
 	//determine whicj HTTP method is being used
@@ -86,7 +86,7 @@ try {
 
 		$reply->message = "Sign in was successful.";
 	} else {
-		throe(new \InvalidArgumentException("Invalid HTTP method request", 418));
+		throw(new \InvalidArgumentException("Invalid HTTP method request", 418));
 	}
 
 	//if an exception throw an update
