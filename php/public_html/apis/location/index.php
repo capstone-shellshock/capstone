@@ -31,11 +31,11 @@ try {
 
 
 	//determine which http type was used
-	$method = $_SERVER[HTTP_X_HTTP_METHOD] ?? $_SERVER["REQUEST_METHOD"];
+	$method = $_SERVER["HTTP_X_HTTP_METHOD"] ?? $_SERVER["REQUEST_METHOD"];
 
 
 	//sanitize input
-	$id = filter_input(INPUT_GET, $id, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$locationProfileId = filter_input(INPUT_GET, "locationProfileId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$locationAddress = filter_input(INPUT_GET, "locationAddress", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$locationText = filter_input(INPUT_GET, "locationText", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
