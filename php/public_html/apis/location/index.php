@@ -35,15 +35,15 @@ try {
 
 
 	//sanitize input
-	$id = filter_input(INPUT_GET, id, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$id = filter_input(INPUT_GET, $id, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$locationProfileId = filter_input(INPUT_GET, "locationProfileId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$locationAddress = filter_input(INPUT_GET, "locationAddress", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	$locationImdbUrl = filter_input(INPUT_GET, "locationImdbUrl", FILTER_SANITIZE_STRING, FILTER_VALIDATE_URL);
 	$locationText = filter_input(INPUT_GET, "locationText", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$locationTitle = filter_input(INPUT_GET, "locationTitle", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$locationImdbUrl = filter_input(INPUT_GET, "locationImdbUrl", FILTER_SANITIZE_STRING, FILTER_VALIDATE_URL);
 
 	//make sure id is valid for the methods that require it
-	if(($method === "DELETE" || $method === "PUT") && (empty(id) === true)) {
+	if(($method === "DELETE" || $method === "PUT") && (empty($id) === true)) {
 		throw(new InvalidArgumentException("id cannot be empty or negative", 402));
 	}
 
@@ -53,19 +53,19 @@ try {
 		setXsrfCookie();
 
 		//get a specific location or all locations and update reply
-		if(empty(id) === false) {
+		if(empty($id) === false) {
 			$reply->data = Location::getLocationByLocationId($pdo, $id);
 		} else if(empty($locationProfileId) === false) {
 			// if the user is logged in grap all the locations by that used based on who is logged in
 			$reply->data = Location::getLocationByLocationProfileId($pdo, $locationProfileId);
 		} else if(empty($locationAddress) === false) {
 			$reply->data = Location::getLocationByLocationAddress($pdo, $locationAddress)->toArray();
-		} else if(empty($locationImdbUrl === false)) {
-			$reply->data = Location::getLocationByLocationImdbUrl($pdo, $locationImdbUrl);
 		} else if(empty($locationText) === false) {
-			$reply->data = Location::getLocationByLocationTitle($pdo, $locationTitle)->toArray();
+			$reply->data = Location::getLocationByLocationText($pdo, $locationText)->toArray();
 		} else if(empty($locationTitle) === false) {
 			$reply->data = Location::getLocationByLocationTitle($pdo, $locationTitle)->toArray();
+		} else if(empty($locationImdbUrl) === false) {
+			$reply->data = Location::getLocationByLocationImdbUrl($pdo, $locationImdbUrl)->toArray();
 		} else {
 			$reply->data = Location::getAllLocations($pdo)->toArray();
 		}
@@ -83,10 +83,6 @@ try {
 		//this line then decodes the JSON packages and stores that result in $requestObject
 		$requestObject = json_decode($requestContent);
 
-		//make sure location Imdb is available (required field))
-		if(empty($requestObject->locationImdb) === true) {
-			throw(new \InvalidArgumentException("no Imdb for location", 405));
-		}
 
 		//make sure location Title is available (required field))
 		if(empty($requestObject->locationTitle) === true) {
@@ -98,7 +94,10 @@ try {
 			throw(new \InvalidArgumentException("no text for location", 405));
 		}
 
-
+//make sure location Imdb is available (required field))
+		if(empty($requestObject->locationImdb) === true) {
+			throw(new \InvalidArgumentException("no Imdb for location", 405));
+		}
 		
 		//perform the actual put or post
 		if($method === "PUT") {
@@ -119,7 +118,10 @@ try {
 			vaildateJwtHeader();
 
 			//update all attributes
+			$location->setLocationAddress($requestObject->locationAddress);
 			$location->setLocationText($requestObject->locationText);
+			$location->setLocationTitle($requestObject->locationTitle);
+			$location->setLocationImdbUrl($requestObject->locationImdbUrl);
 			$location->update($pdo);
 
 			//update reply
