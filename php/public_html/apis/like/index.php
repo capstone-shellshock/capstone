@@ -1,4 +1,5 @@
 <?php
+
 require_once dirname(__DIR__, 3) . "/vendor/autoload.php";
 require_once dirname(__DIR__, 3) . "/Classes/autoload.php";
 require_once("/etc/apache2/capstone-mysql/Secrets.php");
@@ -6,11 +7,7 @@ require_once dirname(__DIR__, 3) . "/lib/xsrf.php";
 require_once dirname(__DIR__, 3) . "/lib/jwt.php";
 require_once dirname(__DIR__, 3) . "/lib/uuid.php";
 
-
-
-use ShellShock\Capstone\ {
-	Like
-};
+use ShellShock\Capstone\{Like, Location, Profile};
 
 /**
  * API for  Like class
@@ -30,7 +27,7 @@ $reply->data = null;
 
 try {
 
-	$secrets = new \Secrets("/etc	/apache2/capstone-mysql/ddctwitter.ini");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/abqonthereel.ini");
 	$pdo = $secrets->getPdoObject();
 
 	//determine which HTTP method was used
@@ -38,32 +35,33 @@ try {
 
 
 	//sanitize the search parameters
-	$likeLocationId =  $id = filter_input(INPUT_GET, "likeLocationId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$likeLocationId = $id = filter_input(INPUT_GET, "likeLocationId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$likeProfileId = $id = filter_input(INPUT_GET, "likeProfileId", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 	if($method === "GET") {
-	//SET XSRF cookie
+		//SET XSRF cookie
 		setXsrfCookie();
 
 		//gets a specific like associated based on its composite key
-		if ($likeLocationId !== null && $likeProfileId !== null) {
+		if($likeLocationId !== null && $likeProfileId !== null) {
 			$like = Like::getLikeByLikeLocationIdAndLikeProfileId($pdo, $likeLocationId, $likeProfileId);
 
 
-			if($like!== null) {
+			if($like !== null) {
 				$reply->data = $like;
 			}
 			//if non of the search parameters are met throw an exception
 		} else if(empty($likeLocationId) === false) {
-			$reply->data = Like::getLikeByLocationId($pdo,  $likeLocationId)->toArray();
+			$reply->data = Like::getLikeByLocationId($pdo, $likeLocationId)->toArray();
 			//get all the likes associated with the profileId
 		} else if(empty($likeProfileId) === false) {
 			$reply->data = Like::getLikeByProfileId($pdo, $likeProfileId)->toArray();
-		} else {;
+		} else {
+			;
 			throw new InvalidArgumentException("incorrect search parameters", 404);
 		}
 
-		}else if($method === "POST" || $method === "PUT") {
+	} else if($method === "POST" || $method === "PUT") {
 		//decode the response from the front end
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
@@ -74,7 +72,7 @@ try {
 		}
 
 		if(empty($requestObject->likeProfileId) === true) {
-			throw (new \InvalidArgumentException("No profile linked to the Like, 405"));
+			throw (new \InvalidArgumentException("No profile linked to the Like", 405));
 		}
 
 
@@ -85,7 +83,7 @@ try {
 			//enforce the end user has a JWT token
 			//validateJwtHeader();
 
-			//enforcce the user is signed in
+			//enforce the user is signed in
 			if(empty($_SESSION["profile"]) === true) {
 				throw(new \InvalidArgumentException("you must be logged in to like posts", 403));
 			}
@@ -96,7 +94,7 @@ try {
 			$like->insert($pdo);
 			$reply->message = "liked location successful";
 
-		} else if ($method === "PUT") {
+		} else if($method === "PUT") {
 			//enforce the end user has  XSRF token.
 			verifyXsrf();
 
@@ -111,7 +109,7 @@ try {
 
 			//enforce the user is signed in and only trying to edit their own like
 			if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId() !== $like->getLikeProfileId()) {
-				throw(new \InvalidArgumentException("You are not allowed to delete this tweet", 403));
+				throw(new \InvalidArgumentException("You are not allowed to delete this like", 403));
 			}
 
 			//validateJwtHeader();
