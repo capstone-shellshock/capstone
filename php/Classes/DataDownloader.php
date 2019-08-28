@@ -18,9 +18,30 @@ class DataDownloader {
 
 		public static function readDataJson($url, $secret) {
 
-			$context = stream_context_create(["http"] => ["ignore_errors" => true, "method" => "GET", "header" => "Authorization: Bearer $secret -> apiKey"])
+			$context = stream_context_create(["http" => ["ignore_errors" => true, "method" => "GET", "header" => "Authorization: Bearer $secret -> apiKey"]]);
+
+			try {
+
+				//file-get-contents returns file in string context
+				if(($jsonData = file_get_contents($url, null, $context)) === false) {
+					throw(new \RuntimeException("URL does not produce results"));
+				}
+
+				//decode the json file
+				$jsonConverted = json_decode($jsonData);
+
+				//format
+				if(empty($jsonConverted -> locations) === false) {
+					$jsonFeatures = $jsonConverted -> locations;
+				}
+				var_dump($jsonFeatures);
+				$newLocations = \SplFixedArray::fromArray($jsonFeatures);
+			} catch(\Exception $exception) {
+				throw(new \PDOException($exception -> getMessage(), 0, $exception));
+			}
+			return ($newLocations);
 		}
-
-
 	}
 }
+
+echo DataDownloader::pullLocations() . PHP_EOL;
