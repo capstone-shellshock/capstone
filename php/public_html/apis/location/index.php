@@ -181,4 +181,3 @@ try {
 //encode and return reply to the front end caller
 header("Content-type: application/Json");
 echo json_encode($reply);
-
