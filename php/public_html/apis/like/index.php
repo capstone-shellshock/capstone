@@ -57,8 +57,7 @@ try {
 		} else if(empty($likeProfileId) === false) {
 			$reply->data = Like::getLikeByProfileId($pdo, $likeProfileId)->toArray();
 		} else {
-			;
-			throw new InvalidArgumentException("incorrect search parameters", 404);
+			throw (new InvalidArgumentException("incorrect search parameters", 404));
 		}
 
 	} else if($method === "POST" || $method === "PUT") {
@@ -70,11 +69,6 @@ try {
 		if(empty($requestObject->likeLocationId) === true) {
 			throw (new \InvalidArgumentException("No location linked to the Like", 405));
 		}
-
-		if(empty($requestObject->likeProfileId) === true) {
-			throw (new \InvalidArgumentException("No profile linked to the Like", 405));
-		}
-
 
 		if($method === "POST") {
 			//enforce that the end user has a XSRF token.
@@ -90,7 +84,7 @@ try {
 
 			validateJwtHeader();
 
-			$like = new Like($_SESSION["profile"]->getProfileId(), $requestObject->likeLocationId);
+			$like = new Like($requestObject->likeLocationId,$_SESSION["profile"]->getProfileId());
 			$like->insert($pdo);
 			$reply->message = "liked location successful";
 

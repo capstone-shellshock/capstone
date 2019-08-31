@@ -6,9 +6,9 @@ require_once("/etc/apache2/capstone-mysql/Secrets.php");
 require_once dirname(__DIR__, 3) . "/lib/xsrf.php";
 require_once dirname(__DIR__, 3) . "/lib/jwt.php";
 require_once dirname(__DIR__, 3) . "/lib/uuid.php";
-require_once("etc/apache2/capstone-mysql/Secrets.php");
+require_once("/etc/apache2/capstone-mysql/Secrets.php");
 
-use ShellShock\Capstone\{Profile};
+use ShellShock\Capstone\{Profile, Location, Like};
 
 /**
  * API for profile
@@ -30,7 +30,7 @@ $reply->data = null;
 try {
 
 	//grab the MySQL connection
-	$secrets = new \Secrets("etc/apache2/capstone-mysql/abqonthereel.ini");
+	$secrets = new \Secrets("/etc/apache2/capstone-mysql/abqonthereel.ini");
 	$pdo = $secrets->getPdoObject();
 
 	//determine which HTTP method was used

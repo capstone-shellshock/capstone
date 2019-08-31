@@ -10,7 +10,7 @@ require_once dirname(__DIR__, 3) . "/lib/xsrf.php";
 
 //verify the xsrf challenge
 if(session_status() !== PHP_SESSION_ACTIVE) {
-	session__start();
+	session_start();
 }
 
 //prepare default error message
@@ -38,7 +38,7 @@ try{
 	$reply->message = $exception->getMessage();
 }
 
-header("Content-type: applicatoin/json");
+header("Content-type: application/json");
 if($reply->data === null) {
 	unset($reply->data);
 }
