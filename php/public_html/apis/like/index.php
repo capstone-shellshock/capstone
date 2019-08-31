@@ -6,8 +6,10 @@ require_once("/etc/apache2/capstone-mysql/Secrets.php");
 require_once dirname(__DIR__, 3) . "/lib/xsrf.php";
 require_once dirname(__DIR__, 3) . "/lib/jwt.php";
 require_once dirname(__DIR__, 3) . "/lib/uuid.php";
+require_once("etc/apache2/capstone-mysql/Secrets.php");
 
 use ShellShock\Capstone\{Like, Location, Profile};
+
 
 /**
  * API for  Like class
@@ -27,7 +29,8 @@ $reply->data = null;
 
 try {
 
-	$secrets = new \Secrets("/etc/apache2/capstone-mysql/abqonthereel.ini");
+	$secrets = new \Secrets("etc/apache2/capstone-mysql/abqonthereel.ini");
+	
 	$pdo = $secrets->getPdoObject();
 
 	//determine which HTTP method was used
