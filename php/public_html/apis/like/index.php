@@ -30,7 +30,7 @@ $reply->data = null;
 try {
 
 	$secrets = new \Secrets("etc/apache2/capstone-mysql/abqonthereel.ini");
-	
+
 	$pdo = $secrets->getPdoObject();
 
 	//determine which HTTP method was used
