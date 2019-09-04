@@ -18,9 +18,9 @@ class DataDownloader {
 		$secrets = new \Secrets("/etc/apache2/capstone-mysql/abqonthereel.ini");
 		$pdo = $secrets->getPdoObject();
 
-		$newLocations = self::readDataJson($urlBase);
-		$filteredResults = removeUselessEntries($newLocations);
-//		var_dump($filteredResults);
+		$locations = self::readDataJson($urlBase);
+		$filteredResults = removeUselessEntries($locations);
+		var_dump($filteredResults);
 	}
 
 	public static function readDataJson($url) {
@@ -49,19 +49,28 @@ class DataDownloader {
 	}
 }
 
-function removeUselessEntries($newLocations) {
-//	$usableEntries = new Vector();
+function removeUselessEntries($locations) {
 
-	foreach($newLocations as $newLocation) {
-//		var_dump($newLocation -> attributes);
-		$newTitle = trim($newLocation -> attributes -> Title) . " at " . trim($newLocation -> attributes -> Site);
-		var_dump($newTitle);
-//		if($newLocation -> attributes -> Title !== "0000") {
-//			$usableEntries -> push($newLocation);
-//		}
+$newLocations = [];
+	foreach($locations as $location) {
+		if($location -> attributes -> Title !== "0000" && $location -> attributes -> IMDbLink !== 'na') {
+
+		$locationTitle = trim($location -> attributes -> Title) . " at " . trim($location -> attributes -> Site);
+		$locationImdbUrl = trim($location -> attributes -> IMDbLink);
+		$locationAddress = trim($location -> attributes -> Address);
+		$locationDate = trim($location -> attributes -> ShootDate);
+		$locationX = $location -> geometry -> x;
+		$locationY = $location -> geometry -> y;
+
+		$newLocations = $newLocations + [$locationTitle => ["locationImdbUrl" => $locationImdbUrl, "locationDate" => $locationDate, "locationAddress" => $locationAddress, "locationX" => $locationX, "locationY" => $locationY]];
+
+			$newLocations = new Location(generateUuidV4(), $_SESSION["profile"]->getProfileId(), $requestObject -> locationAddress, null, $requestObject -> locationTitle, $requestObject -> locationImdbUrl() );
+			$location->insert($pdo);
+
+		}
 	}
-//	return($usableEntries);
-	return;
+
+	return($newLocations);
 }
 
 
