@@ -7,6 +7,8 @@ require_once(dirname(__DIR__) . "/vendor/autoload.php");
 require_once("/etc/apache2/capstone-mysql/Secrets.php");
 require_once(dirname(__DIR__, 1) . "/lib/uuid.php");
 
+//use \Ds\Vector;
+
 class DataDownloader {
 
 	public static function pullLocations() {
@@ -17,7 +19,8 @@ class DataDownloader {
 		$pdo = $secrets->getPdoObject();
 
 		$newLocations = self::readDataJson($urlBase);
-		var_dump($newLocations);
+		$filteredResults = removeUselessEntries($newLocations);
+//		var_dump($filteredResults);
 	}
 
 	public static function readDataJson($url) {
@@ -34,7 +37,6 @@ class DataDownloader {
 			//decode the json file
 			$jsonConverted = json_decode($jsonData);
 
-
 			//format
 			if(empty($jsonConverted->features) === false) {
 				$jsonFeatures = $jsonConverted->features;
@@ -46,5 +48,22 @@ class DataDownloader {
 		return ($newLocations);
 	}
 }
+
+function removeUselessEntries($newLocations) {
+//	$usableEntries = new Vector();
+
+	foreach($newLocations as $newLocation) {
+//		var_dump($newLocation -> attributes);
+		$newTitle = trim($newLocation -> attributes -> Title) . " at " . trim($newLocation -> attributes -> Site);
+		var_dump($newTitle);
+//		if($newLocation -> attributes -> Title !== "0000") {
+//			$usableEntries -> push($newLocation);
+//		}
+	}
+//	return($usableEntries);
+	return;
+}
+
+
 
 echo DataDownloader::pullLocations() . PHP_EOL;

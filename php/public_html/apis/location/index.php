@@ -93,9 +93,9 @@ try {
 		}
 
 		//make sure location Text is available (required field))
-		if(empty($requestContent->locationText) === true) {
-			throw(new \InvalidArgumentException("no text for location", 405));
-		}
+//		if(empty($requestContent->locationText) === true) {
+//			throw(new \InvalidArgumentException("no text for location", 405));
+//		}
 
 
 		
