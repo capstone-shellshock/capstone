@@ -256,6 +256,10 @@ class Location implements \JsonSerializable {
 	 *@throws \TypeError if $newLocationImageCloudinaryId is not a string
 	 */
 	public function setLocationImageCloudinaryId(?string $newLocationImageCloudinaryId): void {
+		if($newLocationImageCloudinaryId === NULL) {
+			$this->locationImageCloudinaryId = null;
+			return;
+		}
 		//verify the cloudinary image id is secure
 		$newLocationImageCloudinaryId = trim($newLocationImageCloudinaryId);
 		$newLocationImageCloudinaryId = filter_var($newLocationImageCloudinaryId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -286,6 +290,10 @@ class Location implements \JsonSerializable {
 	 * @throws \TypeError if $newLocationImageCloudinaryUrl is not a string
 	 */
 	public function setLocationImageCloudinaryUrl(?string $newLocationImageCloudinaryUrl): void {
+		if($newLocationImageCloudinaryUrl === NULL) {
+			$this->locationImageCloudinaryUrl = null;
+			return;
+		}
 		//verify image is secure
 		$newLocationImageCloudinaryUrl = trim($newLocationImageCloudinaryUrl);
 		$newLocationImageCloudinaryUrl = filter_var($newLocationImageCloudinaryUrl, FILTER_SANITIZE_STRING, FILTER_VALIDATE_URL);
