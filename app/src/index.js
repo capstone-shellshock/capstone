@@ -13,11 +13,7 @@ const Routing = () => (
 	<>
 		<BrowserRouter>
 			<Switch>
-<<<<<<< HEAD
-				<Route component={Location}/>
-=======
 				<Route component={Home}/>
->>>>>>> added files
 				<Route component={FourOhFour}/>
 			</Switch>
 		</BrowserRouter>
