@@ -261,7 +261,7 @@ class Location implements \JsonSerializable {
 		$newLocationImageCloudinaryId = filter_var($newLocationImageCloudinaryId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		//make sure image cloudinary id is not empty
 		if(empty($newLocationImageCloudinaryId)=== true) {
-			throw(new\InvalidArgumentException ("cloudinary id is either empty or insecure"));
+			$newLocationImageCloudinaryId = null;
 		}
 		//make sure the cloudinary id will fit in the database
 		if(strlen($newLocationImageCloudinaryId) > 128)
@@ -291,7 +291,7 @@ class Location implements \JsonSerializable {
 		$newLocationImageCloudinaryUrl = filter_var($newLocationImageCloudinaryUrl, FILTER_SANITIZE_STRING, FILTER_VALIDATE_URL);
 		//make sure image cloudinary url is not empty
 		if(empty($newLocationImageCloudinaryUrl) === true) {
-			throw(new \InvalidArgumentException("location image is either empty or insecure"));
+			$newLocationImageCloudinaryUrl = null;
 		}
 		//make sure the image cloudinary url will fit in the database
 		if(strlen($newLocationImageCloudinaryUrl) > 255) {

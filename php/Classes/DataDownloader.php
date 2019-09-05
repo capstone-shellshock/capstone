@@ -14,13 +14,19 @@ class DataDownloader {
 	public static function pullLocations() {
 
 		$newLocations = null;
-		$urlBase = "http://coagisweb.cabq.gov/arcgis/rest/services/public/FilmLocations/MapServer/0/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&f=pjson";
+		$urlBase = "http://coagisweb.cabq.gov/arcgis/rest/services/public/FilmLocations/MapServer/0/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=pjson";
 		$secrets = new \Secrets("/etc/apache2/capstone-mysql/abqonthereel.ini");
 		$pdo = $secrets->getPdoObject();
 
 		$locations = self::readDataJson($urlBase);
 		$filteredResults = removeUselessEntries($locations);
-		var_dump($filteredResults);
+		foreach($filteredResults as $location) {
+			var_dump($location);
+			$location = new Location(generateUuidV4(), "58aa0068-b4a9-4cfd-9dea-777e7a3fb85d", $location["locationAddress"], null, $location["locationY"], $location["locationX"], null, null, null, $location["locationTitle"] , $location["locationImdbUrl"]);
+
+				$location->insert($pdo);
+		}
+//		var_dump($filteredResults);
 	}
 
 	public static function readDataJson($url) {
@@ -53,7 +59,7 @@ function removeUselessEntries($locations) {
 
 $newLocations = [];
 	foreach($locations as $location) {
-		if($location -> attributes -> Title !== "0000" && $location -> attributes -> IMDbLink !== 'na') {
+		if($location -> attributes -> Title !== "0000" && $location -> attributes -> IMDbLink !== "na" && $location -> geometry -> x !== "NaN" && $location -> geometry -> y !== "NaN") {
 
 		$locationTitle = trim($location -> attributes -> Title) . " at " . trim($location -> attributes -> Site);
 		$locationImdbUrl = trim($location -> attributes -> IMDbLink);
@@ -62,11 +68,7 @@ $newLocations = [];
 		$locationX = $location -> geometry -> x;
 		$locationY = $location -> geometry -> y;
 
-		$newLocations = $newLocations + [$locationTitle => ["locationImdbUrl" => $locationImdbUrl, "locationDate" => $locationDate, "locationAddress" => $locationAddress, "locationX" => $locationX, "locationY" => $locationY]];
-
-			$newLocations = new Location(generateUuidV4(), $_SESSION["profile"]->getProfileId(), $requestObject -> locationAddress, null, $requestObject -> locationTitle, $requestObject -> locationImdbUrl() );
-			$location->insert($pdo);
-
+		$newLocations = $newLocations + [$locationTitle => ["locationTitle" => trim($location -> attributes -> Title), "locationImdbUrl" => $locationImdbUrl, "locationDate" => $locationDate, "locationAddress" => $locationAddress, "locationX" => $locationX, "locationY" => $locationY]];
 		}
 	}
 
