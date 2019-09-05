@@ -1,26 +1,23 @@
 import FormControl from "react-bootstrap/es/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const Location = () => {
 	return (
 		<>
 
-<div className="input-group">
+<InputGroup">
 	<div className="input-group-prepend">
-		<span><i className="fas fa-upload"></i></span>
-	</div>
+	</>
 	<div className="custom-file">
-		<input
-			type="file"
-			className="custom-file-input"
-			id="inputGroupFile01"
-			aria-describedby="inputGroupFileAddon01"
-		/>
+		<input type="file" className="custom-file-input" aria-describedby="inputGroupFileAddon01"/>
 		<label className="custom-file-label" htmlFor="inputGroupFile01">a picture of the scene</label>
-	</div>
-</div>
+	</>
+</InputGroup>
 
-<InputGroup className="my-4">
-<FormControl as="textarea" placeholder="What did you see? keep it reel."/>
-	</InputGroup>
-		</>
+			<InputGroup>
+				<FormControl placeholder="What did you see? keep it reel."/>
+				<input type="file" className="custom-file-input"/>
+			</InputGroup>
+
+</>

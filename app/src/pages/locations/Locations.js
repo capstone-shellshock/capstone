@@ -9,6 +9,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/es/FormControl";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import {library} from "@fortawesome/fontawesome-svg-core";
 
 export const Location = () => {
 	return (
@@ -35,7 +36,7 @@ export const Location = () => {
 									<InputGroup className="my-4">
 										<FormControl as="textarea" placeholder="What did you see? keep it reel."/>
 									</InputGroup>
-
+										<button type="submit">Upload</button>
 									</Container>
 								</Form.Group>
 							</Form>
