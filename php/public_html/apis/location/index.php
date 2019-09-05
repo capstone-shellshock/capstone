@@ -91,13 +91,6 @@ try {
 		if(empty($requestContent->locationTitle) === true) {
 			throw(new \InvalidArgumentException("no title for location", 405));
 		}
-
-		//make sure location Text is available (required field))
-//		if(empty($requestContent->locationText) === true) {
-//			throw(new \InvalidArgumentException("no text for location", 405));
-//		}
-
-
 		
 		//perform the actual put or post
 		if($method === "PUT") {
