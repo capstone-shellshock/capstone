@@ -1,1 +1,42 @@
-font impact
+/*font impact*/
+
+#Splash {
+	background-image: url("./shared/img/reel.jpg");
+	background-attachment: scroll;
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 120vh;
+}
+
+#justin {
+	margin-left: 10vw;
+}
+
+#film-reel {
+	z-index: 999;
+	width: 200px;
+	height: 200px;
+	margin-right: 40px;
+}
+
+#Splash h1 {
+	font-size: 6vw;
+	margin-top: 12vh;
+	}
+
+/*#topRow {*/
+/*	height: 15vh;*/
+/*}*/
+
+#SignIn {
+	margin: auto;
+}
+
+#line {
+	width: 1px;
+	padding: 3px;
+	background-color: white;
+	height: 100%;
+	float: outside;
+}
+
