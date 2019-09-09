@@ -1,4 +1,4 @@
-import {FormDebugger} from "../../FormDebugger";
+import {FormDebugger} from "app/src/pages/components/FormDebugger";
 import React from "react";
 
 export const SignInFormContent = (props) => {

@@ -24,25 +24,28 @@ export const Splash = () => {
 			</Row>
 			<Container>
 				<Row>
+				<Container>
 					<Col lg={4}>
 						<Form>
 							<h4 className="text-white font-weight-bold">Crew Sign In</h4>
-								<Form.Group controlId="formGroupEmail">
-									<Form.Control type="email" placeholder="Enter email"/>
-								</Form.Group>
-								<Form.Group controlId="formGroupPassword">
-									<Form.Control type="password" placeholder="Password"/>
-								</Form.Group>
+							<Form.Group controlId="formGroupEmail">
+								<Form.Control type="email" placeholder="Enter email"/>
+							</Form.Group>
+							<Form.Group controlId="formGroupPassword">
+								<Form.Control type="password" placeholder="Password"/>
+							</Form.Group>
 							<Button className="button">Sign In</Button>
 						</Form>
 					</Col>
+				</Container>
 					<Col lg={1}>
 						<Container className="justify-content-center" id="line">
 						</Container>
 					</Col>
-					<Col lg={4}>
-						<Form border="dark">
-							<h4 className="text-white font-weight-bold">Join the Crew</h4>
+					<Container>
+						<Col lg={4}>
+							<Form border="dark">
+								<h4 className="text-white font-weight-bold">Join the Crew</h4>
 								<Form.Group controlId="formGroupUsername">
 									<Form.Control type="username" placeholder="create Username"/>
 								</Form.Group>
@@ -55,9 +58,10 @@ export const Splash = () => {
 								<Form.Group controlId="formGroupRePassword">
 									<Form.Control type="password" placeholder="Re-Enter Password"/>
 								</Form.Group>
-							<Button className="button">Join</Button>
-						</Form>
-					</Col>
+								<Button className="button">Join</Button>
+							</Form>
+						</Col>
+					</Container>
 				</Row>
 			</Container>
 		</Container>
