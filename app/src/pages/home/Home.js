@@ -5,19 +5,20 @@ import Container from "react-bootstrap/es/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col"
 import Card from "react-bootstrap/Card";
+import '../../index.css';
 
 
-export const Home = () => {
+export const Posts = () => {
 	return (
-     <>
-			<Container className="my-top-5 py-lg-5 conte" >
+     <Container id="home">
+			<Container className="my-top-5 py-lg-5" >
 				<Row>
-					<Col md={3}>
-			<h2>Reel Time</h2>
+					<Col md={3} className="float-right">
+			<h2 className="p-3">Reel Time</h2>
 					</Col>
-					<Col md={5}>
+					<Col md={7}>
 					<ButtonToolbar className="float-right">
-						<button className="btn btn-danger">Make a Scene</button>
+						<button className="btn button">Make a Scene</button>
 					</ButtonToolbar>
 					</Col>
 				</Row>
@@ -37,7 +38,7 @@ export const Home = () => {
 			  </div>
 		  </Card>
 	  </Container>
-		  </>
+		  </Container>
 
 )
 };

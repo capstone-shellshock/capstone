@@ -14,7 +14,7 @@ import {Image} from "react-bootstrap";
 import '../../index.css';
 
 
-export const Splash = () => {
+export const Home = () => {
 	return (
 		<>
 		<Container fluid id="Splash">
@@ -34,6 +34,7 @@ export const Splash = () => {
 								<Form.Group controlId="formGroupPassword">
 									<Form.Control type="password" placeholder="Password"/>
 								</Form.Group>
+							<Button className="button" variant="#EFBD09">Sign In</Button>
 						</Form>
 					</Col>
 					<Col lg={1}>
@@ -55,6 +56,7 @@ export const Splash = () => {
 								<Form.Group controlId="formGroupRePassword">
 									<Form.Control type="password" placeholder="Re-Enter Password"/>
 								</Form.Group>
+							<Button className="button" variant="#EFBD09">Join</Button>
 						</Form>
 					</Col>
 				</Row>
