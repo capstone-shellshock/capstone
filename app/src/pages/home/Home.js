@@ -8,10 +8,10 @@ import Card from "react-bootstrap/Card";
 import '../../index.css';
 
 
-export const Posts = () => {
+export const Home = () => {
 	return (
      <Container id="home">
-			<Container className="my-top-5 py-lg-5" >
+			<Container className="margin" >
 				<Row>
 					<Col md={3} className="float-right">
 			<h2 className="p-3">Reel Time</h2>

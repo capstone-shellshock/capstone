@@ -13,8 +13,7 @@ import img from "../../shared/img/official-logo.png";
 import {Image} from "react-bootstrap";
 import '../../index.css';
 
-
-export const Home = () => {
+export const Splash = () => {
 	return (
 		<>
 		<Container fluid id="Splash">
@@ -34,7 +33,7 @@ export const Home = () => {
 								<Form.Group controlId="formGroupPassword">
 									<Form.Control type="password" placeholder="Password"/>
 								</Form.Group>
-							<Button className="button" variant="#EFBD09">Sign In</Button>
+							<Button className="button">Sign In</Button>
 						</Form>
 					</Col>
 					<Col lg={1}>
@@ -56,7 +55,7 @@ export const Home = () => {
 								<Form.Group controlId="formGroupRePassword">
 									<Form.Control type="password" placeholder="Re-Enter Password"/>
 								</Form.Group>
-							<Button className="button" variant="#EFBD09">Join</Button>
+							<Button className="button">Join</Button>
 						</Form>
 					</Col>
 				</Row>

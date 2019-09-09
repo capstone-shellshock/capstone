@@ -1,12 +1,11 @@
 import React from "react";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
 
 export const Footer = () => {
 	return (
-		<div className={"fixed-bottom"}>
+		<div className={"fixed-bottom"} id="footer">
 		<MDBFooter color="yellow" className="font-large pt-4 mt-4">
 			<MDBContainer fluid className="text-center">
 						<h5 className="title">ABQ On The Reel</h5>

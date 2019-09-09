@@ -1,5 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import img from "../../shared/img/official-logo.png";
+import {Image} from "react-bootstrap";
 
 import Navbar from "react-bootstrap/Navbar";
 
@@ -10,13 +12,12 @@ export const NavBar = () => {
 			<Navbar bg="dark" fixed="top" variant="dark">
 				<Navbar.Brand href="#home">
 					<img
-						src="../img/film-reel.png"
+						src={img}
 						alt="Film Reel"
-						width="50"
-						height="50"
+						width="250"
+						height="auto"
 						className="d-inline-block align-top"
 					/>
-					{'ABQ On the Reel'}
 				</Navbar.Brand>
 			</Navbar>
 		</>

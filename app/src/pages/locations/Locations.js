@@ -36,13 +36,30 @@ export const Location = () => {
 									<InputGroup className="my-4">
 										<FormControl as="textarea" placeholder="What did you see? keep it reel."/>
 									</InputGroup>
-										<button type="submit">Upload</button>
+										<div className="input-group">
+											<div className="input-group-prepend">
+    <span className="input-group-text" id="inputGroupFileAddon01">
+      Upload
+    </span>
+											</div>
+											<div className="custom-file">
+												<input
+													type="file"
+													className="custom-file-input"
+													id="inputGroupFile01"
+													aria-describedby="inputGroupFileAddon01"
+												/>
+												<label className="custom-file-label" htmlFor="inputGroupFile01">
+													Choose Picture
+												</label>
+											</div>
+										</div>
 									</Container>
 								</Form.Group>
 							</Form>
 					<Modal.Footer>
 						<InputGroup.Append>
-						<Button>Post your scene</Button>
+						<Button className="button">Post your scene</Button>
 						</InputGroup.Append>
 					</Modal.Footer>
 				</Modal.Dialog>

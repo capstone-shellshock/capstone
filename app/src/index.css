@@ -5,7 +5,18 @@
 	background-attachment: scroll;
 	background-repeat: no-repeat;
 	background-size: cover;
-	height: 120vh;
+	height: 100vh;
+}
+
+.home {
+	background-image: url("shared/img/homebg.png");
+	background-attachment: scroll;
+	background-repeat: repeat;
+	background-size: cover;
+}
+
+.margin {
+	margin-top: 18vh;
 }
 
 #justin {
@@ -39,4 +50,3 @@
 	height: 100%;
 	float: outside;
 }
-
