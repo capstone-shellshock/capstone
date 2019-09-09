@@ -82,7 +82,7 @@ try {
 
 			//enforce the user is signed in
 			if(empty($_SESSION["profile"]) === true) {
-				throw(new \InvalidArgumentException("you must be logged in to like posts", 403));
+				throw(new \InvalidArgumentException("you must be logged in to like home", 403));
 			}
 
 			validateJwtHeader();
