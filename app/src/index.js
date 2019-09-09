@@ -17,7 +17,7 @@ const Routing = () => (
 	<>
 		<BrowserRouter>
 			<Switch>
-				<Route component={Home}/>
+				<Route component={Footer}/>
 				<Route component={FourOhFour}/>
 			</Switch>
 		</BrowserRouter>
