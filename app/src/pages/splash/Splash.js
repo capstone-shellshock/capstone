@@ -24,7 +24,6 @@ export const Splash = () => {
 			</Row>
 			<Container>
 				<Row>
-				<Container>
 					<Col lg={4}>
 						<Form>
 							<h4 className="text-white font-weight-bold">Crew Sign In</h4>
@@ -37,12 +36,10 @@ export const Splash = () => {
 							<Button className="button">Sign In</Button>
 						</Form>
 					</Col>
-				</Container>
 					<Col lg={1}>
 						<Container className="justify-content-center" id="line">
 						</Container>
 					</Col>
-					<Container>
 						<Col lg={4}>
 							<Form border="dark">
 								<h4 className="text-white font-weight-bold">Join the Crew</h4>
@@ -61,7 +58,6 @@ export const Splash = () => {
 								<Button className="button">Join</Button>
 							</Form>
 						</Col>
-					</Container>
 				</Row>
 			</Container>
 		</Container>
