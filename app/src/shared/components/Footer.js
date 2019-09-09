@@ -5,7 +5,7 @@ import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
 
 export const Footer = () => {
 	return (
-		<div className={"fixed-bottom"} id="footer">
+		<div id="footer">
 		<MDBFooter color="yellow" className="font-large pt-4 mt-4">
 			<MDBContainer fluid className="text-center">
 						<h5 className="title">ABQ On The Reel</h5>

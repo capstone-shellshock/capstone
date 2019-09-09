@@ -17,14 +17,12 @@ import './index.css';
 const Routing = () => (
 	<>
 		<BrowserRouter>
-			<NavBar/>
 			<Switch>
 				<Route exact path="/home" component={Home}/>
 				<Route exact path="/splash" component={Splash}/>
 				<Route exact path="/about" component={About}/>
 				<Route component={FourOhFour}/>
 			</Switch>
-			<Footer/>
 		</BrowserRouter>
 	</>
 );
