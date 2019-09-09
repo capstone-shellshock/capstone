@@ -27,7 +27,7 @@ CREATE TABLE location (
 	locationLongitude DECIMAL(11,8),
 	locationImageCloudinaryId VARCHAR(128),
 	locationImageCloudinaryUrl VARCHAR(255),
-	locationText VARCHAR(300) NOT NULL,
+	locationText VARCHAR(300),
 	locationTitle VARCHAR(128) NOT NULL,
 	locationImdbUrl VARCHAR(255) NOT NULL,
 

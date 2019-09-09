@@ -98,7 +98,9 @@ class Location implements \JsonSerializable {
 	 * @throws \Exception if some other exception occurs
 	 *
 	 */
-	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, ?float $newLocationLatitude, ?float $newLocationLongitude, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, string $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
+
+	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, ?float $newLocationLatitude, ?float $newLocationLongitude, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, ?string $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
+
 		try {
 			$this->setLocationId($newLocationId);
 			$this->setLocationProfileId($newLocationProfileId);
@@ -265,7 +267,7 @@ class Location implements \JsonSerializable {
 		$newLocationImageCloudinaryId = filter_var($newLocationImageCloudinaryId, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		//make sure image cloudinary id is not empty
 		if(empty($newLocationImageCloudinaryId)=== true) {
-			throw(new\InvalidArgumentException ("cloudinary id is either empty or insecure"));
+			$newLocationImageCloudinaryId = null;
 		}
 		//make sure the cloudinary id will fit in the database
 		if(strlen($newLocationImageCloudinaryId) > 128)
@@ -299,7 +301,7 @@ class Location implements \JsonSerializable {
 		$newLocationImageCloudinaryUrl = filter_var($newLocationImageCloudinaryUrl, FILTER_SANITIZE_STRING, FILTER_VALIDATE_URL);
 		//make sure image cloudinary url is not empty
 		if(empty($newLocationImageCloudinaryUrl) === true) {
-			throw(new \InvalidArgumentException("location image is either empty or insecure"));
+			$newLocationImageCloudinaryUrl = null;
 		}
 		//make sure the image cloudinary url will fit in the database
 		if(strlen($newLocationImageCloudinaryUrl) > 255) {
@@ -407,13 +409,13 @@ class Location implements \JsonSerializable {
 	 * @throws \RangeException if $newLocationText is < 300 characters
 	 * @throws \TypeError if $newLocationText is not a string
 	 */
-	public function setLocationText(string $newLocationText): void {
+	public function setLocationText(?string $newLocationText): void {
 		//verify the text is secure
 		$newLocationText = trim($newLocationText);
 		$newLocationText = filter_var($newLocationText, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newLocationText) === true) {
-			throw(new \InvalidArgumentException("text is empty please tell us what you saw at this location"));
-		}
+//		if(empty($newLocationText) === true) {
+//			throw(new \InvalidArgumentException("text is empty please tell us what you saw at this location"));
+//		}
 		//verify the text will fit in the database
 		if(strlen($newLocationText) === true) {
 			throw(new\RangeException("text must be under 300 characters"));
@@ -667,13 +669,13 @@ class Location implements \JsonSerializable {
 * @throws \PDOException when mySQL related errors occur
 * @throws \TypeError when variables are not the correct data type
 **/
-	public static function getLocationByLocationText (\PDO $pdo, string $locationText) : \SplFixedArray {
+	public static function getLocationByLocationText (\PDO $pdo, ?string $locationText) : \SplFixedArray {
 		//sanitize the description before searching
 		$locationText = trim($locationText);
 		$locationText = filter_var($locationText, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($locationText) === true) {
-			throw(new \PDOException("location text is invalid"));
-		}
+//		if(empty($locationText) === true) {
+//			throw(new \PDOException("location text is invalid"));
+//		}
 		//escape any mySQL wild cards
 		$locationText = str_replace("_", "\\_", str_replace("%", "\\%", $locationText));
 		//create query template

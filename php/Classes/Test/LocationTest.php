@@ -86,7 +86,7 @@ class LocationTest extends AbqOnTheReelTest {
 	 *
 	 * @var $VALID_LOCATIONTEXT
 	 */
-	protected $VALID_LOCATIONTEXT = "wow what a cool filmimg location. I saw Spongebob he's such a dream boat";
+	protected $VALID_LOCATIONTEXT;
 	/**
 	 * updated text about the Location
 	 *
