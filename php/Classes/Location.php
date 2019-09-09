@@ -98,7 +98,7 @@ class Location implements \JsonSerializable {
 	 * @throws \Exception if some other exception occurs
 	 *
 	 */
-	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, ?float $newLocationLatitude, ?float $newLocationLongitude, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
+	public function __construct( $newLocationId, $newLocationProfileId, ?string $newLocationAddress, $newLocationDate, ?float $newLocationLatitude, ?float $newLocationLongitude, ?string $newLocationImageCloudinaryId, ?string $newLocationImageCloudinaryUrl, string $newLocationText, $newLocationTitle, $newLocationImdbUrl) {
 		try {
 			$this->setLocationId($newLocationId);
 			$this->setLocationProfileId($newLocationProfileId);
