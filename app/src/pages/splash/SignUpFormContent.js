@@ -1,4 +1,4 @@
-import {FormDebugger} from "app/src/pages/components/FormDebugger.js";
+import {FormDebugger} from "../components/FormDebugger.js";
 import React from "react";
 
 export const SignUpFormContent = (props) => {
@@ -103,7 +103,7 @@ export const SignUpFormContent = (props) => {
 							id="profileUsername"
 							type="text"
 							value={values.profileUsername}
-							placeholder="@Handle"
+							placeholder="Username"
 							onChange={handleChange}
 							onBlur={handleBlur}
 

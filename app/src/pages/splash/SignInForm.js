@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {httpConfig} from "../../shared/utils/http-config.js";
 import {Formik} from "formik/dist/index";
 import * as Yup from "yup";
 import {SignInFormContent} from "./SignInFormContent";
+import {Redirect} from "react-router";
 
 export const SignInForm = () => {
+
+	// state variable to handle redirect to posts page on sign in
+	const [toHome, setToHome] = useState(null);
+
 	const  validator = Yup.object().shape({
 		profileEmail: Yup.string()
 			.email("email must be a valid email")
@@ -19,26 +25,32 @@ export const SignInForm = () => {
 		profilePassword: ""
 	};
 
-	const submitSignIn = (values,{resetForm, setStatus}) => {
+	const submitSignIn = (values, {resetForm, setStatus}) => {
 		httpConfig.post("/apis/sign-in/", values)
 			.then(reply => {
 				let {message, type} = reply;
-				setStatus({message, type});
-				if(reply.status ===200 && reply.headers["x-jwt-token"]) {
+				if(reply.status === 200 && reply.headers["x-jwt-token"]) {
 					window.localStorage.removeItem("jwt-token");
 					window.localStorage.setItem("jwt-token", reply.headers["x-jwt-token"]);
 					resetForm();
+					setTimeout(() => {
+						setToHome(true);
+					}, 1500);
 				}
+				setStatus({message, type});
 			});
 	};
 
 	return (
 		<>
+			{/* redirect user to posts page on sign in */}
+			{toHome ? <Redirect to="/home" /> : null}
+
 			<Formik
 				initialValues={signIn}
 				onSubmit={submitSignIn}
-				ValidationSchema={validator}
-				>
+				validationSchema={validator}
+			>
 				{SignInFormContent}
 			</Formik>
 		</>

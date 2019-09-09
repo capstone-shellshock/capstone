@@ -19,8 +19,8 @@ const Routing = () => (
 		<BrowserRouter>
 			<Switch>
 				<Route exact path="/home" component={Home}/>
-				<Route exact path="/splash" component={Splash}/>
 				<Route exact path="/about" component={About}/>
+				<Route exact path="/" component={Splash}/>
 				<Route component={FourOhFour}/>
 			</Switch>
 		</BrowserRouter>

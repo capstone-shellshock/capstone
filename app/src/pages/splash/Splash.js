@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Container from "react-bootstrap/es/Container";
 import Card from "react-bootstrap/Card";
 import CardColumns from "react-bootstrap/CardColumns";
@@ -12,8 +12,14 @@ import logo from "../../shared/img/reel.jpg";
 import img from "../../shared/img/official-logo.png";
 import {Image} from "react-bootstrap";
 import '../../index.css';
+import {SignUpForm} from "./SignUpForm";
+import {SignInForm} from "./SignInForm";
+import {httpConfig} from "../../shared/utils/http-config";
 
 export const Splash = () => {
+	useEffect(() => {
+		httpConfig.get("/apis/earl-grey/")
+	});
 	return (
 		<>
 		<Container fluid id="Splash">
@@ -25,38 +31,16 @@ export const Splash = () => {
 			<Container>
 				<Row>
 					<Col lg={4}>
-						<Form>
 							<h4 className="text-white font-weight-bold">Crew Sign In</h4>
-							<Form.Group controlId="formGroupEmail">
-								<Form.Control type="email" placeholder="Enter email"/>
-							</Form.Group>
-							<Form.Group controlId="formGroupPassword">
-								<Form.Control type="password" placeholder="Password"/>
-							</Form.Group>
-							<Button className="button">Sign In</Button>
-						</Form>
+						<SignInForm/>
 					</Col>
 					<Col lg={1}>
 						<Container className="justify-content-center" id="line">
 						</Container>
 					</Col>
 						<Col lg={4}>
-							<Form border="dark">
 								<h4 className="text-white font-weight-bold">Join the Crew</h4>
-								<Form.Group controlId="formGroupUsername">
-									<Form.Control type="username" placeholder="create Username"/>
-								</Form.Group>
-								<Form.Group controlId="formGroupEmail">
-									<Form.Control type="email" placeholder="Enter email"/>
-								</Form.Group>
-								<Form.Group controlId="formGroupPassword">
-									<Form.Control type="password" placeholder="Password"/>
-								</Form.Group>
-								<Form.Group controlId="formGroupRePassword">
-									<Form.Control type="password" placeholder="Re-Enter Password"/>
-								</Form.Group>
-								<Button className="button">Join</Button>
-							</Form>
+							<SignUpForm/>
 						</Col>
 				</Row>
 			</Container>

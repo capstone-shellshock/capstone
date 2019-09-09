@@ -1,10 +1,16 @@
 import React, {useState} from 'react';
+import {httpConfig} from "../../shared/utils/http-config.js";
 import * as Yup from "yup";
 import {Formik} from "formik";
+import {Redirect} from "react-router";
 
 import {SignUpFormContent} from "./SignUpFormContent";
 
 export const SignUpForm = () => {
+
+	// state variable to handle redirect to posts page on sign in
+	const [toHome, setToHome] = useState(null);
+
 	const signUp = {
 		profileEmail: "",
 		profilePassword: "",
@@ -27,24 +33,34 @@ export const SignUpForm = () => {
 			.required("Profile username is required")
 	});
 
-	const submitSignUp = (values, {resetForm}) => {
+	const submitSignUp = (values, {resetForm, setStatus}) => {
 		httpConfig.post("/apis/sign-up/", values)
 			.then(reply => {
 				let {message, type} = reply;
-				setStatus({message, type});
-				if(reply.status === 200) {
+				if(reply.status === 200 && reply.headers["x-jwt-token"]) {
+					window.localStorage.removeItem("jwt-token");
+					window.localStorage.setItem("jwt-token", reply.headers["x-jwt-token"]);
 					resetForm();
+					setTimeout(() => {
+						setToHome(true);
+					}, 1500);
 				}
-			})
+				setStatus({message, type});
+			});
 	};
 
 	return (
-		<Formik
-			onSubmit={submitSignUp}
-			initialValues={signUp}
-			validationSchema={validator}
+		<>
+			{/* redirect user to posts page on sign in */}
+			{toHome ? <Redirect to="/home/" /> : null}
+
+			<Formik
+				initialValues={signUp}
+				onSubmit={submitSignUp}
+				validationSchema={validator}
 			>
-			{signUpFormContent}
-		</Formik>
+				{SignUpFormContent}
+			</Formik>
+		</>
 	)
 };
