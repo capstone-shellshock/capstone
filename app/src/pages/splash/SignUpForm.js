@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {httpConfig} from "../../../misc/http-config";
 import * as Yup from "yup";
 import {Formik} from "formik";
 
