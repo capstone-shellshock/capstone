@@ -12,7 +12,7 @@ import {FourOhFour} from "./pages/four-oh-four/FourOhFour";
 import {About} from "./pages/about/About";
 import {Splash} from "./pages/splash/Splash";
 import './index.css';
-import {LocationFormContent} from "./pages/locations/LocationFormContent";
+import {LocationModal} from "./pages/locations/LocationModal";
 
 const store = createStore(combinedReducers, applyMiddleware(thunk));
 
@@ -25,7 +25,7 @@ const Routing = () => (
 				<Route exact path="/home" component={Home}/>
 				<Route exact path="/about" component={About}/>
 				<Route exact path="/" component={Splash}/>
-				<Route exact path="/location" component={LocationFormContent}/>
+				<Route exact path="/location" component={LocationModal}/>
 				<Route component={FourOhFour}/>
 			</Switch>
 		</BrowserRouter>

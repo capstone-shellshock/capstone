@@ -8,14 +8,10 @@ import Col from "react-bootstrap/Col"
 import Card from "react-bootstrap/Card";
 import '../../index.css';
 import Modal from "react-bootstrap/Modal";
-import Location, {LocationFormContent} from "../locations/LocationFormContent"
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/es/FormControl";
 import {useSelector, useDispatch} from "react-redux";
-import {LocationCard} from "./LocationCard";
 import {getAllLocations, getAllUsers} from "../../shared/actions/get-locations";
 import {CardColumns} from "react-bootstrap";
+import {LocationModal} from "../locations/LocationModal";
 
 export const Home = () => {
 
@@ -54,7 +50,7 @@ export const Home = () => {
 					</Col>
 					<Col md={7}>
 						<ButtonToolbar className="float-right">
-							<button className="btn btn-warning">Make a Scene</button>
+							<LocationModal/>
 						</ButtonToolbar>
 					</Col>
 				</Row>
