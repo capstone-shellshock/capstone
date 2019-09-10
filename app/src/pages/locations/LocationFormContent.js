@@ -8,7 +8,8 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/es/FormControl";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal"
+import Modal from "react-bootstrap/Modal";
+import {FormDebugger} from "../components/FormDebugger";
 
 export const LocationFormContent = (props) => {
 
@@ -34,7 +35,7 @@ export const LocationFormContent = (props) => {
 					<Modal.Header closeButton>
 						<Modal.Title>Make a Scene</Modal.Title>
 					</Modal.Header>
-							<Form>
+							<Form onSubmit={handleSubmit}>
 								<Form.Group>
 									<Container>
 									<InputGroup>
@@ -135,7 +136,11 @@ export const LocationFormContent = (props) => {
 										</div>
 									</Container>
 								</Form.Group>
+								<FormDebugger {...props} />
 							</Form>
+					{
+						submitStatus && (<div className={submitStatus.type}>{submitStatus.message}</div>)
+					}
 					<Modal.Footer>
 						<InputGroup.Append>
 						<Button className="button">Post your scene</Button>
@@ -143,5 +148,6 @@ export const LocationFormContent = (props) => {
 					</Modal.Footer>
 				</Modal.Dialog>
 			</Container>
+
 		</>
 	)};
