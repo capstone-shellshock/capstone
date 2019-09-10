@@ -1,61 +1,53 @@
-import React, {useState} from "react";
-import {httpConfig} from "../../shared/utils/http-config";
+import React, {useState} from 'react';
+import {httpConfig} from "../../shared/utils/http-config.js";
+import {Formik} from "formik/dist/index";
 import * as Yup from "yup";
-import {Formik} from "formik";
-
-import {LocationFormContent} from "./LocationFormContent";
-import {handleSessionTimeout} from "../../shared/misc/handle-session-timeout";
+import {Location} from "./LocationFormContent";
+import {Redirect} from "react-router";
 
 export const LocationForm = () => {
 
-	const [status, setStatus] = useState(null);
+	// state variable to handle redirect to posts page on sign in
+	const [toHome, setToHome] = useState(null);
 
-	const location = {
-		locationTitle: "",
-		locationAddress: "",
-		locationText: "",
-		locationImdbUrl: "",
-	};
-
-	const validator = Yup.object().shape({
+	const  validator = Yup.object().shape({
 		locationTitle: Yup.string()
-			.required("A title is required.")
-			.max(64, "No titles longer than 64 characters."),
-		locationContent: Yup.string()
-			.required("What are you going to post?")
-			.max(2000, "2000 characters max per location."),
+			.require("email must be a valid email"),
 		locationImdbUrl: Yup.string()
-			.required("What is the URL for the location?")
+			.required("Password is required")
+
 	});
 
-	const submitLocation = (values, {resetForm, setStatus}) => {
-		// grab jwt token to pass in headers on post request
-		const headers = {
-			'X-JWT-TOKEN': window.localStorage.getItem("jwt-token")
-		};
+	//the initial values object defines what the request payload is.
+	const signIn = {
+		locationTitle: "",
+		locationAddress: "",
+		locationImdbUrl:"",
+		locationText:"",
+		locationImageCloudinaryUrl:""
+	};
 
-		httpConfig.post("/apis/location/", values, {
-			headers: headers})
+	const submitLocation = (values, {resetForm, setStatus}) => {
+		httpConfig.post("/apis/location/", values)
 			.then(reply => {
 				let {message, type} = reply;
-				setStatus({message, type});
-				if(reply.status === 200) {
+				if(reply.status === 200 && reply.headers["x-jwt-token"]) {
+					window.localStorage.removeItem("jwt-token");
+					window.localStorage.setItem("jwt-token", reply.headers["x-jwt-token"]);
 					resetForm();
-					setStatus({message, type});
-					/*TODO: find a better way to re-render the post component!*/
 					setTimeout(() => {
-						window.location.reload();
+						setToHome(true);
 					}, 1500);
 				}
-				// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
-				if(reply.status === 401) {
-					handleSessionTimeout();
-				}
+				setStatus({message, type});
 			});
 	};
 
 	return (
 		<>
+			{/* redirect user to posts page on sign in */}
+			{toHome ? <Redirect to="/home" /> : null}
+
 			<Formik
 				initialValues={location}
 				onSubmit={submitLocation}
