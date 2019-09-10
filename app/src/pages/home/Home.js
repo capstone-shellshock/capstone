@@ -8,13 +8,14 @@ import Col from "react-bootstrap/Col"
 import Card from "react-bootstrap/Card";
 import '../../index.css';
 import Modal from "react-bootstrap/Modal";
-import Location from "../locations/Locations"
+import Location from "../locations/LocationFormContent"
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/es/FormControl";
 import {useSelector, useDispatch} from "react-redux";
 import {LocationCard} from "./LocationCard";
 import {getAllLocations, getAllUsers} from "../../shared/actions/get-locations";
+import {CardColumns} from "react-bootstrap";
 
 export const Home = () => {
 
@@ -45,41 +46,46 @@ export const Home = () => {
 	useEffect(sideEffects, sideEffectInputs);
 
 	return (
-     <Container id="home">
-			<Container className="margin" >
+		<Container id="home">
+			<Container className="margin">
 				<Row>
 					<Col md={3} className="float-right">
-			<h2 className="p-3">Reel Time</h2>
+						<h2 className="p-3">Reel Time</h2>
 					</Col>
 					<Col md={7}>
-					<ButtonToolbar className="float-right">
-						<button className="btn button">Make a Scene</button>
-					</ButtonToolbar>
+						<ButtonToolbar className="float-right">
+							<button className="btn btn-warning">Make a Scene</button>
+						</ButtonToolbar>
 					</Col>
 				</Row>
 			</Container>
 
 
+			<Container>
+				<>
+					{/*<CardColumns>*/}
 
-		  <Container>
-			  <>
+						{locations.map(location => (
+							<Card className="card text-center" key={location.locationId}>
+								<div className="card-body">
+									<Card className="text-left">
+										<Card.Header>JALLovesTheABQFilmScene</Card.Header>
+										<Card.Body>
+											<Card.Title>{location.locationTitle}</Card.Title>
+											<Card.Text>{location.locationAddress}</Card.Text>
+											<Card.Text>{location.locationText}</Card.Text>
+											<Card.Text><a href={location.locationImdbUrl}>IMDB</a></Card.Text>
+											<Card.Img/>
+										</Card.Body>
+									</Card>
+								</div>
+							</Card>
+						))}
 
-				  <Card className="card text-center">
-					  <div className="card-body">
-						  <Card className="text-left">
-							  <Card.Header>Username</Card.Header>
-							  <Card.Body>
-								  <Card.Title>Title</Card.Title>
-								  <Card.Text>Text</Card.Text>
-								  <Card.Text>IMDB URL</Card.Text>
-								  <Card.Img/>
-							  </Card.Body>
-						  </Card>
-					  </div>
-				  </Card>
-			  </>
-	  </Container>
-		  </Container>
+					{/*</CardColumns>*/}
+				</>
+			</Container>
+		</Container>
 
-)
+	)
 };
