@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col"
 import Card from "react-bootstrap/Card";
 import '../../index.css';
 import Modal from "react-bootstrap/Modal";
-import Location from "../locations/LocationFormContent"
+import Location, {LocationFormContent} from "../locations/LocationFormContent"
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/es/FormControl";

@@ -12,6 +12,7 @@ import {FourOhFour} from "./pages/four-oh-four/FourOhFour";
 import {About} from "./pages/about/About";
 import {Splash} from "./pages/splash/Splash";
 import './index.css';
+import {LocationFormContent} from "./pages/locations/LocationFormContent";
 
 const store = createStore(combinedReducers, applyMiddleware(thunk));
 

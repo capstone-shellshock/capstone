@@ -29,7 +29,7 @@ export const SignInFormContent = (props) => {
 						</div>
 
 						<input
-							className="form-controll"
+							className="form-control"
 							id="profileEmail"
 							type="email"
 							value={values.profileEmail}

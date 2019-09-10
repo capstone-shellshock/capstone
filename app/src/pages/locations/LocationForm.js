@@ -6,13 +6,15 @@ import {Formik} from "formik";
 import {LocationFormContent} from "./LocationFormContent";
 import {handleSessionTimeout} from "../../shared/misc/handle-session-timeout";
 
-export const PostForm = () => {
+export const LocationForm = () => {
 
 	const [status, setStatus] = useState(null);
 
 	const location = {
 		locationTitle: "",
-		locationContent: ""
+		locationAddress: "",
+		locationText: "",
+		locationImdbUrl: "",
 	};
 
 	const validator = Yup.object().shape({

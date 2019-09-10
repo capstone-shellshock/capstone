@@ -8,8 +8,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/es/FormControl";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import {library} from "@fortawesome/fontawesome-svg-core";
+import Modal from "react-bootstrap/Modal"
 
 export const LocationFormContent = (props) => {
 
