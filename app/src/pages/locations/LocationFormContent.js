@@ -1,5 +1,7 @@
 import {FormDebugger} from "../components/FormDebugger";
 import React from "react";
+import {Image} from 'cloudinary-react'
+
 
 export const LocationFormContent = (props) => {
 	const {

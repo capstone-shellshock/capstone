@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import {LocationForm} from "./LocationForm";
+import {Image} from 'cloudinary-react'
+
 
 export function LocationModal() {
 	const [show, setShow] = useState(false);

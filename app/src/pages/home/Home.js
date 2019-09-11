@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col"
 import Navbar from "../../shared/components/Header";
 import '../../index.css';
 import homeBg from "../../shared/img/homebg.png";
-
+import {Image} from 'cloudinary-react'
 
 import Card from "react-bootstrap/Card";
 import '../../index.css';
@@ -14,7 +14,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {getAllLocations, getAllUsers} from "../../shared/actions/get-locations";
 import {LocationModal} from "../locations/LocationModal";
 import {httpConfig} from "../../shared/utils/http-config";
-
+import {LocationCardComponent} from "./LocationCard";
 export const Home = () => {
 
 // returns the users store from Redux and assigns it to the users variable
@@ -30,12 +30,22 @@ export const Home = () => {
 	// Define the side effects that will occur in the application.
 	function sideEffects() {
 		// The dispatch function takes actions as arguments to make changes to the store/redux.
-		dispatch(getAllLocations())
-		httpConfig.get("/apis/earl-grey/");
+		dispatch(getAllLocations());
+		// dispatch(compareDates())
 	}
 
 	// Declare any inputs that will be used by functions that are declared in sideEffects.
 	const sideEffectInputs = [];
+
+	// function compareDates(a, b) {
+	// 	if (a.locationDate < b.locationDate) {
+	// 		return -1
+	// 	}
+	// 	if (a.locationDate > b.locationDate) {
+	// 		return 1
+	// 	}
+	// 	return 0;
+	// }
 
 	/**
 	 * Pass both sideEffects and sideEffectInputs to useEffect.
@@ -65,20 +75,7 @@ export const Home = () => {
 					{/*<CardColumns>*/}
 
 						{locations.map(location => (
-							<Card className="card text-center" key={location.locationId}>
-								<div className="card-body">
-									<Card className="text-left">
-										<Card.Header>JALLovesTheABQFilmScene</Card.Header>
-										<Card.Body>
-											<Card.Title>{location.locationTitle}</Card.Title>
-											<Card.Text>{location.locationAddress}</Card.Text>
-											<Card.Text>{location.locationText}</Card.Text>
-											<Card.Text><a href={location.locationImdbUrl}>IMDB</a></Card.Text>
-											<Card.Img/>
-										</Card.Body>
-									</Card>
-								</div>
-							</Card>
+							<LocationCardComponent location={location}/>
 						))}
 
 					{/*</CardColumns>*/}

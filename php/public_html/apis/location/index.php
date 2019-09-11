@@ -71,7 +71,7 @@ try {
 		}
 	} else if($method === "PUT" || $method === "POST") {
 		// enforce the user has a XSRF
-		verifyxsrf();
+		verifyXsrf();
 
 		//enforce the user is signed in
 		if(empty($_SESSION["profile"]) === true) {

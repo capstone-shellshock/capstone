@@ -4,6 +4,9 @@ import {Formik} from "formik/dist/index";
 import * as Yup from "yup";
 import {LocationFormContent} from "./LocationFormContent";
 import {Redirect} from "react-router";
+import {handleSessionTimeout} from "../../shared/misc/handle-session-timeout";
+import {Image} from 'cloudinary-react'
+
 
 export const LocationForm = () => {
 
@@ -28,19 +31,27 @@ export const LocationForm = () => {
 	};
 
 	const submitLocation = (values, {resetForm, setStatus}) => {
-		httpConfig.post("/apis/location/", values)
+		//grab jwt token to pass in headers on post request
+		const headers = {
+			'X-JWT-TOKEN': window.localStorage.getItem("jwt-token")
+		};
+
+		httpConfig.post("/apis/location/",values, {
+			headers: headers})
 			.then(reply => {
 				let {message, type} = reply;
-				if(reply.status === 200 && reply.headers["x-jwt-token"]) {
-					window.localStorage.removeItem("jwt-token");
-					window.localStorage.setItem("jwt-token", reply.headers["x-jwt-token"]);
+				setStatus({message, type});
+				if(reply.status === 200) {
 					resetForm();
+					setStatus({message, type});
 					setTimeout(() => {
-						setToHome(true);
+						window.location.reload();
 					}, 1500);
 				}
-				setStatus({message, type});
-			});
+				//if there's an issue with a $_SESSION minmatch with xsrf of jwt, alert user and do a sign out
+				if(reply.status === 401) {
+					handleSessionTimeout();}
+			})
 	};
 
 	return (
