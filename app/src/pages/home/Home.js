@@ -4,6 +4,9 @@ import Row from "react-bootstrap/Row";
 import React, {useEffect} from 'react';
 import Col from "react-bootstrap/Col"
 import Navbar from "../../shared/components/Header";
+import '../../index.css';
+import homeBg from "../../shared/img/homebg.png";
+
 
 import Card from "react-bootstrap/Card";
 import '../../index.css';
@@ -13,8 +16,6 @@ import {LocationModal} from "../locations/LocationModal";
 import {httpConfig} from "../../shared/utils/http-config";
 
 export const Home = () => {
-
-	{Navbar}
 
 // returns the users store from Redux and assigns it to the users variable
 	const locations = useSelector(state => state.locations ? state.locations : []);
@@ -46,7 +47,7 @@ export const Home = () => {
 	return (
 		<Container id="home">
 			<Container className="margin">
-				<Row>
+				<Row id="reel-time">
 					<Col md={3} className="float-right">
 						<h2 className="p-3">Reel Time</h2>
 					</Col>
@@ -59,7 +60,7 @@ export const Home = () => {
 			</Container>
 
 
-			<Container>
+			<Container id="cards">
 				<>
 					{/*<CardColumns>*/}
 

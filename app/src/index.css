@@ -8,11 +8,17 @@
 	height: 100vh;
 }
 
-.home {
+#home {
 	background-image: url("shared/img/homebg.png");
 	background-attachment: scroll;
 	background-repeat: repeat;
-	background-size: cover;
+
+}
+
+#reel-time {
+	padding-right: 12vw;
+	padding-left: 12vw;
+	margin: 0;
 }
 
 .margin {
@@ -49,4 +55,8 @@
 	background-color: white;
 	height: 100%;
 	float: outside;
+}
+
+#cards {
+	padding: 12vw;
 }
