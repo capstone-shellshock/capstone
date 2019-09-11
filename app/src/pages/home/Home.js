@@ -3,12 +3,9 @@ import Container from "react-bootstrap/es/Container";
 import Row from "react-bootstrap/Row";
 import React, {useEffect} from 'react';
 import Col from "react-bootstrap/Col"
-import Navbar from "../../shared/components/Header";
 import '../../index.css';
-import homeBg from "../../shared/img/homebg.png";
-import {Image} from 'cloudinary-react'
 
-import Card from "react-bootstrap/Card";
+
 import '../../index.css';
 import {useSelector, useDispatch} from "react-redux";
 import {getAllLocations, getAllUsers} from "../../shared/actions/get-locations";

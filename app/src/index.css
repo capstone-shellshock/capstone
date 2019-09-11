@@ -12,6 +12,9 @@
 	background-image: url("shared/img/homebg.png");
 	background-attachment: scroll;
 	background-repeat: repeat;
+	background-size: auto;
+	height: 50vh;
+	float: left;
 
 }
 
