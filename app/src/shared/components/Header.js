@@ -5,7 +5,9 @@ import img from "../../shared/img/official-logo.png";
 import Navbar from "react-bootstrap/Navbar";
 
 
-export const NavBar = () => {
+export const Header = () => {
+
+
 	return (
 		<>
 			<Navbar bg="dark" fixed="top" variant="dark">
@@ -17,6 +19,7 @@ export const NavBar = () => {
 						height="auto"
 						className="d-inline-block align-top"
 					/>
+
 				</Navbar.Brand>
 			</Navbar>
 		</>

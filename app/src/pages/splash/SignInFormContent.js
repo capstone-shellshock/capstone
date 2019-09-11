@@ -19,7 +19,7 @@ export const SignInFormContent = (props) => {
 			<form onSubmit={handleSubmit}>
 				{/*contrilId must match what is passed to the initialValues prop*/}
 				<div className="form-group">
-					<label htmlFor="profileEmail">Email</label>
+					<label htmlFor="profileEmail" className="text-white font-weight-bold">Email</label>
 					<div className="input-group">
 						<div className="input-group-prepend">
 							<div className="input-group-text">
@@ -50,7 +50,7 @@ export const SignInFormContent = (props) => {
 				{/*control Id must match what is defined by the initialValues object*/}
 				<div className="form-group">
 
-					<label htmlFor="profilePassword">Password</label>
+					<label htmlFor="profilePassword" className="text-white font-weight-bold">Password</label>
 
 					<div className="input-group">
 
@@ -91,7 +91,6 @@ export const SignInFormContent = (props) => {
 					</button>
 
 				</div>
-				<FormDebugger {...props} />
 			</form>
 			{status && (<div className={status.type}>{status.message}</div>)}
 		</>

@@ -57,18 +57,13 @@ export const Home = () => {
 
 	return (
 		<Container id="home">
-			<Container className="margin">
 				<Row id="reel-time">
-					<Col md={3} className="float-right">
-						<h2 className="p-3">Reel Time</h2>
-					</Col>
-					<Col md={7}>
-						<ButtonToolbar className="float-right">
+						<h2 className="float-right  col-lg-7 col-sm-12">Reel Time</h2>
+						<ButtonToolbar className="float-right col-lg-5 col-sm-12">
 							<LocationModal/>
 						</ButtonToolbar>
-					</Col>
 				</Row>
-			</Container>
+
 
 
 			<Container id="cards">

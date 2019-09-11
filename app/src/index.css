@@ -5,23 +5,21 @@
 	background-attachment: scroll;
 	background-repeat: no-repeat;
 	background-size: cover;
-	height: 100vh;
+	height: 120vh;
 }
 
-#home {
-	background-image: url("shared/img/homebg.png");
-	background-attachment: scroll;
-	background-repeat: repeat;
-	background-size: auto;
-	height: 50vh;
-	float: left;
-
+@media only screen and (min-width: 479px) {
+	#home {
+		background-image: url("shared/img/homebg.png");
+		background-attachment: scroll;
+		background-repeat: repeat;
+	}
 }
 
 #reel-time {
-	padding-right: 12vw;
-	padding-left: 12vw;
-	margin: 0;
+	padding-right: 10vw;
+	padding-left: 10vw;
+	margin-top: 10vh;
 }
 
 .margin {
@@ -30,14 +28,13 @@
 
 #justin {
 	margin-left: 10vw;
-}
 
-#film-reel {
-	z-index: 999;
-	width: 200px;
-	height: 200px;
-	margin-right: 40px;
 }
+/*#logo {*/
+/*	margin-left: auto;*/
+/*	margin-right: auto;*/
+/*	display: block;*/
+/*}*/
 
 #Splash h1 {
 	font-size: 6vw;

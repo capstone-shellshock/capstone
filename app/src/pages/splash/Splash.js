@@ -22,13 +22,13 @@ export const Splash = () => {
 	});
 	return (
 		<>
-		<Container fluid id="Splash">
+		<Container className="align-content-center" fluid id="Splash">
 			<Row id="topRow">
-				<Container fluid id="justin">
-					<img src={img} className="img-fluid" alt="logo"/>
+				<Container className="col-lg-7 col-md-12 col-sm-12 m-4"  fluid id="justin">
+					<img src={img} className="img-fluid" id="logo" alt="logo"/>
 				</Container>
 			</Row>
-			<Container>
+			<Container className="my-5">
 				<Row>
 					<Col lg={4}>
 							<h4 className="text-white font-weight-bold">Crew Sign In</h4>
