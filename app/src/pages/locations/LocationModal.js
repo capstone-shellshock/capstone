@@ -25,12 +25,6 @@ export function LocationModal() {
 				</Modal.Header>
 				<Modal.Body><LocationForm/></Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
-						Close
-					</Button>
-					<Button variant="primary" onClick={handleClose}>
-						Submit
-					</Button>
 				</Modal.Footer>
 			</Modal>
 		</>

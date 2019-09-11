@@ -1,6 +1,7 @@
 import {FormDebugger} from "../components/FormDebugger";
 import React from "react";
 import {Image} from 'cloudinary-react'
+import Button from "react-bootstrap/Button";
 
 
 export const LocationFormContent = (props) => {
@@ -160,12 +161,6 @@ export const LocationFormContent = (props) => {
 
 				<div className="form-group">
 					<button className="btn btn-warning mb-2" type="submit">Submit</button>
-					<button
-								className="btn btn-danger mb-2"
-								onClick={handleReset}
-								disabled={!dirty || isSubmitting}
-					>Reset
-					</button>
 				</div>
 				<FormDebugger {...props} />
 			</form>

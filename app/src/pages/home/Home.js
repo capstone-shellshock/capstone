@@ -31,21 +31,25 @@ export const Home = () => {
 	function sideEffects() {
 		// The dispatch function takes actions as arguments to make changes to the store/redux.
 		dispatch(getAllLocations());
-		// dispatch(compareDates())
+
 	}
 
 	// Declare any inputs that will be used by functions that are declared in sideEffects.
 	const sideEffectInputs = [];
 
-	// function compareDates(a, b) {
-	// 	if (a.locationDate < b.locationDate) {
-	// 		return -1
-	// 	}
-	// 	if (a.locationDate > b.locationDate) {
-	// 		return 1
-	// 	}
-	// 	return 0;
-	// }
+	function compareDates(locations) {
+		locations.sort((a, b) => {
+				if(a.locationDate > b.locationDate) {
+					return -1
+				}
+				if(a.locationDate < b.locationDate) {
+					return 1
+				}
+				return 0;
+			}
+			);
+		return locations;
+	}
 
 	/**
 	 * Pass both sideEffects and sideEffectInputs to useEffect.
@@ -74,7 +78,7 @@ export const Home = () => {
 				<>
 					{/*<CardColumns>*/}
 
-						{locations.map(location => (
+						{compareDates(locations).map(location => (
 							<LocationCardComponent location={location}/>
 						))}
 

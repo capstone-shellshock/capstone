@@ -782,6 +782,7 @@ class Location implements \JsonSerializable {
 		$fields = get_object_vars($this);
 		$fields["locationId"] = $this->locationId->toString();
 		$fields["locationProfileId"] =$this->locationProfileId->toString();
+		$fields["locationDate"] = round(floatval($this->locationDate->format("U.u")) * 1000);
 		return($fields);
 	}
 }
