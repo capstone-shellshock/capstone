@@ -12,6 +12,9 @@ import {getAllLocations, getAllUsers} from "../../shared/actions/get-locations";
 import {LocationModal} from "../locations/LocationModal";
 import {httpConfig} from "../../shared/utils/http-config";
 import {LocationCardComponent} from "./LocationCard";
+import {Footer} from "../../shared/components/Footer";
+import {Header} from "../../shared/components/Header";
+
 export const Home = () => {
 
 // returns the users store from Redux and assigns it to the users variable
@@ -56,7 +59,9 @@ export const Home = () => {
 	useEffect(sideEffects, sideEffectInputs);
 
 	return (
+		<Container fluid>
 		<Container id="home">
+			<Header/>
 				<Row id="reel-time">
 						<h2 className="float-right  col-lg-7 col-sm-12">Reel Time</h2>
 						<ButtonToolbar className="float-right col-lg-5 col-sm-12">
@@ -78,6 +83,9 @@ export const Home = () => {
 				</>
 			</Container>
 		</Container>
+			<Footer/>
+		</Container>
+
 
 	)
 };

@@ -25,7 +25,6 @@ const Routing = () => (
 				<Route exact path="/home" component={Home}/>
 				<Route exact path="/about" component={About}/>
 				<Route exact path="/" component={Splash}/>
-				<Route exact path="/location" component={LocationModal}/>
 				<Route component={FourOhFour}/>
 			</Switch>
 		</BrowserRouter>

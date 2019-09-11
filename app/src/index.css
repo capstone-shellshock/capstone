@@ -17,9 +17,9 @@
 }
 
 #reel-time {
-	padding-right: 10vw;
-	padding-left: 10vw;
-	margin-top: 10vh;
+	padding-right: 12vw;
+	padding-left: 13vw;
+	margin-top: 21vh;
 }
 
 .margin {
@@ -58,5 +58,11 @@
 }
 
 #cards {
-	padding: 12vw;
+	padding-left: 12vw;
+	padding-right: 12vw;
+	padding-top: 5vh;
+}
+
+#aboutTop {
+	margin-top: 18vh;
 }

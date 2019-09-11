@@ -2,6 +2,7 @@ import React from "react";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
+import Container from "react-bootstrap/es/Container";
 
 export const Footer = () => {
 	return (
