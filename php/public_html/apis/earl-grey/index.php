@@ -1,6 +1,5 @@
 <?php
 require_once dirname(__DIR__,3 ) .  "/lib/xsrf.php";
-use ShellShock\Capstone;
 $reply = new stdClass();
 $reply->status = 200;
 $reply->data = null;

@@ -1,7 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import img from "../../shared/img/official-logo.png";
-import {Image} from "react-bootstrap";
 
 import Navbar from "react-bootstrap/Navbar";
 

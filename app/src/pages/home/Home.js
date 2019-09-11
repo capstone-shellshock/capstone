@@ -1,19 +1,20 @@
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/es/Container";
 import Row from "react-bootstrap/Row";
 import React, {useEffect} from 'react';
 import Col from "react-bootstrap/Col"
+import Navbar from "../../shared/components/Header";
 
 import Card from "react-bootstrap/Card";
 import '../../index.css';
-import Modal from "react-bootstrap/Modal";
 import {useSelector, useDispatch} from "react-redux";
 import {getAllLocations, getAllUsers} from "../../shared/actions/get-locations";
-import {CardColumns} from "react-bootstrap";
 import {LocationModal} from "../locations/LocationModal";
+import {httpConfig} from "../../shared/utils/http-config";
 
 export const Home = () => {
+
+	{Navbar}
 
 // returns the users store from Redux and assigns it to the users variable
 	const locations = useSelector(state => state.locations ? state.locations : []);
@@ -24,11 +25,12 @@ export const Home = () => {
 	const dispatch = useDispatch();
 
 
+
 	// Define the side effects that will occur in the application.
-	// E.G code that handles dispatches to redux, API requests, or timers.
 	function sideEffects() {
 		// The dispatch function takes actions as arguments to make changes to the store/redux.
 		dispatch(getAllLocations())
+		httpConfig.get("/apis/earl-grey/");
 	}
 
 	// Declare any inputs that will be used by functions that are declared in sideEffects.

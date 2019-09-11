@@ -1,8 +1,7 @@
 import React, {useState} from "react";
-import {LocationFormContent} from "./LocationFormContent";
-import Container from "react-bootstrap/es/Container";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import {LocationForm} from "./LocationForm";
 
 export function LocationModal() {
 	const [show, setShow] = useState(false);
@@ -22,7 +21,7 @@ export function LocationModal() {
 				<Modal.Header closeButton>
 					<Modal.Title>Make A Scene</Modal.Title>
 				</Modal.Header>
-				<Modal.Body>Hi</Modal.Body>
+				<Modal.Body><LocationForm/></Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
 						Close

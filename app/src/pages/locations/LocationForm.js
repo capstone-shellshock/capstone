@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {httpConfig} from "../../shared/utils/http-config.js";
 import {Formik} from "formik/dist/index";
 import * as Yup from "yup";
-import {Location} from "./LocationFormContent";
+import {LocationFormContent} from "./LocationFormContent";
 import {Redirect} from "react-router";
 
 export const LocationForm = () => {
@@ -12,9 +12,9 @@ export const LocationForm = () => {
 
 	const  validator = Yup.object().shape({
 		locationTitle: Yup.string()
-			.require("email must be a valid email"),
+			.required("Title is required"),
 		locationImdbUrl: Yup.string()
-			.required("Password is required")
+			.required("IMDb URL is required")
 
 	});
 
@@ -49,7 +49,7 @@ export const LocationForm = () => {
 			{toHome ? <Redirect to="/home" /> : null}
 
 			<Formik
-				initialValues={location}
+				initialValues={Location}
 				onSubmit={submitLocation}
 				validationSchema={validator}
 			>
